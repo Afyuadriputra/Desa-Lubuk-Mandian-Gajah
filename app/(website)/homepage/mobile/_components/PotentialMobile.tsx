@@ -2,23 +2,11 @@
 
 import { useEffect, useId, useRef } from "react";
 import type { HomepageData } from "../../data/homepage.types";
+import type { SwiperInstance } from "./swiper.types";
 
 type Props = {
   data: HomepageData;
 };
-
-declare global {
-  interface Window {
-    Swiper?: new (
-      element: Element,
-      options: Record<string, unknown>
-    ) => {
-      realIndex: number;
-      slideTo: (index: number) => void;
-      destroy: (deleteInstance?: boolean, cleanStyles?: boolean) => void;
-    };
-  }
-}
 
 const potentialMeta: Record<
   string,
@@ -82,25 +70,20 @@ export default function PotentialMobile({ data }: Props) {
 
     if (!swiperEl) return;
 
-    let swiper:
-      | {
-          realIndex: number;
-          slideTo: (index: number) => void;
-          destroy: (deleteInstance?: boolean, cleanStyles?: boolean) => void;
-        }
-      | undefined;
-    let retryTimer: ReturnType<typeof window.setTimeout> | undefined;
+    let swiper: SwiperInstance | undefined;
+    let retryTimer: number | undefined;
     let isDisposed = false;
 
-    const updateIndicators = (swiperInstance: { realIndex: number }) => {
+    const updateIndicators = (swiperInstance: SwiperInstance) => {
+      const activeSlide = swiperInstance.realIndex ?? 0;
       progressEls.forEach((el, index) => {
         el.classList.remove("is-past", "is-active");
-        if (index < swiperInstance.realIndex) el.classList.add("is-past");
-        if (index === swiperInstance.realIndex) el.classList.add("is-active");
+        if (index < activeSlide) el.classList.add("is-past");
+        if (index === activeSlide) el.classList.add("is-active");
       });
 
       dotEls.forEach((el, index) => {
-        el.classList.toggle("is-active", index === swiperInstance.realIndex);
+        el.classList.toggle("is-active", index === activeSlide);
       });
     };
 
@@ -140,7 +123,7 @@ export default function PotentialMobile({ data }: Props) {
     };
 
     const dotHandlers = dotEls.map((dot, index) => {
-      const handler = () => swiper?.slideTo(index);
+      const handler = () => swiper?.slideTo?.(index);
       dot.addEventListener("click", handler);
       return { dot, handler };
     });
@@ -193,10 +176,10 @@ export default function PotentialMobile({ data }: Props) {
           },
         },
         on: {
-          init(swiperInstance: { realIndex: number }) {
+          init(swiperInstance: SwiperInstance) {
             updateIndicators(swiperInstance);
           },
-          slideChange(swiperInstance: { realIndex: number }) {
+          slideChange(swiperInstance: SwiperInstance) {
             updateIndicators(swiperInstance);
           },
         },
@@ -220,7 +203,7 @@ export default function PotentialMobile({ data }: Props) {
       );
       document.removeEventListener("keydown", keyHandler);
       document.body.style.overflow = "";
-      swiper?.destroy(true, true);
+      swiper?.destroy?.(true, true);
     };
   }, []);
 
