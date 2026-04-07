@@ -50,9 +50,6 @@ export default function NamaSection({ data }: Props) {
           <div className="h-[400px] md:h-full min-h-[400px] bg-stone-100 relative">
             <img className="w-full h-full object-cover" src={data.contact.mapImage} alt="Peta desa" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-2xl animate-bounce">
-                <span className="material-symbols-outlined">push_pin</span>
-              </div>
             </div>
           </div>
         </div>

@@ -32,7 +32,7 @@ export const homepageData: HomepageData = {
     address: "Jl. Raya Lubuk Mandian Gajah, Kec. Bunut, Kab. Pelalawan, Riau.",
     whatsapp: "+62 812-3456-7890",
     mapImage:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBe2OWIN8WvWVzgBoTga6KZzLKLbIXzZi0XeOreTLO3Hdk47MIDKpGtiX26Ow0CqfkOONLwgw7w9rdW8JcAqpq5IW5QGbLaGOSL0bcC3MqqF_iHdPcw55Q9ziCCmwGN6jp1xhXLyBqdHwwAZXhH1cEonbHy1bPvMoq72MAhPnfHt1ezptkdcJQHhsKPCW0X-WTqMMYbwOixJKq_RcRid7HAjMcVtLOenKNmkT0f4cPIp-yqidIzMZMwnejgjTCwzYhAZ0Ou_FUQ1n8",
+      "https://www.newshanter.com/wp-content/uploads/2021/05/IMG-20210506-WA0079.jpg",
   },
 
   namingTitle: "Kenapa Mandian Gajah?",
@@ -166,30 +166,30 @@ export const homepageData: HomepageData = {
   gallery: [
     {
       image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBe2OWIN8WvWVzgBoTga6KZzLKLbIXzZi0XeOreTLO3Hdk47MIDKpGtiX26Ow0CqfkOONLwgw7w9rdW8JcAqpq5IW5QGbLaGOSL0bcC3MqqF_iHdPcw55Q9ziCCmwGN6jp1xhXLyBqdHwwAZXhH1cEonbHy1bPvMoq72MAhPnfHt1ezptkdcJQHhsKPCW0X-WTqMMYbwOixJKq_RcRid7HAjMcVtLOenKNmkT0f4cPIp-yqidIzMZMwnejgjTCwzYhAZ0Ou_FUQ1n8",
+        "https://pelalawanpos.co/a450d92cb6be01b3b3669c18bfca7901/content_upload/images/IMG-20220827-WA0027.jpg",
       alt: "Peta Wilayah Desa",
       tall: true,
-      caption: "Peta Wilayah Desa",
+      caption: "",
     },
     {
       image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBqMr6jhCxZomZK_pcEN6aNshbWi5k8TcaJJbmr88FYia0CeCk1crf1IzMwaoddDwDN7Q-WRx-XSwAlcNbKa7JpzqQAuyK25rmadkc-vu9ybSy65DNWUyOoNjcKi0tM1k_NWfArDP5UPZ8tF74o4_ICV2OVVuKihaIaG8xWUCpmPBNbdXcM1oFfg2ZnuH7Ux-veTNY52qwB0MfvebF98oXJSWWU8X-vBIuoSq5ZIZ6F9dTNcfJz5H1bdjWiONBo1Uy2bv96OQXCg34",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Rumah_Melayu_Pelalawan.JPG/500px-Rumah_Melayu_Pelalawan.JPG",
       alt: "Galeri desa 2",
     },
     {
       image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDpqIWN5Ey98N7l2qF2MdGb-3RnZidVj-qaMXVA0F-tSLmaSXIQ1f4kTD0vvH7sD5hnRp7nlW-MarBXdsX_4relk9s0wK9AXQIKpXjsbmPehSls9rcTeIwl0xqMOqAd69rAEnxUqVfU5b9jGJ0l0uZNWe6o33WMYimQdtdbO3lCW8eqzDal50IVb9FjX87pQ_1hSNrgb_OlOG5ZN1s7ENplfvB061WcUFI42vz0d9KL_TCsg-Hs7JuW520BuWd_HU5ENkeYakc4puc",
+        "https://pelalawanpos.co/assets/berita/original/52699196850-img-20220827-wa0028.jpg",
       alt: "Galeri desa 3",
     },
     {
       image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDKRm5Kezn1GW2oOwiNtjyvOrJmgXp9T8lD4Xs7KQ0vND94x2NGEevGJSABFiBLpBvcl3TsD4TJGEB61Va_oyCsfNaHFqOE8i2BQC4UgDChYCeLpu8_PehPF3fYuypa8IyXDy5RU3VTzeEjkz7NTQp9nF16Rmsk6VOobKSz5gbYklwSmEzFUGdpOVloTrR8unS9BZrrVmNMbyK-vSu0E6hG8lO9nesh1mFwybUZXE1osYxHNSUKtFNM0pRBLCF4aqSzqBwms85m5yI",
+        "https://www.newshanter.com/wp-content/uploads/2023/03/IMG-20230309-WA0022.jpg",
       alt: "Galeri desa 4",
       tall: true,
     },
     {
       image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDIRJCXJHR7CdBmAUAolGEtpl0z42sU-BeqfqTbp254fqUgZOa16bwahMEhh313llvIfsKIxznr6WoDaa85R0y3p9rAp7neGDDjczS5C9olyaSf7_h73dw77HMrwD93quSq2Vnw0nyA4rXZ6SMFwHz8cbGyKqFuSY1UJWZVZZeBHQs4bJMRUx9jQ4odyNetFSkjwDFEIWAmFq3PK9n3DME2WIuxLXEWodFKDNFwjMnaMgryn-ubn-cdFngpi-HHNmeYQBagnvqZCtc",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnxn9yH5OvAu3-xH0qIY7--eA5cn9XlNwzuogVzAEwwrxer89D7oaA8F7_Z1Dbb0zGelAgmXDucpNTkYgbs0hnCLhKBRmAQQlNLw4vSJjFk2SLLRpRoWsOIclOTjcKUBEJCnTwRJqb5oOAKvDUrpStli6Wpcd8s8ySFUzKewcNIFnInHsh-EcYvomZ/s1024/IMG-20220809-WA0118.jpg",
       alt: "Galeri desa 5",
     },
   ],

@@ -33,9 +33,6 @@ export default function ContactMobile({ data }: Props) {
 
         <div className="h-48 bg-stone-100 relative">
           <img className="w-full h-full object-cover opacity-60" src={data.contact.mapImage} alt="Peta desa" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary">
-            <span className="material-symbols-outlined text-4xl animate-bounce">push_pin</span>
-          </div>
         </div>
       </div>
     </section>
