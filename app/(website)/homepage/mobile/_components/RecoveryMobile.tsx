@@ -20,10 +20,7 @@ export default function RecoveryMobile({ data }: Props) {
 
         <div className="flex flex-col gap-4">
           {data.recoveryItems.map((item) => {
-            const colorClass =
-              item.icon === "compost"
-                ? "bg-secondary/10 text-secondary"
-                : "bg-primary/10 text-primary";
+            const colorClass = item.wrapper ?? "bg-primary/10 text-primary";
 
             return (
               <div

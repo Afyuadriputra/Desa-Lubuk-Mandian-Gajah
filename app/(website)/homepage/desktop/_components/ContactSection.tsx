@@ -22,7 +22,7 @@ export default function NamaSection({ data }: Props) {
                 </div>
                 <div>
                   <h4 className="type-body font-bold">Alamat Kantor Desa</h4>
-                  <p className="type-body text-on-surface-variant">Jl. Raya Lubuk Mandian Gajah, Kec. Bunut, Kab. Pelalawan, Riau.</p>
+                  <p className="type-body text-on-surface-variant">{data.contact.address}</p>
                 </div>
               </div>
 
@@ -32,7 +32,7 @@ export default function NamaSection({ data }: Props) {
                 </div>
                 <div>
                   <h4 className="type-body font-bold">WhatsApp</h4>
-                  <p className="type-body text-on-surface-variant">+62 812-3456-7890</p>
+                  <p className="type-body text-on-surface-variant">{data.contact.whatsapp}</p>
                 </div>
               </div>
             </div>
@@ -48,11 +48,7 @@ export default function NamaSection({ data }: Props) {
           </div>
 
           <div className="h-[400px] md:h-full min-h-[400px] bg-stone-100 relative">
-            <img
-              className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe2OWIN8WvWVzgBoTga6KZzLKLbIXzZi0XeOreTLO3Hdk47MIDKpGtiX26Ow0CqfkOONLwgw7w9rdW8JcAqpq5IW5QGbLaGOSL0bcC3MqqF_iHdPcw55Q9ziCCmwGN6jp1xhXLyBqdHwwAZXhH1cEonbHy1bPvMoq72MAhPnfHt1ezptkdcJQHhsKPCW0X-WTqMMYbwOixJKq_RcRid7HAjMcVtLOenKNmkT0f4cPIp-yqidIzMZMwnejgjTCwzYhAZ0Ou_FUQ1n8"
-              alt="Peta desa"
-            />
+            <img className="w-full h-full object-cover" src={data.contact.mapImage} alt="Peta desa" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-2xl animate-bounce">
                 <span className="material-symbols-outlined">push_pin</span>

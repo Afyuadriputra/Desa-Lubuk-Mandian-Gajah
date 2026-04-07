@@ -32,11 +32,7 @@ export default function ContactMobile({ data }: Props) {
         </div>
 
         <div className="h-48 bg-stone-100 relative">
-          <img
-            className="w-full h-full object-cover opacity-60"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe2OWIN8WvWVzgBoTga6KZzLKLbIXzZi0XeOreTLO3Hdk47MIDKpGtiX26Ow0CqfkOONLwgw7w9rdW8JcAqpq5IW5QGbLaGOSL0bcC3MqqF_iHdPcw55Q9ziCCmwGN6jp1xhXLyBqdHwwAZXhH1cEonbHy1bPvMoq72MAhPnfHt1ezptkdcJQHhsKPCW0X-WTqMMYbwOixJKq_RcRid7HAjMcVtLOenKNmkT0f4cPIp-yqidIzMZMwnejgjTCwzYhAZ0Ou_FUQ1n8"
-            alt="Peta desa"
-          />
+          <img className="w-full h-full object-cover opacity-60" src={data.contact.mapImage} alt="Peta desa" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary">
             <span className="material-symbols-outlined text-4xl animate-bounce">push_pin</span>
           </div>

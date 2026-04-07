@@ -14,9 +14,7 @@ export default function QuickStatsSection({ data }: Props) {
               Fakta Singkat Desa
             </h2>
             <p className="type-body text-on-surface-variant">
-              Desa Lubuk Mandian Gajah merupakan desa di bagian tenggara Provinsi
-              Riau, bertopografi dataran rendah, memiliki sungai-sungai yang
-              mengarah ke lahan gambut, dan memiliki akses darat yang strategis.
+              {data.quickStatsDescription}
             </p>
           </div>
 

@@ -20,7 +20,7 @@ type Props = {
 export default function DesktopHomepage({ data }: Props) {
   return (
     <>
-      <HomeNavbar />
+      <HomeNavbar data={data} />
       <main>
         <HeroSection data={data} />
         <QuickStatsSection data={data} />

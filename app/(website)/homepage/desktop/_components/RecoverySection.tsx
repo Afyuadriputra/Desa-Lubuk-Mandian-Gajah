@@ -1,27 +1,3 @@
-const recoveryItems = [
-  {
-    icon: "local_fire_department",
-    wrapper: "bg-error/10 text-error",
-    title: "Refleksi Masa Lalu",
-    description:
-      "Mengenang kebakaran besar 2015 dan 2019 sebagai titik balik kesadaran menjaga lingkungan.",
-  },
-  {
-    icon: "nature_people",
-    wrapper: "bg-primary/10 text-primary",
-    title: "PLTB",
-    description:
-      "Penerapan Pembukaan Lahan Tanpa Bakar (PLTB) sebagai komitmen desa bebas asap.",
-  },
-  {
-    icon: "recycling",
-    wrapper: "bg-secondary/10 text-secondary",
-    title: "KWT Berkah Mandiri",
-    description:
-      "Inisiatif pengomposan oleh Kelompok Wanita Tani untuk pertanian berkelanjutan.",
-  },
-];
-
 import type { HomepageData } from "../../data/homepage.types";
 
 type Props = {
@@ -40,9 +16,11 @@ export default function NamaSection({ data }: Props) {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {recoveryItems.map((item) => (
+          {data.recoveryItems.map((item) => (
             <div key={item.title} className="bg-white p-8 rounded-3xl shadow-sm">
-              <div className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 ${item.wrapper}`}>
+              <div
+                className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 ${item.wrapper ?? "bg-primary/10 text-primary"}`}
+              >
                 <span className="material-symbols-outlined text-3xl">{item.icon}</span>
               </div>
               <h4 className="type-body font-bold mb-4">{item.title}</h4>

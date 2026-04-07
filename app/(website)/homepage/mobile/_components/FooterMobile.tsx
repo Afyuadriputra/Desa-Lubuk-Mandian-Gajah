@@ -12,9 +12,7 @@ export default function FooterMobile({ data }: Props) {
           <div className="type-body font-bold text-primary uppercase tracking-widest">
             {data.villageName}
           </div>
-          <p className="type-body text-on-surface-variant">
-            Melestarikan warisan leluhur Melayu Petalangan dan menjaga ekosistem gambut.
-          </p>
+          <p className="type-body text-on-surface-variant">{data.footerDescription}</p>
         </div>
 
         <div className="border-t border-primary/5 pt-6">
@@ -46,20 +44,24 @@ export default function FooterMobile({ data }: Props) {
               </span>
             </summary>
             <div className="pt-4 space-y-4 type-body text-on-surface-variant">
-              <div className="flex justify-between"><span>Senin - Kamis</span> <span>08:00 - 15:00</span></div>
-              <div className="flex justify-between"><span>Jumat</span> <span>08:00 - 11:30</span></div>
-              <div className="flex justify-between text-error font-bold"><span>Sabtu - Minggu</span> <span>Tutup</span></div>
+              {data.officeHours.map((item) => (
+                <div key={item.day} className={`flex justify-between ${item.danger ? "text-error font-bold" : ""}`}>
+                  <span>{item.day}</span>
+                  <span>{item.time}</span>
+                </div>
+              ))}
             </div>
           </details>
         </div>
 
         <div className="pt-8 border-t border-primary/10 text-center section-stack-tight">
-          <p className="type-label text-on-surface-variant">
-            © 2024 {data.villageName}
-          </p>
+          <p className="type-label text-on-surface-variant">{data.footerCopyright}</p>
           <div className="flex justify-center gap-4 opacity-40 grayscale scale-75">
-            <span className="type-label font-bold">WONDERFUL INDONESIA</span>
-            <span className="type-label font-bold">RIAU HOMELAND</span>
+            {data.footerBadges.map((badge) => (
+              <span key={badge} className="type-label font-bold">
+                {badge}
+              </span>
+            ))}
           </div>
         </div>
       </div>

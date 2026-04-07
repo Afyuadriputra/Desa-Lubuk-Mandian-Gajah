@@ -10,7 +10,7 @@ export default function HeroMobile({ data }: Props) {
       <div className="absolute inset-0 z-0">
         <img
           className="w-full h-full object-cover"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIEm68iyNLjllXfE6gSr5C4MAJZq0v_Vz47u8I4Z0UCzuQ09vGd0viVuFlxDpeXxqhHLD7BXHdc92slNlr-GsMrzGV6fYYpMSbaKG-HeTzbRDMkRE7vzR-oDhjTWPqIxCMttnTwHZWqU8HQzDUT4IaVLSP_INNwMtbLZbGqMhzqqS8k-C2Kj-6iKtc2TylINONnikb2svjB8-4NlNZPrp4FFf-C_zy6V3qpUwGpnkEQIus8gU1uq4_Vu_VkaisbRwSxrM82pSWk6I"
+          src={data.heroImage}
           alt={data.villageName}
         />
         <div className="absolute inset-0 hero-gradient-mobile" />
@@ -20,7 +20,7 @@ export default function HeroMobile({ data }: Props) {
         <div className="section-stack-tight">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-container text-secondary type-label font-bold rounded-full w-fit">
             <span className="material-symbols-outlined text-sm">eco</span>
-            Desa Peduli Gambut
+            {data.heroBadge}
           </span>
 
           <h1 className="type-display font-bold text-white tracking-tight text-balance">

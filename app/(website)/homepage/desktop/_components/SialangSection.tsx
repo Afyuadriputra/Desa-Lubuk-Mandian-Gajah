@@ -10,17 +10,15 @@ export default function NamaSection({ data }: Props) {
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
         <div className="section-stack">
           <span className="inline-block px-4 py-2 rounded-full bg-secondary-container/20 border border-secondary-container/30 text-secondary-container type-label font-bold w-fit">
-            Kearifan Lokal
+            {data.sialangBadge}
           </span>
-          <h2 className="type-title font-bold">Warisan Alam yang Masih Dijaga</h2>
-          <p className="type-body text-primary-fixed">
-            Kawasan Hutan Adat Kopung Sialang adalah bukti nyata kepedulian kami. Di sini terdapat pohon-pohon Sialang raksasa yang dilindungi secara adat. Tradisi <strong>"Menumbai"</strong> — memanen madu di malam hari dengan lantunan mantra — dipimpin oleh Juagan Tuo dan Juagan Mudo.
-          </p>
+          <h2 className="type-title font-bold">{data.sialangTitle}</h2>
+          <p className="type-body text-primary-fixed">{data.sialangDescription}</p>
           <div className="p-6 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm">
-            <p className="type-body italic text-primary-fixed mb-4">"Menjaga Sialang berarti menjaga keberlangsungan hidup dan berkah dari alam."</p>
+            <p className="type-body italic text-primary-fixed mb-4">"{data.sialangQuote}"</p>
             <div className="flex items-center gap-4">
               <span className="material-symbols-outlined text-secondary-fixed-dim">park</span>
-              <span className="type-body font-bold">50.6 Hektar di 9 Lokasi Lindung</span>
+              <span className="type-body font-bold">{data.sialangStat}</span>
             </div>
           </div>
         </div>
@@ -28,12 +26,12 @@ export default function NamaSection({ data }: Props) {
         <div className="relative">
           <img
             className="rounded-[3rem] w-full aspect-square object-cover shadow-2xl"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKRm5Kezn1GW2oOwiNtjyvOrJmgXp9T8lD4Xs7KQ0vND94x2NGEevGJSABFiBLpBvcl3TsD4TJGEB61Va_oyCsfNaHFqOE8i2BQC4UgDChYCeLpu8_PehPF3fYuypa8IyXDy5RU3VTzeEjkz7NTQp9nF16Rmsk6VOobKSz5gbYklwSmEzFUGdpOVloTrR8unS9BZrrVmNMbyK-vSu0E6hG8lO9nesh1mFwybUZXE1osYxHNSUKtFNM0pRBLCF4aqSzqBwms85m5yI"
-            alt="Kopung Sialang"
+            src={data.sialangImage}
+            alt={data.sialangTitle}
           />
           <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-t from-primary/60 to-transparent" />
           <div className="absolute bottom-8 left-8">
-            <h3 className="type-title font-bold">Kopung Sialang</h3>
+            <h3 className="type-title font-bold">{data.sialangTitle}</h3>
           </div>
         </div>
       </div>

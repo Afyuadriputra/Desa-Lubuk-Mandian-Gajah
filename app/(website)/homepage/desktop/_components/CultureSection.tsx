@@ -1,18 +1,3 @@
-const cultureCards = [
-  {
-    icon: "groups",
-    title: "Batin Bunut",
-    description:
-      "Keterikatan sejarah dan adat dengan kedatuan Bunut sebagai pusat peradaban lokal.",
-  },
-  {
-    icon: "record_voice_over",
-    title: "Dialek Melayu Kampar",
-    description:
-      "Identitas tutur yang khas, mencerminkan kedekatan geografis dan kekerabatan budaya.",
-  },
-];
-
 import type { HomepageData } from "../../data/homepage.types";
 
 type Props = {
@@ -31,16 +16,14 @@ export default function NamaSection({ data }: Props) {
       </div>
 
       <div className="max-w-4xl mx-auto px-6 text-center section-stack relative z-10">
-        <h2 className="type-title font-bold text-primary">Akar Budaya Melayu Petalangan</h2>
+        <h2 className="type-title font-bold text-primary">{data.cultureTitle}</h2>
         <div className="flex justify-center">
           <div className="pucuk-rebung-divider" />
         </div>
-        <p className="type-body text-on-surface-variant">
-          Masyarakat desa merupakan bagian dari Sub-Suku Petalangan yang memiliki hubungan erat dengan Batin Bunut. Kami menuturkan Dialek Melayu Kampar dan memegang teguh nilai-nilai musyawarah serta kebersamaan dalam setiap sendi kehidupan sosial.
-        </p>
+        <p className="type-body text-on-surface-variant">{data.cultureDescription}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-12">
-          {cultureCards.map((card) => (
+          {data.cultureCards.map((card) => (
             <div key={card.title} className="p-8 rounded-3xl bg-surface-container shadow-sm border border-primary/10">
               <span className="material-symbols-outlined text-4xl text-secondary mb-4">{card.icon}</span>
               <h4 className="type-body font-bold mb-2">{card.title}</h4>
