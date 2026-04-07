@@ -6,9 +6,9 @@ type Props = {
 
 export default function FacilitiesMobile({ data }: Props) {
   return (
-    <section className="py-16 bg-surface-container-low">
+    <section className="section-shell-mobile bg-surface-container-low">
       <div className="px-6">
-        <h2 className="text-2xl font-headline font-bold text-primary text-center mb-10">
+        <h2 className="type-title font-bold text-primary text-center mb-8">
           Fasilitas Desa
         </h2>
 
@@ -16,12 +16,12 @@ export default function FacilitiesMobile({ data }: Props) {
           {data.facilities.map((item) => (
             <div
               key={item.label}
-              className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm"
+              className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm"
             >
               <span className="material-symbols-outlined text-primary text-xl">
                 {item.icon}
               </span>
-              <span className="text-xs font-bold">{item.label}</span>
+              <span className="type-body font-bold">{item.label}</span>
             </div>
           ))}
         </div>

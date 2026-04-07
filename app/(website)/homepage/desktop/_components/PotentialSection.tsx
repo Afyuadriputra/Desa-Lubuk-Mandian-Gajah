@@ -52,14 +52,14 @@ type Props = {
 
 export default function NamaSection({ data }: Props) {
   return (
-    <section className="py-24 bg-surface">
+    <section className="section-shell bg-surface">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl md:text-5xl font-headline font-bold text-primary">Potensi Unggulan Desa</h2>
+        <div className="text-center section-stack-tight mb-16">
+          <h2 className="type-title font-bold text-primary">Potensi Unggulan Desa</h2>
           <div className="flex justify-center">
             <div className="pucuk-rebung-divider" />
           </div>
-          <p className="text-on-surface-variant max-w-2xl mx-auto text-lg">
+          <p className="type-body text-on-surface-variant max-w-2xl mx-auto">
             "Karet dan sawit menjadi primadona pendapatan utama masyarakat, sementara padi dan hortikultura melengkapi kehidupan pangan."
           </p>
         </div>
@@ -69,22 +69,22 @@ export default function NamaSection({ data }: Props) {
             <div key={item.title} className="group relative rounded-3xl overflow-hidden aspect-[3/4]">
               <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src={item.image} alt={item.title} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-6 flex flex-col justify-end">
-                <h4 className="text-xl font-bold text-white">{item.title}</h4>
+                <h4 className="type-body font-bold text-white">{item.title}</h4>
               </div>
             </div>
           ))}
         </div>
 
         <div className="bg-primary-container rounded-[2.5rem] p-12 text-white">
-          <h3 className="text-3xl font-headline font-bold mb-8 text-center">Potensi yang Bisa Berkembang</h3>
+          <h3 className="type-title font-bold mb-8 text-center">Potensi yang Bisa Berkembang</h3>
           <div className="grid md:grid-cols-3 gap-12">
             {opportunityItems.map((item) => (
               <div key={item.title} className="space-y-4">
                 <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
                   <span className="material-symbols-outlined">{item.icon}</span>
                 </div>
-                <h4 className="text-xl font-bold">{item.title}</h4>
-                <p className="text-primary-fixed opacity-90">{item.description}</p>
+                <h4 className="type-body font-bold">{item.title}</h4>
+                <p className="type-body text-primary-fixed opacity-90">{item.description}</p>
               </div>
             ))}
           </div>

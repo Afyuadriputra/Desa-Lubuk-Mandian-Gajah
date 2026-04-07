@@ -6,26 +6,29 @@ type Props = {
 
 export default function ContactMobile({ data }: Props) {
   return (
-    <section className="py-16 px-6" id="kontak">
+    <section className="section-shell-mobile px-6" id="kontak">
       <div className="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col border border-primary/5">
-        <div className="p-8 space-y-6">
-          <h2 className="text-3xl font-headline font-bold text-primary">Hubungi Kami</h2>
+        <div className="p-8 section-stack-tight">
+          <h2 className="type-title font-bold text-primary">Hubungi Kami</h2>
 
           <div className="space-y-4">
             <div className="flex gap-4 items-start">
               <span className="material-symbols-outlined text-primary">location_on</span>
-              <p className="text-sm text-on-surface-variant">{data.contact.address}</p>
+              <p className="type-body text-on-surface-variant">{data.contact.address}</p>
             </div>
             <div className="flex gap-4 items-start">
               <span className="material-symbols-outlined text-primary">chat</span>
-              <p className="text-sm text-on-surface-variant">{data.contact.whatsapp}</p>
+              <p className="type-body text-on-surface-variant">{data.contact.whatsapp}</p>
             </div>
           </div>
 
-          <button className="w-full bg-primary text-white py-4 rounded-xl font-bold flex justify-center items-center gap-2">
+          <a
+            className="w-full bg-primary text-white py-4 rounded-xl font-bold flex justify-center items-center gap-2"
+            href={`https://wa.me/${data.contact.whatsapp.replace(/\D/g, "")}`}
+          >
             Kirim Pesan
             <span className="material-symbols-outlined">send</span>
-          </button>
+          </a>
         </div>
 
         <div className="h-48 bg-stone-100 relative">

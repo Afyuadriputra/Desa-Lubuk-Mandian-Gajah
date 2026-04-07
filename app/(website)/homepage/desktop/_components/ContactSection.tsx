@@ -6,12 +6,12 @@ type Props = {
 
 export default function NamaSection({ data }: Props) {
   return (
-    <section className="py-24 bg-surface" id="kontak">
+    <section className="section-shell bg-surface" id="kontak">
       <div className="max-w-7xl mx-auto px-6">
         <div className="bg-white rounded-[3rem] shadow-xl overflow-hidden grid md:grid-cols-2 gap-0 border border-primary/5">
-          <div className="p-12 md:p-16 space-y-8">
-            <h2 className="text-4xl font-headline font-bold text-primary">Hubungi Kami</h2>
-            <p className="text-on-surface-variant text-lg">
+          <div className="p-12 md:p-16 section-stack">
+            <h2 className="type-title font-bold text-primary">Hubungi Kami</h2>
+            <p className="type-body text-on-surface-variant">
               Mari berdiskusi atau berkunjung ke desa kami untuk mengenal lebih dekat warisan budaya dan alamnya.
             </p>
 
@@ -21,8 +21,8 @@ export default function NamaSection({ data }: Props) {
                   <span className="material-symbols-outlined">location_on</span>
                 </div>
                 <div>
-                  <h4 className="font-bold">Alamat Kantor Desa</h4>
-                  <p className="text-on-surface-variant">Jl. Raya Lubuk Mandian Gajah, Kec. Bunut, Kab. Pelalawan, Riau.</p>
+                  <h4 className="type-body font-bold">Alamat Kantor Desa</h4>
+                  <p className="type-body text-on-surface-variant">Jl. Raya Lubuk Mandian Gajah, Kec. Bunut, Kab. Pelalawan, Riau.</p>
                 </div>
               </div>
 
@@ -31,8 +31,8 @@ export default function NamaSection({ data }: Props) {
                   <span className="material-symbols-outlined">chat</span>
                 </div>
                 <div>
-                  <h4 className="font-bold">WhatsApp</h4>
-                  <p className="text-on-surface-variant">+62 812-3456-7890</p>
+                  <h4 className="type-body font-bold">WhatsApp</h4>
+                  <p className="type-body text-on-surface-variant">+62 812-3456-7890</p>
                 </div>
               </div>
             </div>

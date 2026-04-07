@@ -1,17 +1,18 @@
 ﻿import "./globals.css";
 import type { ReactNode } from "react";
+import LocatorRuntime from "./LocatorRuntime";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="id" className="light">
-      <head>
+    <html lang="id" className="light" suppressHydrationWarning>
+      <head suppressHydrationWarning>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
         <link
@@ -82,7 +83,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                       full: "9999px"
                     },
                     fontFamily: {
-                      headline: ["Noto Serif"],
+                      headline: ["Manrope"],
                       body: ["Manrope"],
                       label: ["Manrope"]
                     }
@@ -94,7 +95,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
 
-      <body className="bg-surface font-body text-on-surface selection:bg-primary/20">
+      <body className="bg-surface font-body text-on-surface selection:bg-primary/20 antialiased">
+        <LocatorRuntime />
         {children}
       </body>
     </html>

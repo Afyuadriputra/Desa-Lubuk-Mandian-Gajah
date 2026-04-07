@@ -17,14 +17,14 @@ export default function HeroSection({ data }: Props) {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="max-w-3xl text-white space-y-6">
-          <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight tracking-tight">
+        <div className="max-w-3xl text-white section-stack">
+          <h1 className="type-display font-bold tracking-tight text-balance">
             {data.villageName}
           </h1>
-          <p className="text-xl md:text-2xl text-secondary-fixed-dim leading-relaxed font-headline italic font-semibold">
+          <p className="type-title text-secondary-fixed-dim italic font-semibold text-balance">
             "{data.tagline}"
           </p>
-          <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl">
+          <p className="type-body text-white/90 max-w-2xl">
             {data.heroDescription}
           </p>
           <div className="flex flex-wrap gap-4 pt-4">
@@ -37,7 +37,7 @@ export default function HeroSection({ data }: Props) {
             </a>
             <a
               href="/gambut"
-              className="border-2 border-white/30 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all"
+              className="border-2 border-white/30 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-colors duration-200"
             >
               Kenali Gambut Desa
             </a>

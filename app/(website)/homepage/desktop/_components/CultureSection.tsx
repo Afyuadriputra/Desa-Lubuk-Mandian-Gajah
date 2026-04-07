@@ -21,7 +21,7 @@ type Props = {
 
 export default function NamaSection({ data }: Props) {
   return (
-    <section className="py-24 bg-surface relative overflow-hidden">
+    <section className="section-shell bg-surface relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
         <div className="grid grid-cols-6 gap-4 p-4">
           {Array.from({ length: 6 }).map((_, index) => (
@@ -30,12 +30,12 @@ export default function NamaSection({ data }: Props) {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 text-center space-y-8 relative z-10">
-        <h2 className="text-4xl font-headline font-bold text-primary">Akar Budaya Melayu Petalangan</h2>
+      <div className="max-w-4xl mx-auto px-6 text-center section-stack relative z-10">
+        <h2 className="type-title font-bold text-primary">Akar Budaya Melayu Petalangan</h2>
         <div className="flex justify-center">
           <div className="pucuk-rebung-divider" />
         </div>
-        <p className="text-xl text-on-surface-variant leading-relaxed">
+        <p className="type-body text-on-surface-variant">
           Masyarakat desa merupakan bagian dari Sub-Suku Petalangan yang memiliki hubungan erat dengan Batin Bunut. Kami menuturkan Dialek Melayu Kampar dan memegang teguh nilai-nilai musyawarah serta kebersamaan dalam setiap sendi kehidupan sosial.
         </p>
 
@@ -43,8 +43,8 @@ export default function NamaSection({ data }: Props) {
           {cultureCards.map((card) => (
             <div key={card.title} className="p-8 rounded-3xl bg-surface-container shadow-sm border border-primary/10">
               <span className="material-symbols-outlined text-4xl text-secondary mb-4">{card.icon}</span>
-              <h4 className="text-xl font-bold mb-2">{card.title}</h4>
-              <p className="text-on-surface-variant">{card.description}</p>
+              <h4 className="type-body font-bold mb-2">{card.title}</h4>
+              <p className="type-body text-on-surface-variant">{card.description}</p>
             </div>
           ))}
         </div>

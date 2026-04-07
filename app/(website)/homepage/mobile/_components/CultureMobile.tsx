@@ -6,10 +6,10 @@ type Props = {
 
 export default function CultureMobile({ data }: Props) {
   return (
-    <section className="py-16 bg-surface">
-      <div className="px-6 space-y-8 text-center">
+    <section className="section-shell-mobile bg-surface">
+      <div className="px-6 section-stack text-center">
         <div className="space-y-2">
-          <h2 className="text-3xl font-headline font-bold text-primary">
+          <h2 className="type-title font-bold text-primary">
             {data.cultureTitle}
           </h2>
 
@@ -18,7 +18,7 @@ export default function CultureMobile({ data }: Props) {
           </div>
         </div>
 
-        <p className="text-on-surface-variant leading-relaxed">
+        <p className="type-body text-on-surface-variant">
           {data.cultureDescription}
         </p>
 
@@ -33,8 +33,8 @@ export default function CultureMobile({ data }: Props) {
               </span>
 
               <div>
-                <h4 className="font-bold">{card.title}</h4>
-                <p className="text-sm text-on-surface-variant">
+                <h4 className="type-body font-bold">{card.title}</h4>
+                <p className="type-body text-on-surface-variant">
                   {card.description}
                 </p>
               </div>

@@ -6,21 +6,21 @@ type Props = {
 
 export default function NamaSection({ data }: Props) {
   return (
-    <section className="py-24 bg-primary text-white relative">
+    <section className="section-shell bg-primary text-white relative">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-        <div className="space-y-8">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-secondary-container/20 border border-secondary-container/30 text-secondary-container text-xs font-bold tracking-widest uppercase">
+        <div className="section-stack">
+          <span className="inline-block px-4 py-2 rounded-full bg-secondary-container/20 border border-secondary-container/30 text-secondary-container type-label font-bold w-fit">
             Kearifan Lokal
           </span>
-          <h2 className="text-5xl font-headline font-bold">Warisan Alam yang Masih Dijaga</h2>
-          <p className="text-lg text-primary-fixed leading-relaxed">
+          <h2 className="type-title font-bold">Warisan Alam yang Masih Dijaga</h2>
+          <p className="type-body text-primary-fixed">
             Kawasan Hutan Adat Kopung Sialang adalah bukti nyata kepedulian kami. Di sini terdapat pohon-pohon Sialang raksasa yang dilindungi secara adat. Tradisi <strong>"Menumbai"</strong> — memanen madu di malam hari dengan lantunan mantra — dipimpin oleh Juagan Tuo dan Juagan Mudo.
           </p>
           <div className="p-6 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm">
-            <p className="italic text-primary-fixed mb-4">"Menjaga Sialang berarti menjaga keberlangsungan hidup dan berkah dari alam."</p>
-            <div className="flex items-center gap-2">
+            <p className="type-body italic text-primary-fixed mb-4">"Menjaga Sialang berarti menjaga keberlangsungan hidup dan berkah dari alam."</p>
+            <div className="flex items-center gap-4">
               <span className="material-symbols-outlined text-secondary-fixed-dim">park</span>
-              <span className="font-bold">50.6 Hektar di 9 Lokasi Lindung</span>
+              <span className="type-body font-bold">50.6 Hektar di 9 Lokasi Lindung</span>
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@ export default function NamaSection({ data }: Props) {
           />
           <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-t from-primary/60 to-transparent" />
           <div className="absolute bottom-8 left-8">
-            <h3 className="text-3xl font-headline font-bold">Kopung Sialang</h3>
+            <h3 className="type-title font-bold">Kopung Sialang</h3>
           </div>
         </div>
       </div>

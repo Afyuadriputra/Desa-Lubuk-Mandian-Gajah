@@ -10,9 +10,9 @@ export default function QuickStatsMobile({ data }: Props) {
   );
 
   return (
-    <section className="py-16 bg-surface">
+    <section className="section-shell-mobile bg-surface">
       <div className="px-6">
-        <h2 className="text-2xl font-headline font-bold text-primary mb-2 text-center">
+        <h2 className="type-title font-bold text-primary mb-2 text-center">
           Fakta Singkat
         </h2>
         <div className="flex justify-center mb-8">
@@ -23,12 +23,12 @@ export default function QuickStatsMobile({ data }: Props) {
           {mobileStats.map((item) => (
             <div
               key={item.label}
-              className="bg-white p-5 rounded-2xl shadow-sm border border-primary/5 text-center"
+              className="bg-white p-4 rounded-2xl shadow-sm border border-primary/5 text-center"
             >
-              <div className="text-2xl font-headline font-bold text-primary">
+              <div className="type-title font-bold text-primary">
                 {item.value}
               </div>
-              <div className="text-[10px] uppercase font-bold text-stone-500 tracking-wider">
+              <div className="type-label font-bold text-stone-500">
                 {item.label}
               </div>
             </div>

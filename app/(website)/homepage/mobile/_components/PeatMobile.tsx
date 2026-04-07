@@ -6,9 +6,9 @@ type Props = {
 
 export default function PeatMobile({ data }: Props) {
   return (
-    <section className="py-16 bg-surface">
-      <div className="px-6 space-y-6">
-        <h2 className="text-3xl font-headline font-bold text-primary">
+    <section className="section-shell-mobile bg-surface">
+      <div className="px-6 section-stack-tight">
+        <h2 className="type-title font-bold text-primary">
           {data.peatTitle}
         </h2>
 
@@ -22,11 +22,11 @@ export default function PeatMobile({ data }: Props) {
           />
         </div>
 
-        <div className="p-6 bg-secondary-fixed/20 rounded-2xl border-l-4 border-secondary italic font-headline text-lg text-secondary leading-snug">
+        <div className="p-6 bg-secondary-fixed/20 rounded-2xl border-l-4 border-secondary italic type-body font-semibold text-secondary">
           "{data.peatQuote}"
         </div>
 
-        <p className="text-on-surface-variant leading-relaxed text-sm">
+        <p className="type-body text-on-surface-variant">
           {data.peatDescription}
         </p>
       </div>

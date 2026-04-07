@@ -6,7 +6,7 @@ type Props = {
 
 export default function NamaSection({ data }: Props) {
   return (
-    <section className="py-24 bg-surface scroll-mt-32" id="kontak">
+    <section className="section-shell bg-surface scroll-mt-32" id="gambut">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
         <div className="order-2 md:order-1 grid grid-cols-2 gap-4">
           <img
@@ -21,14 +21,14 @@ export default function NamaSection({ data }: Props) {
           />
         </div>
 
-        <div className="order-1 md:order-2 space-y-6">
-          <h2 className="text-4xl font-headline font-bold text-primary">Desa dan Gambut</h2>
+        <div className="order-1 md:order-2 section-stack-tight">
+          <h2 className="type-title font-bold text-primary">Desa dan Gambut</h2>
           <div className="pucuk-rebung-divider" />
-          <p className="text-lg text-on-surface-variant leading-relaxed">
+          <p className="type-body text-on-surface-variant">
             Dengan luas 82.02 hektar lahan gambut bertingkat kematangan saprik dan hemik, wilayah ini memiliki sejarah panjang sebagai area persawahan. Namun, tantangan perubahan iklim kini membuat kawasan ini rentan terhadap risiko banjir saat hujan dan kekeringan ekstrem.
           </p>
           <div className="bg-secondary-fixed/30 p-8 rounded-3xl border-l-4 border-secondary">
-            <p className="text-xl font-headline italic font-bold text-secondary">
+            <p className="type-body italic font-bold text-secondary">
               "Gambut bukan hanya bentang alam, tetapi bagian dari sejarah, tantangan, dan masa depan Desa Lubuk Mandian Gajah."
             </p>
           </div>

@@ -6,9 +6,9 @@ type Props = {
 
 export default function PotentialMobile({ data }: Props) {
   return (
-    <section className="py-16 bg-surface">
+    <section className="section-shell-mobile bg-surface">
       <div className="px-6">
-        <h2 className="text-2xl font-headline font-bold text-primary mb-6">
+        <h2 className="type-title font-bold text-primary mb-6">
           Potensi Unggulan
         </h2>
 
@@ -24,7 +24,7 @@ export default function PotentialMobile({ data }: Props) {
                 alt={item.title}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
-                <span className="text-white font-bold text-sm">
+                <span className="type-body text-white font-bold">
                   {item.title}
                 </span>
               </div>

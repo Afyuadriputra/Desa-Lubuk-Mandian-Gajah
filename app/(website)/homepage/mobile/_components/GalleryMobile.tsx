@@ -6,13 +6,13 @@ type Props = {
 
 export default function GalleryMobile({ data }: Props) {
   return (
-    <section className="py-16 bg-surface">
+    <section className="section-shell-mobile bg-surface">
       <div className="px-6">
-        <h2 className="text-2xl font-headline font-bold text-primary mb-6">
+        <h2 className="type-title font-bold text-primary mb-6">
           Galeri Desa
         </h2>
 
-        <div className="flex overflow-x-auto gap-3 pb-2 hide-scrollbar -mx-6 px-6">
+        <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar -mx-6 px-6">
           {data.gallery.map((item) => (
             <div
               key={item.alt}

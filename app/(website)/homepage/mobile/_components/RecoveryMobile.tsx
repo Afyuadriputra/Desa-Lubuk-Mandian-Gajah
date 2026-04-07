@@ -6,10 +6,10 @@ type Props = {
 
 export default function RecoveryMobile({ data }: Props) {
   return (
-    <section className="py-16 bg-surface-container-high">
-      <div className="px-6 space-y-8">
+    <section className="section-shell-mobile bg-surface-container-high">
+      <div className="px-6 section-stack">
         <div className="text-center">
-          <h2 className="text-2xl font-headline font-bold text-primary mb-2">
+          <h2 className="type-title font-bold text-primary mb-2">
             Upaya Pemulihan
           </h2>
 
@@ -28,7 +28,7 @@ export default function RecoveryMobile({ data }: Props) {
             return (
               <div
                 key={item.title}
-                className="bg-white p-5 rounded-2xl flex items-center gap-4 shadow-sm"
+                className="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm"
               >
                 <div
                   className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${colorClass}`}
@@ -37,8 +37,8 @@ export default function RecoveryMobile({ data }: Props) {
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-sm">{item.title}</h4>
-                  <p className="text-xs text-on-surface-variant">
+                  <h4 className="type-body font-bold">{item.title}</h4>
+                  <p className="type-body text-on-surface-variant">
                     {item.description}
                   </p>
                 </div>

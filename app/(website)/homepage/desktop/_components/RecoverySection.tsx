@@ -30,10 +30,10 @@ type Props = {
 
 export default function NamaSection({ data }: Props) {
   return (
-    <section className="py-24 bg-surface-container-high">
-      <div className="max-w-5xl mx-auto px-6 text-center space-y-12">
-        <div className="space-y-4">
-          <h2 className="text-4xl font-headline font-bold text-primary">Dari Karhutla ke Pemulihan</h2>
+    <section className="section-shell bg-surface-container-high">
+      <div className="max-w-5xl mx-auto px-6 text-center section-stack">
+        <div className="section-stack-tight">
+          <h2 className="type-title font-bold text-primary">Dari Karhutla ke Pemulihan</h2>
           <div className="flex justify-center">
             <div className="pucuk-rebung-divider" />
           </div>
@@ -45,8 +45,8 @@ export default function NamaSection({ data }: Props) {
               <div className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 ${item.wrapper}`}>
                 <span className="material-symbols-outlined text-3xl">{item.icon}</span>
               </div>
-              <h4 className="font-bold text-xl mb-4">{item.title}</h4>
-              <p className="text-on-surface-variant">{item.description}</p>
+              <h4 className="type-body font-bold mb-4">{item.title}</h4>
+              <p className="type-body text-on-surface-variant">{item.description}</p>
             </div>
           ))}
         </div>

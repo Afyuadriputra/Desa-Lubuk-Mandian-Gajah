@@ -17,21 +17,21 @@ export default function HeroMobile({ data }: Props) {
       </div>
 
       <div className="relative z-10 w-full px-6 pb-12">
-        <div className="space-y-4">
-          <span className="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-secondary text-[10px] font-bold uppercase tracking-widest rounded-full">
+        <div className="section-stack-tight">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-container text-secondary type-label font-bold rounded-full w-fit">
             <span className="material-symbols-outlined text-sm">eco</span>
             Desa Peduli Gambut
           </span>
 
-          <h1 className="text-4xl font-headline font-bold text-white leading-tight">
+          <h1 className="type-display font-bold text-white tracking-tight text-balance">
             {data.villageName}
           </h1>
 
-          <p className="text-secondary-fixed-dim italic font-headline text-lg font-semibold leading-snug">
+          <p className="type-title text-secondary-fixed-dim italic font-semibold">
             "{data.tagline}"
           </p>
 
-          <div className="flex flex-col gap-3 pt-4">
+          <div className="flex flex-col gap-4 pt-4">
             <a
               href="/sejarah"
               className="w-full bg-primary-container text-white py-4 rounded-xl font-bold flex justify-center items-center gap-2"
