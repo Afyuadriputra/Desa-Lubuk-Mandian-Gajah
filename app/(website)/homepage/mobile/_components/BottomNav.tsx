@@ -1,22 +1,91 @@
 export default function BottomNav() {
+  const items = [
+    {
+      href: "/homepage",
+      icon: "home",
+      label: "Beranda",
+      active: true,
+    },
+    {
+      href: "/sejarah",
+      icon: "history_edu",
+      label: "Sejarah",
+    },
+    {
+      href: "/gambut",
+      icon: "nature",
+      label: "Gambut",
+    },
+    {
+      href: "#kontak",
+      icon: "chat",
+      label: "Kontak",
+    },
+  ];
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-primary/10 z-[60] px-6 py-4 flex justify-between items-center md:hidden">
-      <a className="flex flex-col items-center gap-2 text-primary" href="/homepage">
-        <span className="material-symbols-outlined text-2xl">home</span>
-        <span className="type-label font-bold">Beranda</span>
-      </a>
-      <a className="flex flex-col items-center gap-2 text-stone-400" href="/sejarah">
-        <span className="material-symbols-outlined text-2xl">history_edu</span>
-        <span className="type-label font-bold">Sejarah</span>
-      </a>
-      <a className="flex flex-col items-center gap-2 text-stone-400" href="/gambut">
-        <span className="material-symbols-outlined text-2xl">nature</span>
-        <span className="type-label font-bold">Gambut</span>
-      </a>
-      <a className="flex flex-col items-center gap-2 text-stone-400" href="#kontak">
-        <span className="material-symbols-outlined text-2xl">chat</span>
-        <span className="type-label font-bold">Kontak</span>
-      </a>
-    </nav>
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] px-4 pb-[calc(12px+env(safe-area-inset-bottom))] md:hidden">
+      <nav
+        className="pointer-events-auto mx-auto flex max-w-md items-center justify-between rounded-[28px] border border-white/45 px-2.5 py-2 shadow-[0_12px_34px_rgba(20,32,24,0.16)]"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.32) 100%)",
+          backdropFilter: "blur(18px) saturate(180%)",
+          WebkitBackdropFilter: "blur(18px) saturate(180%)",
+          boxShadow:
+            "0 12px 34px rgba(20,32,24,0.16), inset 0 1px 0 rgba(255,255,255,0.55)",
+        }}
+      >
+        {items.map((item) => {
+          const isActive = item.active;
+
+          return (
+            <a
+              key={item.label}
+              href={item.href}
+              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[22px] px-2 py-2.5 transition-all duration-300 ${
+                isActive ? "text-primary" : "text-on-surface-variant/70"
+              }`}
+              style={
+                isActive
+                  ? {
+                      background:
+                        "linear-gradient(180deg, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0.22) 100%)",
+                      boxShadow:
+                        "inset 0 1px 0 rgba(255,255,255,0.7), 0 8px 18px rgba(31,94,59,0.10)",
+                    }
+                  : undefined
+              }
+            >
+              {isActive && (
+                <span className="absolute inset-x-4 top-1 h-px rounded-full bg-white/75" />
+              )}
+
+              <span
+                className={`flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
+                  isActive ? "bg-primary/12" : "bg-transparent"
+                }`}
+              >
+                <span
+                  className={`material-symbols-outlined ${
+                    isActive ? "text-[22px]" : "text-[21px]"
+                  }`}
+                >
+                  {item.icon}
+                </span>
+              </span>
+
+              <span
+                className={`text-[10px] font-bold leading-none tracking-[0.12em] uppercase ${
+                  isActive ? "text-primary" : "text-on-surface-variant/70"
+                }`}
+              >
+                {item.label}
+              </span>
+            </a>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

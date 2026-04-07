@@ -32,7 +32,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
         />
       </head>
-      <body className="bg-surface font-body text-on-surface selection:bg-primary/20 antialiased">
+      <body
+        className="bg-surface font-body text-on-surface selection:bg-primary/20 antialiased"
+        suppressHydrationWarning
+      >
         <SwiperRuntime />
         {children}
       </body>
