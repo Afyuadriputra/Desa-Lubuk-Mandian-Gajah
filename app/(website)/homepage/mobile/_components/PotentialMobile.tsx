@@ -55,7 +55,7 @@ export default function PotentialMobile({ data }: Props) {
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || !window.Swiper) return;
+    if (!root) return;
 
     const swiperEl = root.querySelector(".potential-swiper");
     const progressEls = Array.from(
@@ -82,58 +82,36 @@ export default function PotentialMobile({ data }: Props) {
 
     if (!swiperEl) return;
 
-    const updateIndicators = (swiper: { realIndex: number }) => {
+    let swiper:
+      | {
+          realIndex: number;
+          slideTo: (index: number) => void;
+          destroy: (deleteInstance?: boolean, cleanStyles?: boolean) => void;
+        }
+      | undefined;
+    let retryTimer: ReturnType<typeof window.setTimeout> | undefined;
+    let isDisposed = false;
+
+    const updateIndicators = (swiperInstance: { realIndex: number }) => {
       progressEls.forEach((el, index) => {
         el.classList.remove("is-past", "is-active");
-        if (index < swiper.realIndex) el.classList.add("is-past");
-        if (index === swiper.realIndex) el.classList.add("is-active");
+        if (index < swiperInstance.realIndex) el.classList.add("is-past");
+        if (index === swiperInstance.realIndex) el.classList.add("is-active");
       });
 
       dotEls.forEach((el, index) => {
-        el.classList.toggle("is-active", index === swiper.realIndex);
+        el.classList.toggle("is-active", index === swiperInstance.realIndex);
       });
     };
-
-    const swiper = new window.Swiper(swiperEl, {
-      slidesPerView: 1.12,
-      centeredSlides: true,
-      spaceBetween: 12,
-      speed: 620,
-      grabCursor: true,
-      slideToClickedSlide: true,
-      watchSlidesProgress: true,
-      resistanceRatio: 0.82,
-      observer: true,
-      observeParents: true,
-      breakpoints: {
-        390: {
-          slidesPerView: 1.08,
-          spaceBetween: 14,
-        },
-      },
-      on: {
-        init(swiperInstance: { realIndex: number }) {
-          updateIndicators(swiperInstance);
-        },
-        slideChange(swiperInstance: { realIndex: number }) {
-          updateIndicators(swiperInstance);
-        },
-      },
-    });
-
-    const dotHandlers = dotEls.map((dot, index) => {
-      const handler = () => swiper.slideTo(index);
-      dot.addEventListener("click", handler);
-      return { dot, handler };
-    });
 
     const openPreview = (
       image: string | null,
       title: string | null,
       subtitle: string | null
     ) => {
-      if (!modal || !previewImageWrap || !previewTitle || !previewSubtitle)
+      if (!modal || !previewImageWrap || !previewTitle || !previewSubtitle) {
         return;
+      }
 
       previewImageWrap.innerHTML = "";
 
@@ -142,6 +120,7 @@ export default function PotentialMobile({ data }: Props) {
         img.className = "story-preview-image";
         img.src = image;
         img.alt = title || "";
+        img.decoding = "async";
         previewImageWrap.appendChild(img);
       }
 
@@ -159,6 +138,12 @@ export default function PotentialMobile({ data }: Props) {
       previewImageWrap.innerHTML = "";
       document.body.style.overflow = "";
     };
+
+    const dotHandlers = dotEls.map((dot, index) => {
+      const handler = () => swiper?.slideTo(index);
+      dot.addEventListener("click", handler);
+      return { dot, handler };
+    });
 
     const triggerHandlers = previewTriggers.map((trigger) => {
       const handler = () => {
@@ -182,9 +167,48 @@ export default function PotentialMobile({ data }: Props) {
       if (event.key === "Escape") closePreview();
     };
 
+    const initSwiper = () => {
+      if (isDisposed) return;
+
+      if (!window.Swiper) {
+        retryTimer = window.setTimeout(initSwiper, 120);
+        return;
+      }
+
+      swiper = new window.Swiper(swiperEl, {
+        slidesPerView: 1.12,
+        centeredSlides: true,
+        spaceBetween: 12,
+        speed: 620,
+        grabCursor: true,
+        slideToClickedSlide: true,
+        watchSlidesProgress: true,
+        resistanceRatio: 0.82,
+        observer: true,
+        observeParents: true,
+        breakpoints: {
+          390: {
+            slidesPerView: 1.08,
+            spaceBetween: 14,
+          },
+        },
+        on: {
+          init(swiperInstance: { realIndex: number }) {
+            updateIndicators(swiperInstance);
+          },
+          slideChange(swiperInstance: { realIndex: number }) {
+            updateIndicators(swiperInstance);
+          },
+        },
+      });
+    };
+
     document.addEventListener("keydown", keyHandler);
+    initSwiper();
 
     return () => {
+      isDisposed = true;
+      if (retryTimer) window.clearTimeout(retryTimer);
       dotHandlers.forEach(({ dot, handler }) =>
         dot.removeEventListener("click", handler)
       );
@@ -196,7 +220,7 @@ export default function PotentialMobile({ data }: Props) {
       );
       document.removeEventListener("keydown", keyHandler);
       document.body.style.overflow = "";
-      swiper.destroy(true, true);
+      swiper?.destroy(true, true);
     };
   }, []);
 
@@ -279,6 +303,8 @@ export default function PotentialMobile({ data }: Props) {
                           className="story-image"
                           src={item.image}
                           alt={item.title}
+                          loading="lazy"
+                          decoding="async"
                         />
                         <div className="story-image-overlay" />
 
@@ -389,8 +415,14 @@ export default function PotentialMobile({ data }: Props) {
           overflow: visible;
         }
 
+        .potential-swiper .swiper-wrapper {
+          display: flex;
+          align-items: stretch;
+        }
+
         .potential-swiper .swiper-slide {
           width: 86%;
+          flex-shrink: 0;
           transition: transform 420ms ease, opacity 420ms ease;
           opacity: 0.68;
           transform: scale(0.94);
