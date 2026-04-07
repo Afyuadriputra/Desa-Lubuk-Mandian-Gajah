@@ -22,7 +22,13 @@ const recoveryItems = [
   },
 ];
 
-export default function RecoverySection() {
+import type { HomepageData } from "../../data/homepage.types";
+
+type Props = {
+  data: HomepageData;
+};
+
+export default function NamaSection({ data }: Props) {
   return (
     <section className="py-24 bg-surface-container-high">
       <div className="max-w-5xl mx-auto px-6 text-center space-y-12">

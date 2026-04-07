@@ -13,7 +13,13 @@ const cultureCards = [
   },
 ];
 
-export default function CultureSection() {
+import type { HomepageData } from "../../data/homepage.types";
+
+type Props = {
+  data: HomepageData;
+};
+
+export default function NamaSection({ data }: Props) {
   return (
     <section className="py-24 bg-surface relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">

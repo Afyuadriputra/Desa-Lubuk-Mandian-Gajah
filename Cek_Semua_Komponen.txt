@@ -1,0 +1,682 @@
+
+==================================================
+FILE: ContactSection.tsx
+==================================================
+export default function ContactSection() {
+  return (
+    <section className="py-24 bg-surface" id="kontak">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="bg-white rounded-[3rem] shadow-xl overflow-hidden grid md:grid-cols-2 gap-0 border border-primary/5">
+          <div className="p-12 md:p-16 space-y-8">
+            <h2 className="text-4xl font-headline font-bold text-primary">Hubungi Kami</h2>
+            <p className="text-on-surface-variant text-lg">
+              Mari berdiskusi atau berkunjung ke desa kami untuk mengenal lebih dekat warisan budaya dan alamnya.
+            </p>
+
+            <div className="space-y-6">
+              <div className="flex gap-6 items-start">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <span className="material-symbols-outlined">location_on</span>
+                </div>
+                <div>
+                  <h4 className="font-bold">Alamat Kantor Desa</h4>
+                  <p className="text-on-surface-variant">Jl. Raya Lubuk Mandian Gajah, Kec. Bunut, Kab. Pelalawan, Riau.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-6 items-start">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <span className="material-symbols-outlined">chat</span>
+                </div>
+                <div>
+                  <h4 className="font-bold">WhatsApp</h4>
+                  <p className="text-on-surface-variant">+62 812-3456-7890</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4 pt-4">
+              <a className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg" href="#">
+                <span className="material-symbols-outlined text-xl">public</span>
+              </a>
+              <a className="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg" href="#">
+                <span className="material-symbols-outlined text-xl">share</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="h-[400px] md:h-full min-h-[400px] bg-stone-100 relative">
+            <img
+              className="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe2OWIN8WvWVzgBoTga6KZzLKLbIXzZi0XeOreTLO3Hdk47MIDKpGtiX26Ow0CqfkOONLwgw7w9rdW8JcAqpq5IW5QGbLaGOSL0bcC3MqqF_iHdPcw55Q9ziCCmwGN6jp1xhXLyBqdHwwAZXhH1cEonbHy1bPvMoq72MAhPnfHt1ezptkdcJQHhsKPCW0X-WTqMMYbwOixJKq_RcRid7HAjMcVtLOenKNmkT0f4cPIp-yqidIzMZMwnejgjTCwzYhAZ0Ou_FUQ1n8"
+              alt="Peta desa"
+            />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-2xl animate-bounce">
+                <span className="material-symbols-outlined">push_pin</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: CultureSection.tsx
+==================================================
+const cultureCards = [
+  {
+    icon: "groups",
+    title: "Batin Bunut",
+    description:
+      "Keterikatan sejarah dan adat dengan kedatuan Bunut sebagai pusat peradaban lokal.",
+  },
+  {
+    icon: "record_voice_over",
+    title: "Dialek Melayu Kampar",
+    description:
+      "Identitas tutur yang khas, mencerminkan kedekatan geografis dan kekerabatan budaya.",
+  },
+];
+
+export default function CultureSection() {
+  return (
+    <section className="py-24 bg-surface relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+        <div className="grid grid-cols-6 gap-4 p-4">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div key={index} className="w-full aspect-square border-2 border-primary rotate-45" />
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 text-center space-y-8 relative z-10">
+        <h2 className="text-4xl font-headline font-bold text-primary">Akar Budaya Melayu Petalangan</h2>
+        <div className="flex justify-center">
+          <div className="pucuk-rebung-divider" />
+        </div>
+        <p className="text-xl text-on-surface-variant leading-relaxed">
+          Masyarakat desa merupakan bagian dari Sub-Suku Petalangan yang memiliki hubungan erat dengan Batin Bunut. Kami menuturkan Dialek Melayu Kampar dan memegang teguh nilai-nilai musyawarah serta kebersamaan dalam setiap sendi kehidupan sosial.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-12">
+          {cultureCards.map((card) => (
+            <div key={card.title} className="p-8 rounded-3xl bg-surface-container shadow-sm border border-primary/10">
+              <span className="material-symbols-outlined text-4xl text-secondary mb-4">{card.icon}</span>
+              <h4 className="text-xl font-bold mb-2">{card.title}</h4>
+              <p className="text-on-surface-variant">{card.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: FacilitiesSection.tsx
+==================================================
+const facilities = [
+  { icon: "construction", label: "58 Box Culvert" },
+  { icon: "water", label: "17 Embung & 2 Reservoir" },
+  { icon: "school", label: "SDN 007 & PAUD" },
+  { icon: "health_and_safety", label: "Poskesdes" },
+  { icon: "account_balance", label: "Kantor Desa" },
+];
+
+export default function FacilitiesSection() {
+  return (
+    <section className="py-24 bg-surface-container-low">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-4xl font-headline font-bold text-primary text-center mb-16">Fasilitas dan Kehidupan Desa</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
+          {facilities.map((item) => (
+            <div key={item.label} className="flex flex-col items-center text-center gap-4 group">
+              <div className="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center text-primary transition-transform group-hover:scale-110">
+                <span className="material-symbols-outlined text-4xl">{item.icon}</span>
+              </div>
+              <span className="font-bold">{item.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: GallerySection.tsx
+==================================================
+const galleryImages = [
+  {
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBe2OWIN8WvWVzgBoTga6KZzLKLbIXzZi0XeOreTLO3Hdk47MIDKpGtiX26Ow0CqfkOONLwgw7w9rdW8JcAqpq5IW5QGbLaGOSL0bcC3MqqF_iHdPcw55Q9ziCCmwGN6jp1xhXLyBqdHwwAZXhH1cEonbHy1bPvMoq72MAhPnfHt1ezptkdcJQHhsKPCW0X-WTqMMYbwOixJKq_RcRid7HAjMcVtLOenKNmkT0f4cPIp-yqidIzMZMwnejgjTCwzYhAZ0Ou_FUQ1n8",
+    tall: true,
+    caption: "Peta Wilayah Desa",
+  },
+  {
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBqMr6jhCxZomZK_pcEN6aNshbWi5k8TcaJJbmr88FYia0CeCk1crf1IzMwaoddDwDN7Q-WRx-XSwAlcNbKa7JpzqQAuyK25rmadkc-vu9ybSy65DNWUyOoNjcKi0tM1k_NWfArDP5UPZ8tF74o4_ICV2OVVuKihaIaG8xWUCpmPBNbdXcM1oFfg2ZnuH7Ux-veTNY52qwB0MfvebF98oXJSWWU8X-vBIuoSq5ZIZ6F9dTNcfJz5H1bdjWiONBo1Uy2bv96OQXCg34",
+    tall: false,
+  },
+  {
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDpqIWN5Ey98N7l2qF2MdGb-3RnZidVj-qaMXVA0F-tSLmaSXIQ1f4kTD0vvH7sD5hnRp7nlW-MarBXdsX_4relk9s0wK9AXQIKpXjsbmPehSls9rcTeIwl0xqMOqAd69rAEnxUqVfU5b9jGJ0l0uZNWe6o33WMYimQdtdbO3lCW8eqzDal50IVb9FjX87pQ_1hSNrgb_OlOG5ZN1s7ENplfvB061WcUFI42vz0d9KL_TCsg-Hs7JuW520BuWd_HU5ENkeYakc4puc",
+    tall: false,
+  },
+  {
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDKRm5Kezn1GW2oOwiNtjyvOrJmgXp9T8lD4Xs7KQ0vND94x2NGEevGJSABFiBLpBvcl3TsD4TJGEB61Va_oyCsfNaHFqOE8i2BQC4UgDChYCeLpu8_PehPF3fYuypa8IyXDy5RU3VTzeEjkz7NTQp9nF16Rmsk6VOobKSz5gbYklwSmEzFUGdpOVloTrR8unS9BZrrVmNMbyK-vSu0E6hG8lO9nesh1mFwybUZXE1osYxHNSUKtFNM0pRBLCF4aqSzqBwms85m5yI",
+    tall: true,
+  },
+  {
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDIRJCXJHR7CdBmAUAolGEtpl0z42sU-BeqfqTbp254fqUgZOa16bwahMEhh313llvIfsKIxznr6WoDaa85R0y3p9rAp7neGDDjczS5C9olyaSf7_h73dw77HMrwD93quSq2Vnw0nyA4rXZ6SMFwHz8cbGyKqFuSY1UJWZVZZeBHQs4bJMRUx9jQ4odyNetFSkjwDFEIWAmFq3PK9n3DME2WIuxLXEWodFKDNFwjMnaMgryn-ubn-cdFngpi-HHNmeYQBagnvqZCtc",
+    tall: false,
+  },
+];
+
+export default function GallerySection() {
+  return (
+    <section className="py-24 bg-surface">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-4xl font-headline font-bold text-primary mb-12">Galeri Desa</h2>
+        <div className="masonry-grid">
+          {galleryImages.map((item, index) => (
+            <div key={index} className={`rounded-3xl overflow-hidden relative group ${item.tall ? "row-span-2" : ""}`}>
+              <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src={item.image} alt={`Galeri desa ${index + 1}`} />
+              {item.caption ? (
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white font-bold">{item.caption}</span>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: HeroSection.tsx
+==================================================
+export default function HeroSection() {
+  return (
+    <section className="relative h-[90vh] flex items-center overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          className="w-full h-full object-cover"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIEm68iyNLjllXfE6gSr5C4MAJZq0v_Vz47u8I4Z0UCzuQ09vGd0viVuFlxDpeXxqhHLD7BXHdc92slNlr-GsMrzGV6fYYpMSbaKG-HeTzbRDMkRE7vzR-oDhjTWPqIxCMttnTwHZWqU8HQzDUT4IaVLSP_INNwMtbLZbGqMhzqqS8k-C2Kj-6iKtc2TylINONnikb2svjB8-4NlNZPrp4FFf-C_zy6V3qpUwGpnkEQIus8gU1uq4_Vu_VkaisbRwSxrM82pSWk6I"
+          alt="Desa Lubuk Mandian Gajah"
+        />
+        <div className="absolute inset-0 hero-gradient" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="max-w-3xl text-white space-y-6">
+          <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight tracking-tight">
+            Desa Lubuk Mandian Gajah
+          </h1>
+          <p className="text-xl md:text-2xl text-secondary-fixed-dim leading-relaxed font-headline italic font-semibold">
+            "Jejak Sejarah Melayu Petalangan, Warisan Sialang, dan Desa Peduli Gambut"
+          </p>
+          <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl">
+            Desa ini berada di Kecamatan Bunut, Kabupaten Pelalawan, terdiri dari 2 dusun, 8 RT,
+            dan memiliki bentang dataran rendah yang dialiri beberapa sungai menuju kawasan gambut di bagian timur.
+          </p>
+          <div className="flex flex-wrap gap-4 pt-4">
+            <a href="/sejarah" className="bg-primary-container text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-transform">
+              Baca Sejarah Desa
+              <span className="material-symbols-outlined">history_edu</span>
+            </a>
+            <a href="/gambut" className="border-2 border-white/30 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all">
+              Kenali Gambut Desa
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: HomeFooter.tsx
+==================================================
+const links = [
+  "Sejarah Lengkap",
+  "Profil Gambut",
+  "Potensi Ekonomi",
+  "Transparansi Desa",
+];
+
+const officeHours = [
+  { day: "Senin - Kamis", time: "08:00 - 15:00" },
+  { day: "Jumat", time: "08:00 - 11:30" },
+  { day: "Sabtu - Minggu", time: "Tutup", danger: true },
+];
+
+export default function HomeFooter() {
+  return (
+    <footer className="bg-surface-container pt-20 pb-12 border-t border-primary/10">
+      <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+        <div className="space-y-6">
+          <div className="text-xl font-bold text-primary uppercase tracking-widest font-headline">
+            Lubuk Mandian Gajah
+          </div>
+          <p className="text-on-surface-variant leading-relaxed">
+            Melestarikan warisan leluhur Melayu Petalangan, menjaga keseimbangan ekosistem gambut, dan membangun kemandirian ekonomi desa.
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          <h4 className="font-bold text-primary font-headline">Tautan Penting</h4>
+          <ul className="space-y-3 text-sm">
+            {links.map((link) => (
+              <li key={link}>
+                <a className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+                  <span className="material-symbols-outlined text-xs">chevron_right</span>
+                  {link}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="space-y-6">
+          <h4 className="font-bold text-primary font-headline">Jam Operasional Kantor</h4>
+          <ul className="space-y-2 text-sm text-on-surface-variant">
+            {officeHours.map((item) => (
+              <li key={item.day} className="flex justify-between pb-2 border-b border-primary/5 last:border-b-0">
+                <span>{item.day}</span>
+                <span className={item.danger ? "text-error font-semibold" : "font-semibold"}>{item.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-8 pt-8 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-on-surface-variant text-sm text-center">
+          © 2024 Desa Lubuk Mandian Gajah. Melestarikan Warisan, Menjaga Alam.
+        </p>
+        <div className="flex gap-6 opacity-60 grayscale hover:grayscale-0 transition-all">
+          <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Wonderful Indonesia</span>
+          <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Riau Homeland of Melayu</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+==================================================
+FILE: HomeNavbar.tsx
+==================================================
+export default function HomeNavbar() {
+  return (
+    <header className="bg-surface/80 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-primary/5">
+      <nav className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between gap-4">
+          <a className="brand-link text-2xl font-bold text-primary font-headline tracking-tight hover:text-[#1f5e3b]" href="/homepage">
+            Lubuk Mandian Gajah
+          </a>
+
+          <div className="hidden md:flex gap-8 items-center">
+            <a aria-current="page" className="nav-link font-headline font-semibold text-primary border-b-2 border-secondary pb-1" href="/homepage">
+              Beranda
+            </a>
+            <a className="nav-link font-headline font-semibold text-stone-600 hover:text-primary" href="/sejarah">
+              Sejarah
+            </a>
+            <a className="nav-link font-headline font-semibold text-stone-600 hover:text-primary" href="/gambut">
+              Gambut
+            </a>
+            <a className="nav-link font-headline font-semibold text-stone-600 hover:text-primary" href="/potensi">
+              Potensi
+            </a>
+          </div>
+
+          <a className="nav-cta hidden md:inline-flex min-h-11 items-center rounded-xl bg-primary px-6 py-2 font-bold text-on-primary hover:bg-primary-container active:scale-95" href="#kontak">
+            Kontak
+          </a>
+
+          <details className="mobile-nav md:hidden relative">
+            <summary aria-label="Buka navigasi" className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-[#795900]/15 bg-white/70 px-4 py-2 font-semibold text-primary shadow-sm cursor-pointer touch-manipulation">
+              <span aria-hidden="true" className="material-symbols-outlined menu-open text-[20px]">menu</span>
+              <span aria-hidden="true" className="material-symbols-outlined menu-close text-[20px]">close</span>
+              <span className="text-sm">Menu</span>
+            </summary>
+
+            <div className="absolute right-0 top-[calc(100%+0.75rem)] w-72 rounded-3xl border border-[#795900]/10 bg-[#fff9eb]/95 p-3 shadow-xl backdrop-blur-xl">
+              <div className="flex flex-col gap-1">
+                <a aria-current="page" className="nav-link rounded-2xl bg-primary/10 px-4 py-3 font-headline font-semibold text-primary" href="/homepage">
+                  Beranda
+                </a>
+                <a className="nav-link rounded-2xl px-4 py-3 font-headline font-semibold text-stone-700 hover:bg-primary/5 hover:text-primary" href="/sejarah">
+                  Sejarah
+                </a>
+                <a className="nav-link rounded-2xl px-4 py-3 font-headline font-semibold text-stone-700 hover:bg-primary/5 hover:text-primary" href="/gambut">
+                  Gambut
+                </a>
+                <a className="nav-link rounded-2xl px-4 py-3 font-headline font-semibold text-stone-700 hover:bg-primary/5 hover:text-primary" href="/potensi">
+                  Potensi
+                </a>
+                <a className="nav-cta mt-2 inline-flex min-h-11 items-center justify-center rounded-2xl bg-primary px-4 py-3 font-bold text-on-primary hover:bg-primary-container" href="#kontak">
+                  Kontak
+                </a>
+              </div>
+            </div>
+          </details>
+        </div>
+      </nav>
+    </header>
+  );
+}
+
+==================================================
+FILE: NamingSection.tsx
+==================================================
+export default function NamingSection() {
+  return (
+    <section className="py-24 bg-surface-container-low overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <div className="relative">
+          <img
+            className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFJHDDgN08hvlmrU41mUGPKoxupVL-osgtYInTpiEhrXmqG1It1j4RuvRyYBcYPhvv8NwWqrFl_Q489HJ3033F0_s9cKb7-txeJ8S69hSTk5poFV-6ZJ-XDcX9LmYx90BpVQzy_HWD8s9cMJ1LaxG7so1j5PYF8nfIuz9CGHglOgbky_3Ut2GFNiF5VFGkYBpJz1mOpOAV46im-SzjbAA9TZiD6nELxlG9aVYI3NUtxO5eCT5G0z_sWe70W-6_y2zgMPj8tEYLqzg"
+            alt="Asal-usul Lubuk Mandian Gajah"
+          />
+          <div className="absolute -bottom-6 -left-6 bg-primary text-white p-8 rounded-3xl shadow-xl z-20 max-w-[240px]">
+            <p className="font-headline italic text-lg leading-snug">"Jejak kawanan gajah di tepian Sungai Skou."</p>
+          </div>
+        </div>
+
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tight">
+              Mengapa Disebut Lubuk Mandian Gajah?
+            </h2>
+            <div className="pucuk-rebung-divider" />
+          </div>
+          <p className="text-lg text-on-surface-variant leading-relaxed">
+            Nama desa ini berakar dari keberadaan Sungai Skou, di mana pada masa lampau kawanan gajah sering terlihat mandi dan beristirahat di lubuk-lubuk sungai tersebut. Seiring waktu, wilayah yang awalnya berupa pondok-pondok ladang nomaden para peladang berpindah, bertransformasi menjadi pemukiman permanen.
+          </p>
+          <p className="text-lg text-on-surface-variant leading-relaxed">
+            Perubahan ini menandai babak baru kehidupan masyarakat yang menetap, tanpa meninggalkan akar sejarah alam yang menjadi identitas nama desa mereka hingga saat ini.
+          </p>
+          <a href="/sejarah" className="flex items-center gap-4 group text-secondary font-bold text-lg">
+            Selengkapnya di Halaman Sejarah
+            <span className="material-symbols-outlined transition-transform group-hover:translate-x-2">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: PeatSection.tsx
+==================================================
+export default function PeatSection() {
+  return (
+    <section className="py-24 bg-surface scroll-mt-32" id="kontak">
+      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <div className="order-2 md:order-1 grid grid-cols-2 gap-4">
+          <img
+            className="rounded-2xl w-full aspect-[3/4] object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqMr6jhCxZomZK_pcEN6aNshbWi5k8TcaJJbmr88FYia0CeCk1crf1IzMwaoddDwDN7Q-WRx-XSwAlcNbKa7JpzqQAuyK25rmadkc-vu9ybSy65DNWUyOoNjcKi0tM1k_NWfArDP5UPZ8tF74o4_ICV2OVVuKihaIaG8xWUCpmPBNbdXcM1oFfg2ZnuH7Ux-veTNY52qwB0MfvebF98oXJSWWU8X-vBIuoSq5ZIZ6F9dTNcfJz5H1bdjWiONBo1Uy2bv96OQXCg34"
+            alt="Gambut desa 1"
+          />
+          <img
+            className="rounded-2xl w-full aspect-[3/4] object-cover mt-8"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpqIWN5Ey98N7l2qF2MdGb-3RnZidVj-qaMXVA0F-tSLmaSXIQ1f4kTD0vvH7sD5hnRp7nlW-MarBXdsX_4relk9s0wK9AXQIKpXjsbmPehSls9rcTeIwl0xqMOqAd69rAEnxUqVfU5b9jGJ0l0uZNWe6o33WMYimQdtdbO3lCW8eqzDal50IVb9FjX87pQ_1hSNrgb_OlOG5ZN1s7ENplfvB061WcUFI42vz0d9KL_TCsg-Hs7JuW520BuWd_HU5ENkeYakc4puc"
+            alt="Gambut desa 2"
+          />
+        </div>
+
+        <div className="order-1 md:order-2 space-y-6">
+          <h2 className="text-4xl font-headline font-bold text-primary">Desa dan Gambut</h2>
+          <div className="pucuk-rebung-divider" />
+          <p className="text-lg text-on-surface-variant leading-relaxed">
+            Dengan luas 82.02 hektar lahan gambut bertingkat kematangan saprik dan hemik, wilayah ini memiliki sejarah panjang sebagai area persawahan. Namun, tantangan perubahan iklim kini membuat kawasan ini rentan terhadap risiko banjir saat hujan dan kekeringan ekstrem.
+          </p>
+          <div className="bg-secondary-fixed/30 p-8 rounded-3xl border-l-4 border-secondary">
+            <p className="text-xl font-headline italic font-bold text-secondary">
+              "Gambut bukan hanya bentang alam, tetapi bagian dari sejarah, tantangan, dan masa depan Desa Lubuk Mandian Gajah."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: PotentialSection.tsx
+==================================================
+const potentials = [
+  {
+    title: "Karet (40%)",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAl2SPLnuZEJeUb1trZnGqRck_UShIbVvvK4JZVEa3KrEN34AKvybUvS_bMDB_s6CVJlmX_jNb3wpBHiIRvMUdX-SrrryUQVqgeLBv_KvfZkLSR8fmKQ63ldAaLodbXjp_feOwXmHKT7tSnlxBjeGbp3BBgqU0lWGJvXuFx_rZ0fU53JII069eawust7urY3Ue4y1gd1WTohL7lH25rb1M_Q0FNPrHoXh3rM96bRPbP96xv_irTxx_EorOr7PUprDVsvCDvQqBR4SQ",
+  },
+  {
+    title: "Sawit (40%)",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBdX6sqZcUkoOv9nVR4rju2Rafo3KXvGuCYn6oEvR4yWtkHq9ZTz2sY2FrQd7a7FYOs-1UJXp0yhRQNOOCCf0b8Ky_oAdI80ewe5hw9jMuO-BaShxdcj1SWOJGNZl0w3pn8SwQxAzuedxtnKWNl_wwcpad7N8SIfBNeaSJMBimXUtNkhJdnhPa8oQWaCsAu8RtH8pgKAdsMGiJ2ftozSWEbB_k8pgBVH3IM0wizVu5EfYABpMnOPGy0SGIsT-3MtodzbryFsT9tYzs",
+  },
+  {
+    title: "Padi",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAGyJt19_TWGmGaj7iyHyKwEkNeqnzZBBPCZqEuaCd-hPNSM4lq0731xwJVn9zn-UKzXgzBKFvoRI4f2srk1NBzhiiK7qn4dhqLpfp8aIRhp-lVW_PbNoR1ugkGvBNmgTxEzQVQ90awvRaT7WsJax-7nc3kZA3FxhNbz1iZOOF5VvvhEXMvCAIQMJ3ce3RMCQ_IEWdrwmkBzDdktiL5f9iT2leuIimbM-B1PBBNHFzAaw7Yq2lZJuS6f9GPy8mXS8F4lzEnKy1a4I4",
+  },
+  {
+    title: "Cabe (Hortikultura)",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDSGc-W8Ye_BTFZg36V8GuCLp66pSWlujmM48nIh8tjBgROCG6U-QHrRquQdMjhekoThqw8wyWeTGgBE0peFHmnONqAckbqZD32fxPT4L-Pgt3l5o8x76ZHgB0mhCkC1VeE0kI6nHJ_RcT4-F6_Q7yqB71H_eFLAFmSqvBX70XGy1OI8Ri_pfnTvA8V5o9NEm31DyqDvmit99p9gZxX-Mg3R83sSUqqLEVcoXy3UUvpcX52G9JfE-wn6cniCPvs1tUG96f0TfAMc8Y",
+  },
+  {
+    title: "Madu Sialang",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuA1D3k556q6tHa2yGBB-VE5Ki_GBmz_XBR0zKz_H3k-Q4IUNWQTIhEO8G6lKc2aBUFfURR2IlP2dQin46QSMpursJWIkBurdFRS8CNFtwTO9QT50L6FF92DFkSUExsX94W4hJjAijRY8LUBCIqQF0EH9gk3zPKVvvJ__Hs5OQBv51eX-h_qyp9iVQJiYh6SBSd0yRONaSgT0NHp8D3h_gBXCJAnL71yiSrdcMmOiwbifuaoGNiFpihHDMv5cw0zVjZ_Rx8IhzFeUPg",
+  },
+];
+
+const opportunityItems = [
+  {
+    icon: "storefront",
+    title: "Akses Pasar",
+    description: "Lokasi strategis memudahkan distribusi hasil bumi ke pasar regional.",
+  },
+  {
+    icon: "travel_explore",
+    title: "Ekowisata",
+    description: "Kopung Sialang berpotensi menjadi destinasi wisata alam dan budaya yang unik.",
+  },
+  {
+    icon: "handshake",
+    title: "Kemitraan",
+    description: "Peran BUMDes dan Koperasi diperkuat untuk meningkatkan nilai tambah produk lokal.",
+  },
+];
+
+export default function PotentialSection() {
+  return (
+    <section className="py-24 bg-surface">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-4xl md:text-5xl font-headline font-bold text-primary">Potensi Unggulan Desa</h2>
+          <div className="flex justify-center">
+            <div className="pucuk-rebung-divider" />
+          </div>
+          <p className="text-on-surface-variant max-w-2xl mx-auto text-lg">
+            "Karet dan sawit menjadi primadona pendapatan utama masyarakat, sementara padi dan hortikultura melengkapi kehidupan pangan."
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-20">
+          {potentials.map((item) => (
+            <div key={item.title} className="group relative rounded-3xl overflow-hidden aspect-[3/4]">
+              <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src={item.image} alt={item.title} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-6 flex flex-col justify-end">
+                <h4 className="text-xl font-bold text-white">{item.title}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-primary-container rounded-[2.5rem] p-12 text-white">
+          <h3 className="text-3xl font-headline font-bold mb-8 text-center">Potensi yang Bisa Berkembang</h3>
+          <div className="grid md:grid-cols-3 gap-12">
+            {opportunityItems.map((item) => (
+              <div key={item.title} className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+                  <span className="material-symbols-outlined">{item.icon}</span>
+                </div>
+                <h4 className="text-xl font-bold">{item.title}</h4>
+                <p className="text-primary-fixed opacity-90">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: QuickStatsSection.tsx
+==================================================
+const stats = [
+  { value: "2", label: "Dusun" },
+  { value: "4", label: "RW" },
+  { value: "8", label: "RT" },
+  { value: "791", label: "Jiwa" },
+  { value: "233", label: "KK" },
+  { value: "~29.62", label: "km² Luas" },
+  { value: "82.02", label: "Ha Gambut" },
+  { value: "17", label: "Embung" },
+];
+
+export default function QuickStatsSection() {
+  return (
+    <section className="py-20 bg-surface">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid md:grid-cols-3 gap-12 items-center mb-16">
+          <div className="md:col-span-1">
+            <h2 className="text-3xl font-headline font-bold text-primary mb-6">Fakta Singkat Desa</h2>
+            <p className="text-on-surface-variant leading-relaxed text-lg">
+              Desa Lubuk Mandian Gajah merupakan desa di bagian tenggara Provinsi Riau, bertopografi dataran rendah,
+              memiliki sungai-sungai yang mengarah ke lahan gambut, dan memiliki akses darat yang strategis.
+            </p>
+          </div>
+
+          <div className="md:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {stats.map((item) => (
+              <div key={item.label} className="bg-white p-6 rounded-2xl shadow-sm border border-primary/5 text-center transition-transform hover:-translate-y-1">
+                <div className="text-3xl font-headline font-bold text-primary">{item.value}</div>
+                <div className="text-sm text-stone-500 font-medium">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: RecoverySection.tsx
+==================================================
+const recoveryItems = [
+  {
+    icon: "local_fire_department",
+    wrapper: "bg-error/10 text-error",
+    title: "Refleksi Masa Lalu",
+    description:
+      "Mengenang kebakaran besar 2015 dan 2019 sebagai titik balik kesadaran menjaga lingkungan.",
+  },
+  {
+    icon: "nature_people",
+    wrapper: "bg-primary/10 text-primary",
+    title: "PLTB",
+    description:
+      "Penerapan Pembukaan Lahan Tanpa Bakar (PLTB) sebagai komitmen desa bebas asap.",
+  },
+  {
+    icon: "recycling",
+    wrapper: "bg-secondary/10 text-secondary",
+    title: "KWT Berkah Mandiri",
+    description:
+      "Inisiatif pengomposan oleh Kelompok Wanita Tani untuk pertanian berkelanjutan.",
+  },
+];
+
+export default function RecoverySection() {
+  return (
+    <section className="py-24 bg-surface-container-high">
+      <div className="max-w-5xl mx-auto px-6 text-center space-y-12">
+        <div className="space-y-4">
+          <h2 className="text-4xl font-headline font-bold text-primary">Dari Karhutla ke Pemulihan</h2>
+          <div className="flex justify-center">
+            <div className="pucuk-rebung-divider" />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {recoveryItems.map((item) => (
+            <div key={item.title} className="bg-white p-8 rounded-3xl shadow-sm">
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 ${item.wrapper}`}>
+                <span className="material-symbols-outlined text-3xl">{item.icon}</span>
+              </div>
+              <h4 className="font-bold text-xl mb-4">{item.title}</h4>
+              <p className="text-on-surface-variant">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+==================================================
+FILE: SialangSection.tsx
+==================================================
+export default function SialangSection() {
+  return (
+    <section className="py-24 bg-primary text-white relative">
+      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <div className="space-y-8">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-secondary-container/20 border border-secondary-container/30 text-secondary-container text-xs font-bold tracking-widest uppercase">
+            Kearifan Lokal
+          </span>
+          <h2 className="text-5xl font-headline font-bold">Warisan Alam yang Masih Dijaga</h2>
+          <p className="text-lg text-primary-fixed leading-relaxed">
+            Kawasan Hutan Adat Kopung Sialang adalah bukti nyata kepedulian kami. Di sini terdapat pohon-pohon Sialang raksasa yang dilindungi secara adat. Tradisi <strong>"Menumbai"</strong> — memanen madu di malam hari dengan lantunan mantra — dipimpin oleh Juagan Tuo dan Juagan Mudo.
+          </p>
+          <div className="p-6 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm">
+            <p className="italic text-primary-fixed mb-4">"Menjaga Sialang berarti menjaga keberlangsungan hidup dan berkah dari alam."</p>
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-secondary-fixed-dim">park</span>
+              <span className="font-bold">50.6 Hektar di 9 Lokasi Lindung</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative">
+          <img
+            className="rounded-[3rem] w-full aspect-square object-cover shadow-2xl"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKRm5Kezn1GW2oOwiNtjyvOrJmgXp9T8lD4Xs7KQ0vND94x2NGEevGJSABFiBLpBvcl3TsD4TJGEB61Va_oyCsfNaHFqOE8i2BQC4UgDChYCeLpu8_PehPF3fYuypa8IyXDy5RU3VTzeEjkz7NTQp9nF16Rmsk6VOobKSz5gbYklwSmEzFUGdpOVloTrR8unS9BZrrVmNMbyK-vSu0E6hG8lO9nesh1mFwybUZXE1osYxHNSUKtFNM0pRBLCF4aqSzqBwms85m5yI"
+            alt="Kopung Sialang"
+          />
+          <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-t from-primary/60 to-transparent" />
+          <div className="absolute bottom-8 left-8">
+            <h3 className="text-3xl font-headline font-bold">Kopung Sialang</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

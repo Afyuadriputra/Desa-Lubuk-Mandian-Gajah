@@ -44,7 +44,13 @@ const opportunityItems = [
   },
 ];
 
-export default function PotentialSection() {
+import type { HomepageData } from "../../data/homepage.types";
+
+type Props = {
+  data: HomepageData;
+};
+
+export default function NamaSection({ data }: Props) {
   return (
     <section className="py-24 bg-surface">
       <div className="max-w-7xl mx-auto px-6">

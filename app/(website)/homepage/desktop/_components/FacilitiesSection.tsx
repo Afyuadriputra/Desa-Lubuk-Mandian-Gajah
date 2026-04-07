@@ -6,7 +6,13 @@ const facilities = [
   { icon: "account_balance", label: "Kantor Desa" },
 ];
 
-export default function FacilitiesSection() {
+import type { HomepageData } from "../../data/homepage.types";
+
+type Props = {
+  data: HomepageData;
+};
+
+export default function NamaSection({ data }: Props) {
   return (
     <section className="py-24 bg-surface-container-low">
       <div className="max-w-7xl mx-auto px-6">

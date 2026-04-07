@@ -11,7 +11,13 @@ const officeHours = [
   { day: "Sabtu - Minggu", time: "Tutup", danger: true },
 ];
 
-export default function HomeFooter() {
+import type { HomepageData } from "../../data/homepage.types";
+
+type Props = {
+  data: HomepageData;
+};
+
+export default function NamaSection({ data }: Props) {
   return (
     <footer className="bg-surface-container pt-20 pb-12 border-t border-primary/10">
       <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">

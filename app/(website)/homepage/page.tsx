@@ -1,7 +1,7 @@
 // app/(website)/homepage/page.tsx
-import DesktopHomepage from "./(website)/homepage/desktop/DesktopHomepage";
-import MobileHomepage from "./(website)/homepage/mobile/MobileHomepage";
-import { homepageData } from "./(website)/homepage/data/homepage.data";
+import DesktopHomepage from "./desktop/DesktopHomepage";
+import MobileHomepage from "./mobile/MobileHomepage";
+import { homepageData } from "./data/homepage.data";
 
 export default function HomepagePage() {
   const data = homepageData;
