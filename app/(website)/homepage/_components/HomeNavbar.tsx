@@ -1,0 +1,60 @@
+﻿export default function HomeNavbar() {
+  return (
+    <header className="bg-surface/80 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-primary/5">
+      <nav className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between gap-4">
+          <a className="brand-link text-2xl font-bold text-primary font-headline tracking-tight hover:text-[#1f5e3b]" href="/homepage">
+            Lubuk Mandian Gajah
+          </a>
+
+          <div className="hidden md:flex gap-8 items-center">
+            <a aria-current="page" className="nav-link font-headline font-semibold text-primary border-b-2 border-secondary pb-1" href="/homepage">
+              Beranda
+            </a>
+            <a className="nav-link font-headline font-semibold text-stone-600 hover:text-primary" href="/sejarah">
+              Sejarah
+            </a>
+            <a className="nav-link font-headline font-semibold text-stone-600 hover:text-primary" href="/gambut">
+              Gambut
+            </a>
+            <a className="nav-link font-headline font-semibold text-stone-600 hover:text-primary" href="/potensi">
+              Potensi
+            </a>
+          </div>
+
+          <a className="nav-cta hidden md:inline-flex min-h-11 items-center rounded-xl bg-primary px-6 py-2 font-bold text-on-primary hover:bg-primary-container active:scale-95" href="#kontak">
+            Kontak
+          </a>
+
+          <details className="mobile-nav md:hidden relative">
+            <summary aria-label="Buka navigasi" className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-[#795900]/15 bg-white/70 px-4 py-2 font-semibold text-primary shadow-sm cursor-pointer touch-manipulation">
+              <span aria-hidden="true" className="material-symbols-outlined menu-open text-[20px]">menu</span>
+              <span aria-hidden="true" className="material-symbols-outlined menu-close text-[20px]">close</span>
+              <span className="text-sm">Menu</span>
+            </summary>
+
+            <div className="absolute right-0 top-[calc(100%+0.75rem)] w-72 rounded-3xl border border-[#795900]/10 bg-[#fff9eb]/95 p-3 shadow-xl backdrop-blur-xl">
+              <div className="flex flex-col gap-1">
+                <a aria-current="page" className="nav-link rounded-2xl bg-primary/10 px-4 py-3 font-headline font-semibold text-primary" href="/homepage">
+                  Beranda
+                </a>
+                <a className="nav-link rounded-2xl px-4 py-3 font-headline font-semibold text-stone-700 hover:bg-primary/5 hover:text-primary" href="/sejarah">
+                  Sejarah
+                </a>
+                <a className="nav-link rounded-2xl px-4 py-3 font-headline font-semibold text-stone-700 hover:bg-primary/5 hover:text-primary" href="/gambut">
+                  Gambut
+                </a>
+                <a className="nav-link rounded-2xl px-4 py-3 font-headline font-semibold text-stone-700 hover:bg-primary/5 hover:text-primary" href="/potensi">
+                  Potensi
+                </a>
+                <a className="nav-cta mt-2 inline-flex min-h-11 items-center justify-center rounded-2xl bg-primary px-4 py-3 font-bold text-on-primary hover:bg-primary-container" href="#kontak">
+                  Kontak
+                </a>
+              </div>
+            </div>
+          </details>
+        </div>
+      </nav>
+    </header>
+  );
+}
