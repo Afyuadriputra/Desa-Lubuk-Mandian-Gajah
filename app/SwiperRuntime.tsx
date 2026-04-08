@@ -2,25 +2,20 @@
 
 import { useEffect } from "react";
 
-declare global {
-  interface Window {
-    __swiperRuntimeLoaded?: boolean;
-    requestIdleCallback?: (
-      callback: IdleRequestCallback,
-      options?: IdleRequestOptions
-    ) => number;
-  }
-}
+type SwiperWindow = Window & {
+  __swiperRuntimeLoaded?: boolean;
+};
 
 const SWIPER_SRC =
   "https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js";
 
 export default function SwiperRuntime() {
   useEffect(() => {
+    const swiperWindow = window as SwiperWindow;
     let cancelled = false;
 
-    if (window.__swiperRuntimeLoaded || window.Swiper) {
-      window.__swiperRuntimeLoaded = true;
+    if (swiperWindow.__swiperRuntimeLoaded || window.Swiper) {
+      swiperWindow.__swiperRuntimeLoaded = true;
       return;
     }
 
@@ -30,7 +25,7 @@ export default function SwiperRuntime() {
 
     if (existingScript) {
       const markLoaded = () => {
-        window.__swiperRuntimeLoaded = true;
+        swiperWindow.__swiperRuntimeLoaded = true;
       };
 
       existingScript.addEventListener("load", markLoaded, { once: true });
@@ -40,7 +35,7 @@ export default function SwiperRuntime() {
     }
 
     const mountScript = () => {
-      if (cancelled || window.__swiperRuntimeLoaded || window.Swiper) {
+      if (cancelled || swiperWindow.__swiperRuntimeLoaded || window.Swiper) {
         return;
       }
 
@@ -49,7 +44,7 @@ export default function SwiperRuntime() {
       script.async = true;
       script.dataset.swiperRuntime = "true";
       script.onload = () => {
-        window.__swiperRuntimeLoaded = true;
+        swiperWindow.__swiperRuntimeLoaded = true;
       };
       document.body.appendChild(script);
     };
