@@ -211,7 +211,7 @@ export default function PotentialMobile({ data }: Props) {
     <section
       id={`potential-story-mobile-${sectionId}`}
       ref={rootRef}
-      className="section-shell-mobile relative overflow-hidden bg-surface px-4"
+      className="defer-section section-shell-mobile relative overflow-hidden bg-surface px-4"
     >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-10 top-8 h-28 w-28 rounded-full bg-primary/6 blur-3xl" />
@@ -286,6 +286,8 @@ export default function PotentialMobile({ data }: Props) {
                           className="story-image"
                           src={item.image}
                           alt={item.title}
+                          width="960"
+                          height="1280"
                           loading="lazy"
                           decoding="async"
                         />

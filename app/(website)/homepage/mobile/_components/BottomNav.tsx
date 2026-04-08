@@ -43,8 +43,8 @@ export default function BottomNav() {
             <a
               key={item.label}
               href={item.href}
-              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[22px] px-2 py-2.5 transition-all duration-300 ${
-                isActive ? "text-primary" : "text-on-surface-variant/70"
+              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 rounded-[22px] px-2 py-3 transition-all duration-300 ${
+                isActive ? "text-primary" : "text-on-surface-variant"
               }`}
               style={
                 isActive
@@ -62,8 +62,8 @@ export default function BottomNav() {
               )}
 
               <span
-                className={`flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
-                  isActive ? "bg-primary/12" : "bg-transparent"
+                className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 ${
+                  isActive ? "bg-primary/12" : "bg-black/5"
                 }`}
               >
                 <span
@@ -76,8 +76,8 @@ export default function BottomNav() {
               </span>
 
               <span
-                className={`text-[10px] font-bold leading-none tracking-[0.12em] uppercase ${
-                  isActive ? "text-primary" : "text-on-surface-variant/70"
+                className={`text-[11px] font-bold leading-none tracking-[0.1em] uppercase ${
+                  isActive ? "text-primary" : "text-on-surface"
                 }`}
               >
                 {item.label}

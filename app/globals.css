@@ -111,6 +111,13 @@ body {
   padding-block: var(--space-6);
 }
 
+@supports (content-visibility: auto) {
+  .defer-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 720px;
+  }
+}
+
 .section-stack {
   display: flex;
   flex-direction: column;

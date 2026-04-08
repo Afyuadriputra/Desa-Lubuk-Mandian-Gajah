@@ -6,7 +6,7 @@ type Props = {
 
 export default function PeatMobile({ data }: Props) {
   return (
-    <section className="relative overflow-hidden bg-surface px-4 py-8">
+    <section className="defer-section relative overflow-hidden bg-surface px-4 py-8">
       <div className="mx-auto w-full max-w-sm">
         <div className="peat-shell">
           <div className="mb-4">
@@ -40,6 +40,10 @@ export default function PeatMobile({ data }: Props) {
               className="peat-image h-[240px] w-full object-cover"
               src={data.peatImages[0]}
               alt={data.peatTitle}
+              width="960"
+              height="720"
+              loading="lazy"
+              decoding="async"
             />
 
             <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(31,94,59,0.56)_0%,rgba(31,94,59,0.15)_45%,rgba(31,94,59,0.02)_100%)]" />

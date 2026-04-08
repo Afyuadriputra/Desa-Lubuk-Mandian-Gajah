@@ -1,18 +1,44 @@
+import dynamic from "next/dynamic";
 import type { HomepageData } from "../data/homepage.types";
 import MobileHeader from "./_components/MobileHeader";
 import BottomNav from "./_components/BottomNav";
 import HeroMobile from "./_components/HeroMobile";
 import QuickStatsMobile from "./_components/QuickStatsMobile";
-import NamingMobile from "./_components/NamingMobile";
-import CultureMobile from "./_components/CultureMobile";
-import SialangMobile from "./_components/SialangMobile";
-import PeatMobile from "./_components/PeatMobile";
-import RecoveryMobile from "./_components/RecoveryMobile";
-import PotentialMobile from "./_components/PotentialMobile";
-import FacilitiesMobile from "./_components/FacilitiesMobile";
-import GalleryMobile from "./_components/GalleryMobile";
-import ContactMobile from "./_components/ContactMobile";
-import FooterMobile from "./_components/FooterMobile";
+import MobileSectionSkeleton from "./_components/MobileSectionSkeleton";
+
+const NamingMobile = dynamic(() => import("./_components/NamingMobile"), {
+  loading: () => <MobileSectionSkeleton variant="media" />,
+});
+const CultureMobile = dynamic(() => import("./_components/CultureMobile"), {
+  loading: () => <MobileSectionSkeleton variant="content" />,
+});
+const SialangMobile = dynamic(() => import("./_components/SialangMobile"), {
+  loading: () => <MobileSectionSkeleton variant="media" />,
+});
+const PeatMobile = dynamic(() => import("./_components/PeatMobile"), {
+  loading: () => <MobileSectionSkeleton variant="media" />,
+});
+const RecoveryMobile = dynamic(() => import("./_components/RecoveryMobile"), {
+  loading: () => <MobileSectionSkeleton variant="content" />,
+});
+const PotentialMobile = dynamic(() => import("./_components/PotentialMobile"), {
+  loading: () => <MobileSectionSkeleton variant="story" />,
+});
+const FacilitiesMobile = dynamic(
+  () => import("./_components/FacilitiesMobile"),
+  {
+    loading: () => <MobileSectionSkeleton variant="story" />,
+  }
+);
+const GalleryMobile = dynamic(() => import("./_components/GalleryMobile"), {
+  loading: () => <MobileSectionSkeleton variant="story" />,
+});
+const ContactMobile = dynamic(() => import("./_components/ContactMobile"), {
+  loading: () => <MobileSectionSkeleton variant="contact" />,
+});
+const FooterMobile = dynamic(() => import("./_components/FooterMobile"), {
+  loading: () => <MobileSectionSkeleton variant="footer" />,
+});
 
 type Props = {
   data: HomepageData;

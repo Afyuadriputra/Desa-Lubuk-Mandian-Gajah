@@ -43,6 +43,10 @@ export default function FooterMobile({ data }: Props) {
                   src={logoUrl}
                   alt={data.brand?.logoAlt || "Logo Kabupaten Pelalawan"}
                   className="h-full w-full object-contain"
+                  width="96"
+                  height="144"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 

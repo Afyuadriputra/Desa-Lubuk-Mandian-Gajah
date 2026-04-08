@@ -5,6 +5,8 @@ import SwiperRuntime from "./SwiperRuntime";
 
 export const metadata: Metadata = {
   title: "Desa Segamai",
+  description:
+    "Profil Desa Segamai yang menampilkan sejarah, gambut, potensi, fasilitas, galeri, dan informasi kontak desa.",
 };
 
 export const viewport: Viewport = {

@@ -6,7 +6,7 @@ type Props = {
 
 export default function SialangMobile({ data }: Props) {
   return (
-    <section className="relative overflow-hidden bg-primary px-4 py-8 text-white">
+    <section className="defer-section relative overflow-hidden bg-primary px-4 py-8 text-white">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-10 top-8 h-28 w-28 rounded-full bg-white/6 blur-3xl" />
         <div className="absolute right-0 top-24 h-24 w-24 rounded-full bg-secondary-container/20 blur-3xl" />
@@ -48,6 +48,10 @@ export default function SialangMobile({ data }: Props) {
               className="sialang-image h-[260px] w-full object-cover"
               src={data.sialangImage}
               alt={data.sialangTitle}
+              width="960"
+              height="720"
+              loading="lazy"
+              decoding="async"
             />
 
             <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(31,94,59,0.82)_0%,rgba(31,94,59,0.30)_46%,rgba(31,94,59,0.03)_100%)]" />

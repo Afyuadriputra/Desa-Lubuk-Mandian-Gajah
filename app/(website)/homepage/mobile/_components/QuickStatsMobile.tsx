@@ -54,7 +54,7 @@ export default function QuickStatsMobile({ data }: Props) {
               Fakta Singkat Desa
             </h2>
 
-            <p className="mx-auto mt-2 max-w-[280px] text-[12px] leading-5 text-on-surface/70">
+            <p className="mx-auto mt-2 max-w-[280px] text-[12px] leading-5 text-on-surface/80">
               Informasi utama yang diringkas agar nyaman dibaca hanya dalam satu
               layar mobile.
             </p>
@@ -89,7 +89,7 @@ export default function QuickStatsMobile({ data }: Props) {
                   key={item.label}
                   className="group relative overflow-hidden rounded-[22px] border border-primary/10 bg-white/90 p-4 shadow-[0_10px_30px_rgba(31,94,59,0.08)] backdrop-blur-sm"
                   style={{
-                    animation: "qs-card-reveal 700ms cubic-bezier(0.22,1,0.36,1) both",
+                    animation: "qs-card-reveal 480ms cubic-bezier(0.22,1,0.36,1) both",
                     animationDelay: `${index * 110}ms`,
                   }}
                 >
@@ -98,9 +98,9 @@ export default function QuickStatsMobile({ data }: Props) {
                     style={{ background: meta.tint }}
                   />
                   <div
-                    className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/50 blur-2xl"
+                    className="qs-orb absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/50 blur-2xl"
                     style={{
-                      animation: "qs-orb-float 4s ease-in-out infinite",
+                      animation: "qs-orb-float 7s ease-in-out infinite",
                     }}
                   />
 
@@ -112,7 +112,7 @@ export default function QuickStatsMobile({ data }: Props) {
                         </span>
                       </div>
 
-                      <span className="rounded-full bg-primary/5 px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.14em] text-primary/75">
+                      <span className="rounded-full bg-primary/5 px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.14em] text-primary/90">
                         Info
                       </span>
                     </div>
@@ -121,11 +121,11 @@ export default function QuickStatsMobile({ data }: Props) {
                       {item.value}
                     </div>
 
-                    <h3 className="mt-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-on-surface/75">
+                    <h3 className="mt-1 text-[11px] font-extrabold uppercase tracking-[0.16em] text-on-surface/85">
                       {item.label}
                     </h3>
 
-                    <p className="mt-2 text-[11px] leading-5 text-on-surface/62">
+                    <p className="mt-2 text-[11px] leading-5 text-on-surface/72">
                       {meta.desc}
                     </p>
                   </div>
@@ -142,34 +142,31 @@ export default function QuickStatsMobile({ data }: Props) {
         @keyframes qs-card-reveal {
           0% {
             opacity: 0;
-            transform: translateY(20px) scale(0.96);
-            filter: blur(8px);
-          }
-          60% {
-            opacity: 1;
-            transform: translateY(-2px) scale(1.01);
-            filter: blur(0);
+            transform: translateY(14px) scale(0.98);
           }
           100% {
             opacity: 1;
             transform: translateY(0) scale(1);
-            filter: blur(0);
           }
         }
 
         @keyframes qs-orb-float {
           0%, 100% {
             transform: translate3d(0, 0, 0) scale(1);
-            opacity: 0.45;
+            opacity: 0.25;
           }
           50% {
-            transform: translate3d(-4px, 6px, 0) scale(1.08);
-            opacity: 0.72;
+            transform: translate3d(-2px, 4px, 0) scale(1.04);
+            opacity: 0.4;
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
           article {
+            animation: none !important;
+          }
+
+          .qs-orb {
             animation: none !important;
           }
         }

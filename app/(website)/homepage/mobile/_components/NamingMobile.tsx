@@ -6,7 +6,7 @@ type Props = {
 
 export default function NamingMobile({ data }: Props) {
   return (
-    <section className="relative overflow-hidden bg-surface-container-low px-4 py-8">
+    <section className="defer-section relative overflow-hidden bg-surface-container-low px-4 py-8">
       <div className="mx-auto w-full max-w-sm">
         <div className="naming-card overflow-hidden rounded-[28px] border border-primary/8 bg-white/60 shadow-[0_16px_40px_rgba(31,94,59,0.08)] backdrop-blur-sm">
           <div className="relative h-[240px] overflow-hidden">
@@ -14,6 +14,10 @@ export default function NamingMobile({ data }: Props) {
               className="naming-image h-full w-full object-cover"
               src={data.namingImage}
               alt={data.namingTitle}
+              width="960"
+              height="720"
+              loading="lazy"
+              decoding="async"
             />
 
             <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(31,94,59,0.52)_0%,rgba(31,94,59,0.16)_42%,rgba(31,94,59,0.02)_100%)]" />

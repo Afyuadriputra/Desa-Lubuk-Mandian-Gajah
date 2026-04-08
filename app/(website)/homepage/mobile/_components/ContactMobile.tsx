@@ -12,7 +12,7 @@ export default function ContactMobile({ data }: Props) {
   const mapsUrl = `https://www.google.com/maps?q=${LATITUDE},${LONGITUDE}`;
 
   return (
-    <section className="section-shell-mobile px-4 bg-surface" id="kontak">
+    <section className="defer-section section-shell-mobile px-4 bg-surface" id="kontak">
       <div className="overflow-hidden rounded-[24px] border border-primary/10 bg-white shadow-[0_14px_34px_rgba(31,94,59,0.08)]">
         <div className="relative overflow-hidden bg-gradient-to-br from-primary-container to-primary px-4 py-5 text-white">
           <div
@@ -50,7 +50,7 @@ export default function ContactMobile({ data }: Props) {
               Hubungi Kami
             </h2>
 
-            <p className="mt-2 text-[13px] leading-5 text-white/85">
+            <p className="mt-2 text-[13px] leading-5 text-white/92">
               Kontak dan lokasi desa untuk komunikasi dan kunjungan.
             </p>
           </div>
@@ -59,7 +59,7 @@ export default function ContactMobile({ data }: Props) {
         <div className="px-4 py-4">
           <div className="space-y-2.5">
             <div className="flex items-start gap-3 rounded-2xl border border-primary/8 bg-surface-container-low px-3.5 py-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                 <span className="material-symbols-outlined text-[20px]">
                   location_on
                 </span>
@@ -76,7 +76,7 @@ export default function ContactMobile({ data }: Props) {
             </div>
 
             <div className="flex items-start gap-3 rounded-2xl border border-primary/8 bg-surface-container-low px-3.5 py-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                 <span className="material-symbols-outlined text-[20px]">
                   chat
                 </span>
@@ -95,7 +95,7 @@ export default function ContactMobile({ data }: Props) {
                 href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl bg-primary px-3 text-white"
+                className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-xl bg-primary px-3 text-white"
                 aria-label="Hubungi lewat WhatsApp"
               >
                 <span className="material-symbols-outlined text-[18px]">
@@ -143,6 +143,10 @@ export default function ContactMobile({ data }: Props) {
             className="h-full w-full object-cover"
             src={data.contact.mapImage}
             alt="Peta desa"
+            width="960"
+            height="640"
+            loading="lazy"
+            decoding="async"
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent" />
@@ -150,7 +154,7 @@ export default function ContactMobile({ data }: Props) {
           <div className="absolute inset-x-0 bottom-0 p-3">
             <div className="rounded-2xl bg-white/88 px-3.5 py-3 backdrop-blur-md">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <span className="material-symbols-outlined text-[18px]">
                     near_me
                   </span>

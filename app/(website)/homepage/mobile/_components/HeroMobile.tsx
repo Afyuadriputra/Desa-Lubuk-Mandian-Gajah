@@ -67,6 +67,10 @@ function HeroBackground({
         className="hero-image h-full w-full object-cover"
         src={image}
         alt={alt}
+        width="1280"
+        height="1920"
+        fetchPriority="high"
+        decoding="async"
       />
 
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(31,94,59,0.04)_0%,rgba(31,94,59,0.10)_34%,rgba(31,94,59,0.28)_68%,rgba(31,94,59,0.58)_100%)]" />

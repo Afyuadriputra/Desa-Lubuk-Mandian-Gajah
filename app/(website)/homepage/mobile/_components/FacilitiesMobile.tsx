@@ -174,7 +174,7 @@ export default function FacilitiesMobile({ data }: Props) {
   };
 
   return (
-    <section className="section-shell-mobile bg-surface-container-low overflow-hidden">
+    <section className="defer-section section-shell-mobile bg-surface-container-low overflow-hidden">
       <div className="px-4">
         <div className="facilities-hero rounded-[28px] border border-primary/10 bg-gradient-to-br from-primary-container to-primary p-5 text-on-primary">
           <div className="ornament-local ornament-local-top" />

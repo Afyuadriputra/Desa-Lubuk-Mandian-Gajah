@@ -27,7 +27,7 @@ const recoveryMeta: Record<
 
 export default function RecoveryMobile({ data }: Props) {
   return (
-    <section className="relative overflow-hidden bg-surface-container-high px-4 py-8">
+    <section className="defer-section relative overflow-hidden bg-surface-container-high px-4 py-8">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-8 top-10 h-28 w-28 rounded-full bg-primary/6 blur-3xl" />
         <div className="absolute right-0 top-24 h-24 w-24 rounded-full bg-secondary-container/20 blur-3xl" />

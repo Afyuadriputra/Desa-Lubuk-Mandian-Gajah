@@ -74,7 +74,7 @@ export default function GalleryMobile({ data }: Props) {
 
   return (
     <>
-      <section className="section-shell-mobile bg-surface overflow-hidden">
+      <section className="defer-section section-shell-mobile bg-surface overflow-hidden">
         <div className="px-4">
           <div className="gallery-shell rounded-[28px] border border-primary/10 bg-surface-container-low p-4">
             <div className="flex items-start justify-between gap-3">
@@ -132,6 +132,10 @@ export default function GalleryMobile({ data }: Props) {
                             src={item.image}
                             alt={item.alt}
                             className="gallery-image h-full w-full object-cover"
+                            width="960"
+                            height="1280"
+                            loading="lazy"
+                            decoding="async"
                           />
                           <div className="gallery-overlay absolute inset-x-0 bottom-0 p-4">
                             <div className="rounded-2xl bg-black/28 px-4 py-3 backdrop-blur-[6px]">
@@ -170,11 +174,11 @@ export default function GalleryMobile({ data }: Props) {
                   type="button"
                   aria-label={`Pilih gambar ${index + 1}`}
                   onClick={() => goToSlide(index)}
-                  className={`gallery-dot rounded-full transition-all duration-300 ${
+                  className={`gallery-dot min-h-3 min-w-3 rounded-full transition-all duration-300 ${
                     activeIndex === index
                       ? "w-8 bg-primary"
-                      : "w-2.5 bg-primary/20"
-                  } h-2.5`}
+                      : "w-3 bg-primary/30"
+                  } h-3`}
                 />
               ))}
             </div>
@@ -189,7 +193,7 @@ export default function GalleryMobile({ data }: Props) {
                       key={`${item.alt}-thumb`}
                       type="button"
                       onClick={() => goToSlide(index)}
-                      className={`gallery-thumb relative h-16 w-20 shrink-0 overflow-hidden rounded-2xl border transition-all duration-300 ${
+                      className={`gallery-thumb relative h-[72px] w-[88px] shrink-0 overflow-hidden rounded-2xl border transition-all duration-300 ${
                         isActive
                           ? "border-primary ring-2 ring-primary/20"
                           : "border-outline/10"
@@ -200,6 +204,10 @@ export default function GalleryMobile({ data }: Props) {
                         src={item.image}
                         alt={item.alt}
                         className="h-full w-full object-cover"
+                        width="320"
+                        height="256"
+                        loading="lazy"
+                        decoding="async"
                       />
                       {isActive && (
                         <div className="absolute inset-0 bg-primary/10" />
@@ -256,7 +264,7 @@ export default function GalleryMobile({ data }: Props) {
               <button
                 type="button"
                 onClick={() => setLightboxOpen(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/8 text-primary"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/8 text-primary"
                 aria-label="Tutup galeri"
               >
                 <span className="material-symbols-outlined text-[20px]">
@@ -270,6 +278,9 @@ export default function GalleryMobile({ data }: Props) {
                 src={activeItem.image}
                 alt={activeItem.alt}
                 className="max-h-[68vh] w-full object-cover"
+                width="1280"
+                height="1600"
+                decoding="async"
               />
             </div>
 
@@ -287,7 +298,7 @@ export default function GalleryMobile({ data }: Props) {
                     activeIndex === 0 ? data.gallery.length - 1 : activeIndex - 1
                   )
                 }
-                className="inline-flex items-center gap-2 rounded-full bg-primary/8 px-4 py-2 text-sm font-semibold text-primary"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary/8 px-4 py-2 text-sm font-semibold text-primary"
               >
                 <span className="material-symbols-outlined text-[18px]">
                   arrow_back
@@ -306,7 +317,7 @@ export default function GalleryMobile({ data }: Props) {
                     activeIndex === data.gallery.length - 1 ? 0 : activeIndex + 1
                   )
                 }
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
               >
                 Berikutnya
                 <span className="material-symbols-outlined text-[18px]">
