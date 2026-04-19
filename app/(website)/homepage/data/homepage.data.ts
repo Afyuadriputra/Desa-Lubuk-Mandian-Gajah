@@ -80,6 +80,9 @@ export const homepageData: HomepageData = {
     "https://indomgb.s3.amazonaws.com/wp-content/uploads/2024/05/22003021/Mengukur-subsiden-gambut-pada-tanaman-kelapa-di-Indragiri-Hilir.-Foto-Sigit-Sutikno-768x512.jpg",
   ],
 
+  recoveryTitle: "Dari Karhutla ke Pemulihan",
+  recoveryDescription:
+    "Dari pengalaman kebakaran lahan, desa membangun langkah bertahap menuju pemulihan yang lebih aman, bijak, dan berkelanjutan.",
   recoveryItems: [
     {
       icon: "local_fire_department",
@@ -104,6 +107,7 @@ export const homepageData: HomepageData = {
     },
   ],
 
+  potentialTitle: "Potensi Unggulan Desa",
   potentials: [
     {
       title: "Karet",
@@ -133,6 +137,7 @@ export const homepageData: HomepageData = {
   ],
   potentialQuote:
     "Karet dan sawit menjadi primadona pendapatan utama masyarakat, sementara padi dan hortikultura melengkapi kehidupan pangan.",
+  potentialOpportunitiesTitle: "Potensi yang Bisa Berkembang",
   potentialOpportunityItems: [
     {
       icon: "storefront",
@@ -163,6 +168,9 @@ export const homepageData: HomepageData = {
     { icon: "account_balance", label: "Kantor Desa" },
   ],
 
+  galleryTitle: "Galeri Desa",
+  galleryDescription:
+    "Potret suasana, lingkungan, dan kehidupan desa dalam satu galeri visual.",
   gallery: [
     {
       image:
@@ -193,6 +201,10 @@ export const homepageData: HomepageData = {
       alt: "Galeri desa 5",
     },
   ],
+
+  contactTitle: "Hubungi Kami",
+  contactDescription:
+    "Kontak dan lokasi desa untuk komunikasi, koordinasi, dan kunjungan.",
 
   footerLinks: [
     { label: "Sejarah Lengkap", href: "/sejarah" },

@@ -5,9 +5,6 @@ type Props = {
   data: HomepageData;
 };
 
-const HERO_INTRO =
-  "Hamparan gambut, warisan Melayu Petalangan, dan kehidupan desa dalam satu cerita yang utuh.";
-
 export default function HeroMobile({ data }: Props) {
   return (
     <section className="relative h-[100dvh] overflow-hidden bg-surface">
@@ -32,7 +29,7 @@ export default function HeroMobile({ data }: Props) {
               </p>
 
               <p className="mt-2 max-w-[30ch] text-[12px] leading-5 text-white">
-                {HERO_INTRO}
+                {data.heroDescription}
               </p>
             </div>
 
@@ -63,15 +60,19 @@ function HeroBackground({
 }) {
   return (
     <div className="absolute inset-0 z-0">
-      <img
-        className="hero-image h-full w-full object-cover"
-        src={image}
-        alt={alt}
-        width="1280"
-        height="1920"
-        fetchPriority="high"
-        decoding="async"
-      />
+      {image ? (
+        <img
+          className="hero-image h-full w-full object-cover"
+          src={image}
+          alt={alt}
+          width="1280"
+          height="1920"
+          fetchPriority="high"
+          decoding="async"
+        />
+      ) : (
+        <div className="h-full w-full bg-[linear-gradient(160deg,#1f5e3b_0%,#2f7d4f_48%,#d7a93b_100%)]" />
+      )}
 
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(31,94,59,0.04)_0%,rgba(31,94,59,0.10)_34%,rgba(31,94,59,0.28)_68%,rgba(31,94,59,0.58)_100%)]" />
 

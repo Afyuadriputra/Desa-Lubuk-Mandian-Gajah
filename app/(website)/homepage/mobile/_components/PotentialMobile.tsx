@@ -227,12 +227,11 @@ export default function PotentialMobile({ data }: Props) {
           </div>
 
           <h2 className="type-title mt-3 font-extrabold tracking-[-0.02em] text-primary">
-            Potensi Unggulan
+            {data.potentialTitle}
           </h2>
 
           <p className="type-body mx-auto mt-4 max-w-[32ch] text-sm text-on-surface/76">
-            Geser seperti melihat story untuk mengenal hasil kebun, pangan, dan
-            kekayaan alam desa.
+            {data.potentialQuote}
           </p>
         </div>
 

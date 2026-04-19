@@ -5,14 +5,18 @@ type Props = {
 };
 
 export default function NamaSection({ data }: Props) {
+  const whatsappNumber = data.contact.whatsapp.replace(/\D/g, "");
+  const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(data.contact.address)}`;
+  const hasMapImage = Boolean(data.contact.mapImage);
+
   return (
     <section className="section-shell bg-surface" id="kontak">
       <div className="max-w-7xl mx-auto px-6">
         <div className="bg-white rounded-[3rem] shadow-xl overflow-hidden grid md:grid-cols-2 gap-0 border border-primary/5">
           <div className="p-12 md:p-16 section-stack">
-            <h2 className="type-title font-bold text-primary">Hubungi Kami</h2>
+            <h2 className="type-title font-bold text-primary">{data.contactTitle}</h2>
             <p className="type-body text-on-surface-variant">
-              Mari berdiskusi atau berkunjung ke desa kami untuk mengenal lebih dekat warisan budaya dan alamnya.
+              {data.contactDescription}
             </p>
 
             <div className="space-y-6">
@@ -38,17 +42,31 @@ export default function NamaSection({ data }: Props) {
             </div>
 
             <div className="flex gap-4 pt-4">
-              <a className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg" href="#">
+              <a
+                className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                href={mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="material-symbols-outlined text-xl">public</span>
               </a>
-              <a className="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg" href="#">
+              <a
+                className="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
+                href={`https://wa.me/${whatsappNumber}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <span className="material-symbols-outlined text-xl">share</span>
               </a>
             </div>
           </div>
 
           <div className="h-[400px] md:h-full min-h-[400px] bg-stone-100 relative">
-            <img className="w-full h-full object-cover" src={data.contact.mapImage} alt="Peta desa" />
+            {hasMapImage ? (
+              <img className="w-full h-full object-cover" src={data.contact.mapImage} alt="Peta desa" />
+            ) : (
+              <div className="w-full h-full bg-primary/10" />
+            )}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             </div>
           </div>

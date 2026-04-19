@@ -5,6 +5,8 @@ type Props = {
 };
 
 export default function SialangMobile({ data }: Props) {
+  const hasImage = Boolean(data.sialangImage);
+
   return (
     <section className="defer-section relative overflow-hidden bg-primary px-4 py-8 text-white">
       <div className="pointer-events-none absolute inset-0">
@@ -44,15 +46,19 @@ export default function SialangMobile({ data }: Props) {
           </div>
 
           <div className="relative overflow-hidden rounded-[28px] shadow-[0_18px_42px_rgba(0,0,0,0.22)]">
-            <img
-              className="sialang-image h-[260px] w-full object-cover"
-              src={data.sialangImage}
-              alt={data.sialangTitle}
-              width="960"
-              height="720"
-              loading="lazy"
-              decoding="async"
-            />
+            {hasImage ? (
+              <img
+                className="sialang-image h-[260px] w-full object-cover"
+                src={data.sialangImage}
+                alt={data.sialangTitle}
+                width="960"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div className="h-[260px] w-full bg-white/10" />
+            )}
 
             <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(31,94,59,0.82)_0%,rgba(31,94,59,0.30)_46%,rgba(31,94,59,0.03)_100%)]" />
 

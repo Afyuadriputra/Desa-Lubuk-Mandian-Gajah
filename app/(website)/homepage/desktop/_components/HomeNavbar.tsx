@@ -5,20 +5,28 @@ type Props = {
 };
 
 export default function HomeNavbar({ data }: Props) {
+  const hasLogo = Boolean(data.brand.logoUrl);
+
   return (
     <header className="bg-surface/80 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-primary/5">
       <nav className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <a className="brand-link inline-flex items-center gap-3 rounded-2xl border border-primary/10 bg-white/65 px-3 py-2 text-primary shadow-sm hover:text-[#1f5e3b]" href="/homepage">
             <div className="flex h-14 w-12 items-center justify-center rounded-lg bg-white ring-1 ring-primary/10">
-              <img
-                className="h-12 w-10 object-contain"
-                src={data.brand.logoUrl}
-                alt={data.brand.logoAlt}
-                width="40"
-                height="58"
-                fetchPriority="high"
-              />
+              {hasLogo ? (
+                <img
+                  className="h-12 w-10 object-contain"
+                  src={data.brand.logoUrl}
+                  alt={data.brand.logoAlt}
+                  width="40"
+                  height="58"
+                  fetchPriority="high"
+                />
+              ) : (
+                <span className="material-symbols-outlined text-[28px] text-primary/60">
+                  location_city
+                </span>
+              )}
             </div>
             <span className="flex flex-col leading-none">
               <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-primary/70">

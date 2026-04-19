@@ -5,6 +5,8 @@ type Props = {
 };
 
 export default function PeatMobile({ data }: Props) {
+  const primaryImage = data.peatImages.find(Boolean);
+
   return (
     <section className="defer-section relative overflow-hidden bg-surface px-4 py-8">
       <div className="mx-auto w-full max-w-sm">
@@ -35,27 +37,29 @@ export default function PeatMobile({ data }: Props) {
             />
           </div>
 
-          <div className="relative overflow-hidden rounded-[28px] shadow-[0_16px_40px_rgba(31,94,59,0.10)]">
-            <img
-              className="peat-image h-[240px] w-full object-cover"
-              src={data.peatImages[0]}
-              alt={data.peatTitle}
-              width="960"
-              height="720"
-              loading="lazy"
-              decoding="async"
-            />
+          {primaryImage ? (
+            <div className="relative overflow-hidden rounded-[28px] shadow-[0_16px_40px_rgba(31,94,59,0.10)]">
+              <img
+                className="peat-image h-[240px] w-full object-cover"
+                src={primaryImage}
+                alt={data.peatTitle}
+                width="960"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
 
-            <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(31,94,59,0.56)_0%,rgba(31,94,59,0.15)_45%,rgba(31,94,59,0.02)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(31,94,59,0.56)_0%,rgba(31,94,59,0.15)_45%,rgba(31,94,59,0.02)_100%)]" />
 
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <div className="inline-flex max-w-[88%] rounded-2xl border border-white/14 bg-white/10 px-3 py-2 backdrop-blur-md">
-                <p className="text-[12px] font-semibold leading-5 text-white">
-                  {data.peatQuote}
-                </p>
+              <div className="absolute inset-x-0 bottom-0 p-4">
+                <div className="inline-flex max-w-[88%] rounded-2xl border border-white/14 bg-white/10 px-3 py-2 backdrop-blur-md">
+                  <p className="text-[12px] font-semibold leading-5 text-white">
+                    {data.peatQuote}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
 
           <div className="mt-4 rounded-[24px] border border-secondary/10 bg-secondary-fixed/20 p-4 shadow-sm">
             <div className="mb-2 flex items-center gap-2">

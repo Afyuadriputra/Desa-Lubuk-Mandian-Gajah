@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function GalleryMobile({ data }: Props) {
+  const hasGallery = data.gallery.length > 0;
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -17,7 +18,7 @@ export default function GalleryMobile({ data }: Props) {
 
   useEffect(() => {
     const slider = sliderRef.current;
-    if (!slider || typeof window === "undefined") {
+    if (!slider || !hasGallery || typeof window === "undefined") {
       return;
     }
 
@@ -63,7 +64,7 @@ export default function GalleryMobile({ data }: Props) {
       swiperRef.current?.destroy?.(true, true);
       swiperRef.current = null;
     };
-  }, [data.gallery.length]);
+  }, [data.gallery.length, hasGallery]);
 
   const goToSlide = (index: number) => {
     setActiveIndex(index);
@@ -87,12 +88,11 @@ export default function GalleryMobile({ data }: Props) {
                 </div>
 
                 <h2 className="mt-3 type-title font-extrabold text-primary">
-                  Galeri Desa
+                  {data.galleryTitle}
                 </h2>
 
                 <p className="mt-2 text-sm leading-6 text-on-surface-variant">
-                  Potret suasana, lingkungan, dan kehidupan desa dalam satu
-                  galeri visual.
+                  {data.galleryDescription}
                 </p>
               </div>
 
@@ -101,10 +101,21 @@ export default function GalleryMobile({ data }: Props) {
                   Foto
                 </p>
                 <p className="mt-1 text-sm font-extrabold text-primary">
-                  {activeIndex + 1}/{data.gallery.length}
+                  {hasGallery ? activeIndex + 1 : 0}/{data.gallery.length}
                 </p>
               </div>
             </div>
+
+            {!hasGallery ? (
+              <div className="mt-5 rounded-[22px] border border-dashed border-primary/15 bg-white px-4 py-8 text-center">
+                <p className="text-sm font-semibold text-primary">
+                  Galeri belum tersedia.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-on-surface-variant">
+                  Tambahkan item galeri dari dashboard admin agar tampil di homepage.
+                </p>
+              </div>
+            ) : null}
 
             <div ref={sliderRef} className="swiper gallery-swiper mt-5">
               <div className="swiper-wrapper">

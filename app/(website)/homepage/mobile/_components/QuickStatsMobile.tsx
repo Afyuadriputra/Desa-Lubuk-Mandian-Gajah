@@ -35,9 +35,12 @@ const statMeta: Record<
 };
 
 export default function QuickStatsMobile({ data }: Props) {
+  const prioritizedLabels = ["Dusun", "Jiwa", "Ha Gambut", "Embung"];
   const mobileStats = data.stats.filter((item) =>
-    ["Dusun", "Jiwa", "Ha Gambut", "Embung"].includes(item.label)
+    prioritizedLabels.includes(item.label)
   );
+  const displayedStats =
+    mobileStats.length > 0 ? mobileStats : data.stats.slice(0, 4);
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-surface">
@@ -55,8 +58,7 @@ export default function QuickStatsMobile({ data }: Props) {
             </h2>
 
             <p className="mx-auto mt-2 max-w-[280px] text-[12px] leading-5 text-on-surface/80">
-              Informasi utama yang diringkas agar nyaman dibaca hanya dalam satu
-              layar mobile.
+              {data.quickStatsDescription}
             </p>
 
             <div className="mt-4 flex justify-center">
@@ -77,7 +79,7 @@ export default function QuickStatsMobile({ data }: Props) {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {mobileStats.map((item, index) => {
+            {displayedStats.map((item, index) => {
               const meta = statMeta[item.label] ?? {
                 icon: "bar_chart",
                 desc: "Informasi penting desa.",

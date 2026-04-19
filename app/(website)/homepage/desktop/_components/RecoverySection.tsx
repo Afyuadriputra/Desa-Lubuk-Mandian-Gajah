@@ -9,10 +9,13 @@ export default function NamaSection({ data }: Props) {
     <section className="section-shell bg-surface-container-high">
       <div className="max-w-5xl mx-auto px-6 text-center section-stack">
         <div className="section-stack-tight">
-          <h2 className="type-title font-bold text-primary">Dari Karhutla ke Pemulihan</h2>
+          <h2 className="type-title font-bold text-primary">{data.recoveryTitle}</h2>
           <div className="flex justify-center">
             <div className="pucuk-rebung-divider" />
           </div>
+          <p className="type-body text-on-surface-variant max-w-3xl mx-auto">
+            {data.recoveryDescription}
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">

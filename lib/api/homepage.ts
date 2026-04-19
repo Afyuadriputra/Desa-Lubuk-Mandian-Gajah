@@ -16,12 +16,139 @@ import type {
   HomepagePotentialOpportunityItemPayload,
   HomepageRecoveryItemDto,
   HomepageRecoveryItemPayload,
-  HomepageStatDto,
   HomepageStatItemPayload,
 } from "@/lib/api/types";
+import type { HomepageData } from "@/app/(website)/homepage/data/homepage.types";
+
+function ensureString(value: string | null | undefined) {
+  return value ?? "";
+}
+
+function ensureStringArray(values: string[] | null | undefined) {
+  return Array.isArray(values) ? values.filter((value): value is string => typeof value === "string") : [];
+}
+
+function mapHomepageDtoToViewModel(data: HomepageDataDto): HomepageData {
+  return {
+    villageName: ensureString(data.villageName),
+    tagline: ensureString(data.tagline),
+    heroDescription: ensureString(data.heroDescription),
+    heroImage: ensureString(data.heroImage),
+    heroBadge: ensureString(data.heroBadge),
+    brand: {
+      logoUrl: ensureString(data.brand?.logoUrl),
+      logoAlt: ensureString(data.brand?.logoAlt),
+      regionLabel: ensureString(data.brand?.regionLabel),
+    },
+    stats: Array.isArray(data.stats)
+      ? data.stats.map((item) => ({
+          value: ensureString(item?.value),
+          label: ensureString(item?.label),
+        }))
+      : [],
+    quickStatsDescription: ensureString(data.quickStatsDescription),
+    contact: {
+      address: ensureString(data.contact?.address),
+      whatsapp: ensureString(data.contact?.whatsapp),
+      mapImage: ensureString(data.contact?.mapImage),
+    },
+    namingTitle: ensureString(data.namingTitle),
+    namingDescription: ensureString(data.namingDescription),
+    namingImage: ensureString(data.namingImage),
+    namingQuote: ensureString(data.namingQuote),
+    cultureTitle: ensureString(data.cultureTitle),
+    cultureDescription: ensureString(data.cultureDescription),
+    cultureCards: Array.isArray(data.cultureCards)
+      ? data.cultureCards.map((item) => ({
+          icon: ensureString(item?.icon),
+          title: ensureString(item?.title),
+          description: ensureString(item?.description),
+        }))
+      : [],
+    sialangTitle: ensureString(data.sialangTitle),
+    sialangDescription: ensureString(data.sialangDescription),
+    sialangImage: ensureString(data.sialangImage),
+    sialangBadge: ensureString(data.sialangBadge),
+    sialangStat: ensureString(data.sialangStat),
+    sialangQuote: ensureString(data.sialangQuote),
+    peatTitle: ensureString(data.peatTitle),
+    peatDescription: ensureString(data.peatDescription),
+    peatQuote: ensureString(data.peatQuote),
+    peatImages: ensureStringArray(data.peatImages),
+    recoveryTitle: ensureString(data.recoveryTitle),
+    recoveryDescription: ensureString(data.recoveryDescription),
+    recoveryItems: Array.isArray(data.recoveryItems)
+      ? data.recoveryItems.map((item) => ({
+          icon: ensureString(item?.icon),
+          title: ensureString(item?.title),
+          description: ensureString(item?.description),
+          wrapper: ensureString(item?.wrapper),
+        }))
+      : [],
+    potentialTitle: ensureString(data.potentialTitle),
+    potentials: Array.isArray(data.potentials)
+      ? data.potentials
+          .map((item) => ({
+            title: ensureString(item?.title),
+            image: ensureString(item?.image),
+          }))
+          .filter((item) => item.image)
+      : [],
+    potentialQuote: ensureString(data.potentialQuote),
+    potentialOpportunitiesTitle: ensureString(data.potentialOpportunitiesTitle),
+    potentialOpportunityItems: Array.isArray(data.potentialOpportunityItems)
+      ? data.potentialOpportunityItems.map((item) => ({
+          icon: ensureString(item?.icon),
+          title: ensureString(item?.title),
+          description: ensureString(item?.description),
+        }))
+      : [],
+    facilitiesTitle: ensureString(data.facilitiesTitle),
+    facilities: Array.isArray(data.facilities)
+      ? data.facilities.map((item) => ({
+          icon: ensureString(item?.icon),
+          label: ensureString(item?.label),
+        }))
+      : [],
+    galleryTitle: ensureString(data.galleryTitle),
+    galleryDescription: ensureString(data.galleryDescription),
+    gallery: Array.isArray(data.gallery)
+      ? data.gallery
+          .map((item) => ({
+            image: ensureString(item?.image),
+            alt: ensureString(item?.alt),
+            tall: Boolean(item?.tall),
+            caption: ensureString(item?.caption),
+          }))
+          .filter((item) => item.image)
+      : [],
+    contactTitle: ensureString(data.contactTitle),
+    contactDescription: ensureString(data.contactDescription),
+    footerLinks: Array.isArray(data.footerLinks)
+      ? data.footerLinks.map((item) => ({
+          label: ensureString(item?.label),
+          href: ensureString(item?.href),
+        }))
+      : [],
+    footerDescription: ensureString(data.footerDescription),
+    officeHours: Array.isArray(data.officeHours)
+      ? data.officeHours.map((item) => ({
+          day: ensureString(item?.day),
+          time: ensureString(item?.time),
+          danger: Boolean(item?.danger),
+        }))
+      : [],
+    footerBadges: ensureStringArray(data.footerBadges),
+    footerCopyright: ensureString(data.footerCopyright),
+  };
+}
 
 export const homepageApi = {
-  getPublic: () => apiRequest<HomepageDataDto>("/homepage"),
+  getPublic: () =>
+    apiRequest<HomepageDataDto>("/homepage", {
+      cache: "no-store",
+      next: { revalidate: 0 },
+    }),
 
   getAdminContent: () =>
     apiRequest<ApiEnvelope<HomepageAdminContentDto>>("/homepage/admin/content"),
@@ -153,5 +280,6 @@ export const homepageApi = {
 };
 
 export async function getHomepageBackendData() {
-  return homepageApi.getPublic();
+  const data = await homepageApi.getPublic();
+  return mapHomepageDtoToViewModel(data);
 }

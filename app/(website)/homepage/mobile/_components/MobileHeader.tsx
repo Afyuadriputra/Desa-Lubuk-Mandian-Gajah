@@ -5,19 +5,27 @@ type Props = {
 };
 
 export default function MobileHeader({ data }: Props) {
+  const hasLogo = Boolean(data.brand.logoUrl);
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav className="flex items-center justify-center px-4 pt-4">
         <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-3 py-2 shadow-sm backdrop-blur-md">
           <div className="flex h-12 w-10 items-center justify-center rounded-lg bg-white/90 ring-1 ring-white/20">
-            <img
-              className="h-10 w-8 object-contain"
-              src={data.brand.logoUrl}
-              alt={data.brand.logoAlt}
-              width="32"
-              height="48"
-              fetchPriority="high"
-            />
+            {hasLogo ? (
+              <img
+                className="h-10 w-8 object-contain"
+                src={data.brand.logoUrl}
+                alt={data.brand.logoAlt}
+                width="32"
+                height="48"
+                fetchPriority="high"
+              />
+            ) : (
+              <span className="material-symbols-outlined text-[24px] text-primary/60">
+                location_city
+              </span>
+            )}
           </div>
 
           <div className="flex flex-col leading-tight">

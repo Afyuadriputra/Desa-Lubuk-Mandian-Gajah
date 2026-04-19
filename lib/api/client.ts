@@ -7,12 +7,18 @@ type RequestOptions = {
   body?: BodyInit | Record<string, unknown> | null;
   headers?: HeadersInit;
   credentials?: RequestCredentials;
+  cache?: RequestCache;
   csrfToken?: string;
   next?: NextFetchRequestConfig;
 };
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api/v1";
+function getApiBaseUrl() {
+  return (
+    process.env.API_BASE_URL ??
+    process.env.NEXT_PUBLIC_API_BASE_URL ??
+    "http://127.0.0.1:8000/api/v1"
+  );
+}
 
 export class ApiClientError extends Error {
   status: number;
@@ -57,14 +63,26 @@ function serializeBody(body: RequestOptions["body"]) {
 }
 
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const url = `${API_BASE_URL}${path}`;
-  const response = await fetch(url, {
-    method: options.method ?? "GET",
-    credentials: options.credentials ?? "include",
-    headers: buildHeaders(options.body, options.csrfToken, options.headers),
-    body: serializeBody(options.body),
-    next: options.next,
-  });
+  const url = `${getApiBaseUrl()}${path}`;
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      method: options.method ?? "GET",
+      credentials: options.credentials ?? "include",
+      cache: options.cache,
+      headers: buildHeaders(options.body, options.csrfToken, options.headers),
+      body: serializeBody(options.body),
+      next: options.next,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown fetch error";
+    throw new ApiClientError(
+      `Network error while requesting ${url}. Set API_BASE_URL/NEXT_PUBLIC_API_BASE_URL correctly and ensure backend is running. Original error: ${message}`,
+      0,
+      error
+    );
+  }
 
   const contentType = response.headers.get("content-type") ?? "";
   const isJson = contentType.includes("application/json");
@@ -81,4 +99,4 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   return payload as T;
 }
 
-export { API_BASE_URL };
+export { getApiBaseUrl };

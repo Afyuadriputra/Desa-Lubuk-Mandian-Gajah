@@ -4,12 +4,10 @@ type Props = {
   data: HomepageData;
 };
 
-const LATITUDE = 0.21392621504433937;
-const LONGITUDE = 102.1626206;
-
 export default function ContactMobile({ data }: Props) {
   const whatsappNumber = data.contact.whatsapp.replace(/\D/g, "");
-  const mapsUrl = `https://www.google.com/maps?q=${LATITUDE},${LONGITUDE}`;
+  const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(data.contact.address)}`;
+  const hasMapImage = Boolean(data.contact.mapImage);
 
   return (
     <section className="defer-section section-shell-mobile px-4 bg-surface" id="kontak">
@@ -47,11 +45,11 @@ export default function ContactMobile({ data }: Props) {
             </div>
 
             <h2 className="mt-3 text-[1.5rem] font-extrabold leading-tight text-white">
-              Hubungi Kami
+              {data.contactTitle}
             </h2>
 
             <p className="mt-2 text-[13px] leading-5 text-white/92">
-              Kontak dan lokasi desa untuk komunikasi dan kunjungan.
+              {data.contactDescription}
             </p>
           </div>
         </div>
@@ -139,15 +137,19 @@ export default function ContactMobile({ data }: Props) {
           className="relative block h-[160px] overflow-hidden border-t border-primary/8 bg-surface-container-low"
           aria-label="Buka lokasi di Google Maps"
         >
-          <img
-            className="h-full w-full object-cover"
-            src={data.contact.mapImage}
-            alt="Peta desa"
-            width="960"
-            height="640"
-            loading="lazy"
-            decoding="async"
-          />
+          {hasMapImage ? (
+            <img
+              className="h-full w-full object-cover"
+              src={data.contact.mapImage}
+              alt="Peta desa"
+              width="960"
+              height="640"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div className="h-full w-full bg-primary/10" />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent" />
 
@@ -162,10 +164,10 @@ export default function ContactMobile({ data }: Props) {
 
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-secondary">
-                    Koordinat
+                    Lokasi
                   </p>
                   <p className="truncate text-[13px] font-semibold text-on-surface">
-                    {LATITUDE}, {LONGITUDE}
+                    {data.contact.address}
                   </p>
                 </div>
 

@@ -9,7 +9,7 @@ export default function NamaSection({ data }: Props) {
     <section className="section-shell bg-surface">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center section-stack-tight mb-16">
-          <h2 className="type-title font-bold text-primary">Potensi Unggulan Desa</h2>
+          <h2 className="type-title font-bold text-primary">{data.potentialTitle}</h2>
           <div className="flex justify-center">
             <div className="pucuk-rebung-divider" />
           </div>
@@ -35,7 +35,7 @@ export default function NamaSection({ data }: Props) {
         </div>
 
         <div className="bg-primary-container rounded-[2.5rem] p-12 text-white">
-          <h3 className="type-title font-bold mb-8 text-center">Potensi yang Bisa Berkembang</h3>
+          <h3 className="type-title font-bold mb-8 text-center">{data.potentialOpportunitiesTitle}</h3>
           <div className="grid md:grid-cols-3 gap-12">
             {data.potentialOpportunityItems.map((item) => (
               <div key={item.title} className="space-y-4">

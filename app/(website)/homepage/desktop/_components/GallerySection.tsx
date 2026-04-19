@@ -8,7 +8,12 @@ export default function NamaSection({ data }: Props) {
   return (
     <section className="section-shell bg-surface">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="type-title font-bold text-primary mb-12">Galeri Desa</h2>
+        <div className="section-stack-tight mb-12">
+          <h2 className="type-title font-bold text-primary">{data.galleryTitle}</h2>
+          <p className="type-body text-on-surface-variant max-w-3xl">
+            {data.galleryDescription}
+          </p>
+        </div>
         <div className="masonry-grid">
           {data.gallery.map((item, index) => (
             <div

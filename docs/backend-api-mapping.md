@@ -1,31 +1,37 @@
 # Backend API Mapping for Frontend
 
-Dokumen ini memetakan halaman frontend Next.js/React + TypeScript ke endpoint backend Django Ninja yang sudah tersedia di project.
+Dokumen ini jadi konteks kerja cepat untuk frontend dan LLM saat membaca relasi antara page Next.js dan endpoint backend Django Ninja.
 
-Base API:
+## Base API
 
 ```txt
 /api/v1
 ```
 
-Default env frontend:
+## Env penting
+
+Frontend sekarang memakai 2 env yang relevan:
 
 ```env
+API_BASE_URL=http://127.0.0.1:8000/api/v1
 NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000/api/v1
 ```
 
+Aturan praktis:
+- `API_BASE_URL` dipakai aman untuk SSR/server component
+- `NEXT_PUBLIC_API_BASE_URL` dipakai sebagai fallback/client-safe env
+- kalau dua-duanya kosong, client default ke `http://127.0.0.1:8000/api/v1`
+
 ## Auth dan sesi
 
-Backend saat ini memakai session Django, bukan JWT.
+Backend pakai session Django, bukan JWT.
 
-- Frontend harus kirim request dengan `credentials: "include"`
-- Untuk request mutasi `POST`, `PUT`, `DELETE`, siapkan CSRF bila frontend dijalankan beda origin/domain dari backend
-- Endpoint cek sesi aktif:
+- request harus `credentials: "include"`
+- request mutasi `POST`, `PUT`, `DELETE` perlu CSRF bila frontend beda origin dari backend
+- endpoint cek sesi:
   - `GET /auth/me`
 
-## Struktur client yang dibuat
-
-Folder client TS:
+## Struktur client TS
 
 ```txt
 frontend/my-project/lib/api/
@@ -42,20 +48,37 @@ frontend/my-project/lib/api/
 └── index.ts
 ```
 
+## Source of truth homepage
+
+Status terbaru:
+
+- homepage publik sekarang **dynamic-first**
+- source utama: `GET /api/v1/homepage`
+- frontend wrapper utama:
+  - [homepage.ts](/mnt/d/kuliah/joki/radit/desa/frontend/my-project/lib/api/homepage.ts:1)
+- render entrypoint:
+  - [page.tsx](/mnt/d/kuliah/joki/radit/desa/frontend/my-project/app/page.tsx:1)
+
+Perilaku runtime:
+- server component fetch homepage sekali
+- hasil dibagikan ke layout desktop/mobile
+- bila backend gagal dijangkau, page fallback ke [homepage.data.ts](/mnt/d/kuliah/joki/radit/desa/frontend/my-project/app/(website)/homepage/data/homepage.data.ts:1)
+
 ## Mapping halaman frontend ke backend
 
-### Halaman yang sudah ada sekarang
+### Halaman yang sudah aktif sekarang
 
 | Frontend page | Tujuan | Endpoint backend utama | Client TS |
 | --- | --- | --- | --- |
-| `/` | Homepage website publik | `GET /profil-wilayah/publik` | `profilApi.getPublik()` |
-| `/` | Homepage website publik | `GET /publikasi/mvp/publik` | `publikasiApi.listPublik()` |
-| `/` | Homepage website publik | `GET /potensi-ekonomi/mvp/katalog` | `ekonomiApi.listPublik()` |
+| `/` | Homepage website publik | `GET /homepage` | `homepageApi.getPublic()` |
+| `/` | Homepage website publik | `GET /profil-wilayah/publik` | dipakai tidak langsung; owner domain tertentu |
+| `/` | Homepage website publik | `GET /potensi-ekonomi/mvp/katalog` | digabung backend lewat aggregator homepage |
 
 Catatan:
 
-- Saat ini [homepage.data.ts](</mnt/d/kuliah/joki/radit/desa/frontend/my-project/app/(website)/homepage/data/homepage.data.ts:1>) masih statis.
-- Helper `getHomepageBackendData()` di [homepage.ts](/mnt/d/kuliah/joki/radit/desa/frontend/my-project/lib/api/homepage.ts:1) sudah disiapkan untuk migrasi bertahap.
+- homepage tidak lagi perlu gabung 3 endpoint di frontend
+- agregasi `profil_wilayah + potensi_ekonomi + homepage_konten` dilakukan di backend
+- `homepage.data.ts` sekarang statusnya seed/fallback, bukan source utama render
 
 ### Rekomendasi page website publik
 
@@ -95,46 +118,142 @@ Catatan:
 | `/admin/analytics/pengaduan` | `GET /dashboard-admin/pengaduan-analytics` | `dashboardApi.pengaduanAnalytics(days)` |
 | `/admin/health/content` | `GET /dashboard-admin/content-health` | `dashboardApi.contentHealth()` |
 | `/admin/health/master` | `GET /dashboard-admin/master-health` | `dashboardApi.masterHealth()` |
-| `/admin/publikasi` | `GET /publikasi/mvp/publik` atau list admin custom nanti | `publikasiApi.listPublik()` |
-| `/admin/publikasi/buat` | `POST /publikasi/admin/buat` | `publikasiApi.create()` |
-| `/admin/publikasi/[slug]` | `PUT /publikasi/admin/{slug}` | `publikasiApi.update(slug)` |
-| `/admin/publikasi/[slug]/status` | `PUT /publikasi/admin/{slug}/status` | `publikasiApi.updateStatus(slug)` |
-| `/admin/publikasi/[slug]/hapus` | `DELETE /publikasi/admin/{slug}` | `publikasiApi.remove(slug)` |
-| `/admin/dusun` | `GET /profil-wilayah/admin/dusun` | `profilApi.listDusunAdmin()` |
-| `/admin/dusun/buat` | `POST /profil-wilayah/admin/dusun` | `profilApi.createDusun()` |
-| `/admin/dusun/[id]` | `PUT /profil-wilayah/admin/dusun/{id}` | `profilApi.updateDusun(id)` |
-| `/admin/profil-desa` | `PUT /profil-wilayah/admin/profil` | `profilApi.updateProfilDesa()` |
-| `/admin/ekonomi` | `GET /potensi-ekonomi/mvp/admin/list` | `ekonomiApi.listAdmin()` |
-| `/admin/ekonomi/buat` | `POST /potensi-ekonomi/mvp/admin/buat` | `ekonomiApi.create()` |
-| `/admin/ekonomi/[id]` | `PUT /potensi-ekonomi/mvp/admin/{id}` | `ekonomiApi.update(id)` |
-| `/admin/ekonomi/[id]/hapus` | `DELETE /potensi-ekonomi/mvp/admin/{id}` | `ekonomiApi.remove(id)` |
-| `/admin/surat` | `GET /layanan-administrasi/mvp/surat` | `suratApi.list()` |
-| `/admin/surat/[id]` | `GET /layanan-administrasi/mvp/surat/{id}` | `suratApi.detail(id)` |
-| `/admin/surat/[id]/proses` | `POST /layanan-administrasi/mvp/surat/{id}/proses` | `suratApi.proses(id)` |
-| `/admin/pengaduan` | `GET /pengaduan/mvp` | `pengaduanApi.list()` |
-| `/admin/pengaduan/[id]` | `GET /pengaduan/mvp/{id}` | `pengaduanApi.detail(id)` |
-| `/admin/pengaduan/[id]/proses` | `POST /pengaduan/mvp/{id}/proses` | `pengaduanApi.proses(id)` |
-| `/admin/users/warga/buat` | `POST /auth/users/warga/create` | `authApi.createWarga()` |
-| `/admin/users/admin/buat` | `POST /auth/users/admin/create` | `authApi.createAdmin()` |
-| `/admin/users/[id]/activate` | `POST /auth/users/{id}/activate` | `authApi.activateUser(id)` |
-| `/admin/users/[id]/deactivate` | `POST /auth/users/{id}/deactivate` | `authApi.deactivateUser(id)` |
+| `/admin/homepage` | `GET /homepage/admin/content` | `homepageApi.getAdminContent()` |
+| `/admin/homepage` | `PUT /homepage/admin/content` | `homepageApi.updateContent()` |
+| `/admin/homepage/culture-cards` | `POST/PUT/DELETE /homepage/admin/culture-cards/*` | `homepageApi.create/update/deleteCultureCard()` |
+| `/admin/homepage/recovery-items` | `POST/PUT/DELETE /homepage/admin/recovery-items/*` | `homepageApi.create/update/deleteRecoveryItem()` |
+| `/admin/homepage/potential-opportunities` | `POST/PUT/DELETE /homepage/admin/potential-opportunities/*` | `homepageApi.create/update/deletePotentialOpportunity()` |
+| `/admin/homepage/facilities` | `POST/PUT/DELETE /homepage/admin/facilities/*` | `homepageApi.create/update/deleteFacility()` |
+| `/admin/homepage/gallery` | `POST/PUT/DELETE /homepage/admin/gallery/*` | `homepageApi.create/update/deleteGalleryItem()` |
+| `/admin/homepage/footer-links` | `POST/PUT/DELETE /homepage/admin/footer-links/*` | `homepageApi.create/update/deleteFooterLink()` |
+| `/admin/homepage/stats` | `POST/PUT/DELETE /homepage/admin/stats/*` | `homepageApi.create/update/deleteStat()` |
 
-## Endpoint prioritas untuk website sekarang
+## Kontrak homepage publik
 
-Kalau target dekat kamu adalah website publik dulu, cukup setup ini dulu:
+Endpoint:
 
-1. `profilApi.getPublik()`
-2. `publikasiApi.listPublik()`
-3. `publikasiApi.detailPublik(slug)`
-4. `ekonomiApi.listPublik()`
-5. `ekonomiApi.detailPublik(id)`
+```txt
+GET /api/v1/homepage
+```
+
+Owner data ringkas:
+
+- `profil_wilayah`
+  - `stats.Dusun`
+- `potensi_ekonomi`
+  - `potentials`
+- `homepage_konten`
+  - hero
+  - branding
+  - naming
+  - culture
+  - sialang
+  - peat
+  - recovery
+  - gallery
+  - footer
+  - contact homepage
+  - stats manual homepage
+
+Field penting yang sekarang sudah dynamic:
+
+- `villageName`
+- `tagline`
+- `heroDescription`
+- `heroImage`
+- `heroBadge`
+- `brand.*`
+- `stats`
+- `quickStatsDescription`
+- `contact.*`
+- `naming*`
+- `culture*`
+- `sialang*`
+- `peat*`
+- `recoveryTitle`
+- `recoveryDescription`
+- `recoveryItems`
+- `potentialTitle`
+- `potentials`
+- `potentialQuote`
+- `potentialOpportunitiesTitle`
+- `potentialOpportunityItems`
+- `facilitiesTitle`
+- `facilities`
+- `galleryTitle`
+- `galleryDescription`
+- `gallery`
+- `footerLinks`
+- `footerDescription`
+- `officeHours`
+- `footerBadges`
+- `footerCopyright`
+
+## Kontrak homepage admin
+
+Endpoint utama:
+
+```txt
+GET /api/v1/homepage/admin/content
+PUT /api/v1/homepage/admin/content
+```
+
+Update payload sekarang mencakup scalar field berikut:
+
+- hero dan branding
+- contact homepage
+- quick stats description
+- naming
+- culture
+- sialang
+- peat
+- `recoveryTitle`
+- `recoveryDescription`
+- `potentialTitle`
+- `potentialQuote`
+- `potentialOpportunitiesTitle`
+- `facilitiesTitle`
+- `galleryTitle`
+- `galleryDescription`
+- `contactTitle`
+- `contactDescription`
+- footer
+- office hours
+
+## Mapping komponen homepage ke field backend
+
+| Komponen | Field utama |
+| --- | --- |
+| `HomeNavbar` / `MobileHeader` | `brand.logoUrl`, `brand.logoAlt`, `brand.regionLabel`, `villageName` |
+| `HeroSection` / `HeroMobile` | `heroImage`, `heroBadge`, `villageName`, `tagline`, `heroDescription` |
+| `QuickStatsSection` / `QuickStatsMobile` | `stats`, `quickStatsDescription` |
+| `NamingSection` / `NamingMobile` | `namingTitle`, `namingDescription`, `namingImage`, `namingQuote` |
+| `CultureSection` / `CultureMobile` | `cultureTitle`, `cultureDescription`, `cultureCards` |
+| `SialangSection` / `SialangMobile` | `sialangTitle`, `sialangDescription`, `sialangImage`, `sialangBadge`, `sialangStat`, `sialangQuote` |
+| `PeatSection` / `PeatMobile` | `peatTitle`, `peatDescription`, `peatQuote`, `peatImages` |
+| `RecoverySection` / `RecoveryMobile` | `recoveryTitle`, `recoveryDescription`, `recoveryItems` |
+| `PotentialSection` / `PotentialMobile` | `potentialTitle`, `potentials`, `potentialQuote`, `potentialOpportunitiesTitle`, `potentialOpportunityItems` |
+| `FacilitiesSection` / `FacilitiesMobile` | `facilitiesTitle`, `facilities` |
+| `GallerySection` / `GalleryMobile` | `galleryTitle`, `galleryDescription`, `gallery` |
+| `ContactSection` / `ContactMobile` | `contactTitle`, `contactDescription`, `contact.address`, `contact.whatsapp`, `contact.mapImage` |
+| `HomeFooter` / `FooterMobile` | `footerLinks`, `footerDescription`, `officeHours`, `footerBadges`, `footerCopyright`, `villageName` |
+
+## Guard dan fallback frontend
+
+Status terbaru:
+
+- `app/page.tsx` fetch homepage di server component
+- bila API gagal, page fallback ke `homepage.data.ts`
+- mapper `mapHomepageDtoToViewModel()` membersihkan field kosong/null
+- item `gallery` dan `potentials` dengan `image=""` dibuang dari view model
+- komponen image tunggal seperti navbar/hero/naming/sialang/contact sudah di-guard agar tidak render `src=""`
 
 ## Contoh pemakaian
 
 ### Server component Next.js
 
 ```tsx
-import { getHomepageBackendData } from "@/lib/api";
+import { getHomepageBackendData } from "@/lib/api/homepage";
 
 export default async function HomePage() {
   const data = await getHomepageBackendData();
@@ -155,7 +274,8 @@ await authApi.login({
 
 ## Catatan implementasi
 
-- Sebagian endpoint publik lama tidak memakai envelope `{ data: ... }`, tapi client baru dipusatkan ke endpoint yang paling stabil untuk frontend baru.
-- Modul `profil_wilayah` publik saat ini belum dibungkus envelope; itu normal karena memang shape existing backend begitu.
-- Kalau nanti frontend admin butuh list user admin/warga penuh, backend masih perlu endpoint list/search user khusus admin.
-- Kalau frontend butuh pagination, search, dan filter list publikasi/surat/pengaduan yang lebih kaya, backend sebaiknya ditambah query params resmi.
+- homepage frontend sekarang dynamic-first, bukan static-first
+- `homepage.data.ts` jangan dipakai langsung di komponen homepage
+- kalau SSR gagal fetch backend, cek env `API_BASE_URL`
+- dashboard admin sudah punya quick action `kelola homepage` dan content health homepage
+- bila nanti admin UI homepage dibangun, pakai `homepageApi` yang sudah ada; jangan buat client baru

@@ -5,15 +5,21 @@ type Props = {
 };
 
 export default function NamaSection({ data }: Props) {
+  const hasImage = Boolean(data.namingImage);
+
   return (
     <section className="section-shell bg-surface-container-low overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
         <div className="relative">
-          <img
-            className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"
-            src={data.namingImage}
-            alt={data.namingTitle}
-          />
+          {hasImage ? (
+            <img
+              className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"
+              src={data.namingImage}
+              alt={data.namingTitle}
+            />
+          ) : (
+            <div className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] bg-primary/10" />
+          )}
           <div className="absolute -bottom-8 -left-8 bg-primary text-white p-8 rounded-3xl shadow-xl z-20 max-w-[240px]">
             <p className="type-body italic leading-snug">"{data.namingQuote}"</p>
           </div>

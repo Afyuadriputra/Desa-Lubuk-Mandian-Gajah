@@ -95,13 +95,21 @@ export type HomepageData = {
   peatQuote: string;
   peatImages: string[];
 
+  recoveryTitle: string;
+  recoveryDescription: string;
   recoveryItems: HomepageRecoveryItem[];
+  potentialTitle: string;
   potentials: HomepagePotential[];
   potentialQuote: string;
+  potentialOpportunitiesTitle: string;
   potentialOpportunityItems: HomepageOpportunityItem[];
   facilitiesTitle: string;
   facilities: HomepageFacility[];
+  galleryTitle: string;
+  galleryDescription: string;
   gallery: HomepageGalleryItem[];
+  contactTitle: string;
+  contactDescription: string;
 
   footerLinks: HomepageFooterLink[];
   footerDescription: string;

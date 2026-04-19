@@ -5,19 +5,28 @@ type Props = {
 };
 
 export default function HeroSection({ data }: Props) {
+  const hasHeroImage = Boolean(data.heroImage);
+
   return (
     <section className="relative h-[90vh] flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <img
-          className="w-full h-full object-cover"
-          src={data.heroImage}
-          alt={data.villageName}
-        />
+        {hasHeroImage ? (
+          <img
+            className="w-full h-full object-cover"
+            src={data.heroImage}
+            alt={data.villageName}
+          />
+        ) : (
+          <div className="w-full h-full bg-[linear-gradient(135deg,#1f5e3b_0%,#2f7d4f_45%,#d7a93b_100%)]" />
+        )}
         <div className="absolute inset-0 hero-gradient" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="max-w-3xl text-white section-stack">
+          <span className="inline-flex w-fit items-center rounded-full bg-secondary-container px-4 py-2 text-sm font-extrabold uppercase tracking-[0.16em] text-[#2d1600] shadow-sm">
+            {data.heroBadge}
+          </span>
           <h1 className="type-display font-bold tracking-tight text-balance">
             {data.villageName}
           </h1>

@@ -5,6 +5,8 @@ type Props = {
 };
 
 export default function NamaSection({ data }: Props) {
+  const hasImage = Boolean(data.sialangImage);
+
   return (
     <section className="section-shell bg-primary text-white relative">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
@@ -24,11 +26,15 @@ export default function NamaSection({ data }: Props) {
         </div>
 
         <div className="relative">
-          <img
-            className="rounded-[3rem] w-full aspect-square object-cover shadow-2xl"
-            src={data.sialangImage}
-            alt={data.sialangTitle}
-          />
+          {hasImage ? (
+            <img
+              className="rounded-[3rem] w-full aspect-square object-cover shadow-2xl"
+              src={data.sialangImage}
+              alt={data.sialangTitle}
+            />
+          ) : (
+            <div className="rounded-[3rem] w-full aspect-square bg-white/10 shadow-2xl" />
+          )}
           <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-t from-primary/60 to-transparent" />
           <div className="absolute bottom-8 left-8">
             <h3 className="type-title font-bold">{data.sialangTitle}</h3>

@@ -42,7 +42,7 @@ export default function RecoveryMobile({ data }: Props) {
           </div>
 
           <h2 className="mt-3 text-[1.65rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-primary">
-            Upaya Pemulihan
+            {data.recoveryTitle}
           </h2>
 
           <div className="mt-3 flex justify-center">
@@ -62,8 +62,7 @@ export default function RecoveryMobile({ data }: Props) {
           </div>
 
           <p className="mt-4 text-[14px] leading-7 text-on-surface/76">
-            Dari pengalaman pahit kebakaran, desa membangun langkah bertahap
-            menuju pemulihan yang lebih bijak, aman, dan berkelanjutan.
+            {data.recoveryDescription}
           </p>
         </div>
 
