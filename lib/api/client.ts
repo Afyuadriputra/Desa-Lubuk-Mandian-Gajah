@@ -32,7 +32,18 @@ export class ApiClientError extends Error {
   }
 }
 
-function buildHeaders(body: RequestOptions["body"], csrfToken?: string, headers?: HeadersInit) {
+function getCsrfToken(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]*)/);
+  return match?.[1];
+}
+
+function buildHeaders(
+  method: RequestMethod,
+  body: RequestOptions["body"],
+  csrfToken?: string,
+  headers?: HeadersInit
+) {
   const result = new Headers(headers);
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
@@ -40,8 +51,12 @@ function buildHeaders(body: RequestOptions["body"], csrfToken?: string, headers?
     result.set("Content-Type", "application/json");
   }
 
-  if (csrfToken && !result.has("X-CSRFToken")) {
-    result.set("X-CSRFToken", csrfToken);
+  // Auto-inject CSRF token for mutating requests
+  if (!result.has("X-CSRFToken") && (method === "POST" || method === "PUT" || method === "DELETE")) {
+    const token = csrfToken || getCsrfToken();
+    if (token) {
+      result.set("X-CSRFToken", token);
+    }
   }
 
   return result;
@@ -71,7 +86,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
       method: options.method ?? "GET",
       credentials: options.credentials ?? "include",
       cache: options.cache,
-      headers: buildHeaders(options.body, options.csrfToken, options.headers),
+      headers: buildHeaders(options.method ?? "GET", options.body, options.csrfToken, options.headers),
       body: serializeBody(options.body),
       next: options.next,
     });

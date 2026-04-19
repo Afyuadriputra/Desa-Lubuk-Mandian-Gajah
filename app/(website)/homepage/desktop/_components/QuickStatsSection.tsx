@@ -1,4 +1,5 @@
 ﻿import type { HomepageData } from "../../data/homepage.types";
+import { Card, CardContent } from "@/components/ui/card";
 
 type Props = {
   data: HomepageData;
@@ -20,17 +21,23 @@ export default function QuickStatsSection({ data }: Props) {
 
           <div className="md:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
             {data.stats.map((item) => (
-              <div
+              <Card
                 key={item.label}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-primary/5 text-center transition-transform hover:-translate-y-1"
+                className="group overflow-hidden rounded-[1.75rem] border-primary/8 bg-white/92 text-center transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1.5 hover:border-primary/15 hover:shadow-[0_22px_38px_-28px_rgba(31,94,59,0.7)]"
               >
-                <div className="type-title font-bold text-primary">
-                  {item.value}
-                </div>
-                <div className="type-label text-stone-500 font-medium">
-                  {item.label}
-                </div>
-              </div>
+                <CardContent className="relative p-6">
+                  <div
+                    className="absolute top-0 left-0 h-1.5 w-full bg-gradient-to-r from-primary/75 via-primary/40 to-secondary/65 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                  <div className="type-title font-bold text-primary [font-variant-numeric:tabular-nums]">
+                    {item.value}
+                  </div>
+                  <div className="type-label font-medium text-stone-500">
+                    {item.label}
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>

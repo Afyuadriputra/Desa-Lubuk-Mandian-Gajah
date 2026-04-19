@@ -1,4 +1,7 @@
 import type { HomepageData } from "../../data/homepage.types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { DesktopIcon } from "./DesktopIcon";
 
 type Props = {
   data: HomepageData;
@@ -20,9 +23,11 @@ export default function NamaSection({ data }: Props) {
           ) : (
             <div className="rounded-[2.5rem] shadow-2xl relative z-10 w-full aspect-[4/5] bg-primary/10" />
           )}
-          <div className="absolute -bottom-8 -left-8 bg-primary text-white p-8 rounded-3xl shadow-xl z-20 max-w-[240px]">
-            <p className="type-body italic leading-snug">"{data.namingQuote}"</p>
-          </div>
+          <Card className="absolute -bottom-8 -left-8 z-20 max-w-[280px] border-white/10 bg-primary text-white shadow-2xl">
+            <CardContent className="p-7">
+              <p className="type-body italic leading-snug text-white/92">"{data.namingQuote}"</p>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="section-stack">
@@ -32,11 +37,18 @@ export default function NamaSection({ data }: Props) {
             </h2>
             <div className="pucuk-rebung-divider" />
           </div>
-          <p className="type-body text-on-surface-variant">{data.namingDescription}</p>
-          <a href="/sejarah" className="flex items-center gap-4 group text-secondary font-bold type-body">
-            Selengkapnya di Halaman Sejarah
-            <span className="material-symbols-outlined transition-transform group-hover:translate-x-2">arrow_forward</span>
-          </a>
+          <p className="type-body max-w-[64ch] text-on-surface-variant">{data.namingDescription}</p>
+          <div>
+            <a href="/sejarah" className="inline-flex">
+              <Button variant="outline" className="group">
+                Selengkapnya di Halaman Sejarah
+                <DesktopIcon
+                  name="arrow_forward"
+                  className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
     </section>

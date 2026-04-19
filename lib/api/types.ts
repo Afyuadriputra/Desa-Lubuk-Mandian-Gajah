@@ -19,6 +19,12 @@ export type UserDto = {
 
 export type ActivationDto = UserDto;
 
+export type UserListQuery = {
+  q?: string;
+  role?: UserRole | "";
+  is_active?: boolean;
+};
+
 export type ProfilDesaDto = {
   visi: string;
   misi: string;
@@ -247,6 +253,11 @@ export type HomepageStatDto = {
   label: string;
 };
 
+export type HomepageStatItemDto = HomepageStatDto & {
+  id: number;
+  sort_order: number;
+};
+
 export type HomepageBrandDto = {
   logoUrl: string;
   logoAlt: string;
@@ -368,6 +379,7 @@ export type HomepageDataDto = {
 };
 
 export type HomepageAdminContentDto = HomepageDataDto & {
+  statsItems: HomepageStatItemDto[];
   contactAddressSource: string;
   villageNameSource: string;
 };

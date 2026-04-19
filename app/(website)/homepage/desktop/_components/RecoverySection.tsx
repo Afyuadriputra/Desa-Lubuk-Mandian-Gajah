@@ -1,4 +1,6 @@
 import type { HomepageData } from "../../data/homepage.types";
+import { Card, CardContent } from "@/components/ui/card";
+import { DesktopIcon } from "./DesktopIcon";
 
 type Props = {
   data: HomepageData;
@@ -18,17 +20,22 @@ export default function NamaSection({ data }: Props) {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid gap-8 md:grid-cols-3">
           {data.recoveryItems.map((item) => (
-            <div key={item.title} className="bg-white p-8 rounded-3xl shadow-sm">
-              <div
-                className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6 ${item.wrapper ?? "bg-primary/10 text-primary"}`}
-              >
-                <span className="material-symbols-outlined text-3xl">{item.icon}</span>
-              </div>
-              <h4 className="type-body font-bold mb-4">{item.title}</h4>
-              <p className="type-body text-on-surface-variant">{item.description}</p>
-            </div>
+            <Card
+              key={item.title}
+              className="group rounded-[2rem] border-primary/8 bg-white/92 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1.5 hover:border-primary/15 hover:shadow-[0_22px_38px_-30px_rgba(31,94,59,0.72)]"
+            >
+              <CardContent className="p-8 text-center">
+                <div
+                  className={`mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full ${item.wrapper ?? "bg-primary/10 text-primary"}`}
+                >
+                  <DesktopIcon name={item.icon} className="h-7 w-7" />
+                </div>
+                <h4 className="mb-4 type-body font-bold">{item.title}</h4>
+                <p className="type-body text-on-surface-variant">{item.description}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Antrean Pengaduan - Village Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#450e1a",
+                        "outline": "#5b74b1",
+                        "on-background": "#dee5ff",
+                        "error-container": "#7f2927",
+                        "inverse-on-surface": "#4d556b",
+                        "surface-container-low": "#06122d",
+                        "surface-variant": "#00225a",
+                        "inverse-primary": "#5c5f61",
+                        "on-surface": "#dee5ff",
+                        "on-tertiary": "#6d2d38",
+                        "primary-container": "#444749",
+                        "background": "#060e20",
+                        "on-tertiary-fixed-variant": "#6c2d37",
+                        "on-secondary": "#122131",
+                        "secondary-container": "#2e3c4e",
+                        "primary-dim": "#b6b9bb",
+                        "on-error-container": "#ff9993",
+                        "on-primary-fixed-variant": "#595c5e",
+                        "on-secondary-fixed": "#324052",
+                        "surface-container-high": "#031d4b",
+                        "tertiary-fixed": "#fca3ae",
+                        "secondary-dim": "#909fb4",
+                        "tertiary-container": "#fca3ae",
+                        "primary-fixed": "#e0e3e5",
+                        "on-surface-variant": "#91aaeb",
+                        "error-dim": "#bb5551",
+                        "on-primary": "#3d4142",
+                        "on-secondary-fixed-variant": "#4e5d6f",
+                        "surface-container-highest": "#00225a",
+                        "surface-bright": "#002867",
+                        "secondary-fixed": "#d4e4fa",
+                        "inverse-surface": "#faf8ff",
+                        "primary": "#c4c7c9",
+                        "surface-dim": "#060e20",
+                        "on-primary-fixed": "#3c4042",
+                        "on-secondary-container": "#b1c0d6",
+                        "primary-fixed-dim": "#d2d5d7",
+                        "secondary": "#909fb4",
+                        "on-primary-container": "#ced1d2",
+                        "surface-tint": "#c4c7c9",
+                        "secondary-fixed-dim": "#c6d6ec",
+                        "on-error": "#490106",
+                        "tertiary": "#ffb6be",
+                        "on-tertiary-container": "#61242f",
+                        "surface": "#060e20",
+                        "outline-variant": "#2b4680",
+                        "tertiary-fixed-dim": "#ec96a1",
+                        "surface-container": "#05183c",
+                        "tertiary-dim": "#ec96a1",
+                        "surface-container-lowest": "#000000",
+                        "error": "#ee7d77"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"],
+                        "inter": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            stroke-width: 1.25px;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Ghost Border utility */
+        .ghost-border {
+            border: 1px solid rgba(43, 70, 128, 0.15); /* outline-variant at 15% */
+        }
+        
+        /* No scrollbar for clean aesthetic */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen antialiased selection:bg-surface-container-highest selection:text-primary-fixed overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-slate-900/70 backdrop-blur-xl text-slate-200 font-inter tracking-tight headline-sm fixed top-0 w-full z-50 shadow-2xl shadow-slate-950/50 flex justify-between items-center px-8 h-16 transition-all duration-300 ease-in-out pl-[18rem] md:pl-[18rem]">
+<!-- Left Side: Search (Search Bar "on_left") -->
+<div class="flex items-center w-full max-w-md">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors text-[20px]">search</span>
+<input class="w-full bg-surface-container-lowest ghost-border rounded-xl py-2.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-outline focus:ring-1 focus:ring-outline transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]" placeholder="Cari ID, Judul, atau Subjek..." type="text"/>
+</div>
+</div>
+<!-- Right Side: Actions & Profile -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 border-r border-outline-variant/20 pr-6">
+<button class="p-2 rounded-full text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors scale-95 duration-200 ease-in-out relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full shadow-[0_0_8px_rgba(255,182,190,0.6)]"></span>
+</button>
+<button class="p-2 rounded-full text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-colors scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<button class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+<div class="w-10 h-10 rounded-xl overflow-hidden border border-outline-variant/30">
+<img alt="Administrator Profile" class="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500" data-alt="Close up portrait of a professional man in a dark tailored suit against a muted slate background, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0GRHpa84IDfSfRIkAtU8WlFZKjiYOCFSOfyd8gTU7tWGjxe776B3YnFaIavY7TWCoLcNmDHJK1y2CEJJ3ey8_55api4MwnEH09w_ulNMs9o94doHoDZv8-I2ZgsLBM-5psm0BN7Al_X7Hw1YqUdkkaKjHkSkX2FRZBO1EwIcEcOF0ZvUBtHY71NiTM6PwXBoTlEpVt92zI1Ip6EfyLj5a5mo8JoQY-IibzlyrgLj2eZFAr5N4x0xc9f22im-d5LvxeNdlsMUv7w"/>
+</div>
+<div class="hidden md:flex flex-col items-start">
+<span class="text-sm font-semibold text-slate-200">Admin Utama</span>
+<span class="text-xs text-on-surface-variant">Desa Digital</span>
+</div>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="bg-slate-900 text-slate-200 font-inter body-md tracking-wide fixed left-0 top-0 h-screen w-64 flex flex-col py-6 space-y-2 z-[60] transition-all duration-300 ease-in-out">
+<!-- Brand Header -->
+<div class="px-6 mb-8 flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-background" data-weight="fill">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-semibold text-slate-100 tracking-widest uppercase">Admin Panel</span>
+<span class="text-xs text-on-surface-variant tracking-wider uppercase font-medium">Management Console</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 px-2 space-y-1">
+<!-- Tab 1: Beranda Overview (Inactive) -->
+<a class="text-slate-400 hover:text-slate-200 mx-2 flex items-center gap-3 py-3 px-4 hover:bg-slate-800/30 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Beranda Overview</span>
+</a>
+<!-- Tab 2: Antrean Surat (Inactive) -->
+<a class="text-slate-400 hover:text-slate-200 mx-2 flex items-center gap-3 py-3 px-4 hover:bg-slate-800/30 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="description">description</span>
+<span class="font-medium text-sm">Antrean Surat</span>
+</a>
+<!-- Tab 3: Antrean Pengaduan (ACTIVE) -->
+<a class="bg-slate-800 text-slate-100 rounded-lg mx-2 flex items-center gap-3 py-3 px-4 transition-all group" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="chat_bubble" data-weight="fill">chat_bubble</span>
+<span class="text-sm font-bold">Antrean Pengaduan</span>
+</a>
+<!-- Tab 4: Kelola Homepage (Inactive) -->
+<a class="text-slate-400 hover:text-slate-200 mx-2 flex items-center gap-3 py-3 px-4 hover:bg-slate-800/30 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="home_max">home_max</span>
+<span class="font-medium text-sm">Kelola Homepage</span>
+</a>
+<!-- Tab 5: Katalog BUMDes (Inactive) -->
+<a class="text-slate-400 hover:text-slate-200 mx-2 flex items-center gap-3 py-3 px-4 hover:bg-slate-800/30 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="storefront">storefront</span>
+<span class="font-medium text-sm">Katalog BUMDes</span>
+</a>
+<!-- Tab 6: Kelola Akun Warga (Inactive) -->
+<a class="text-slate-400 hover:text-slate-200 mx-2 flex items-center gap-3 py-3 px-4 hover:bg-slate-800/30 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="group">group</span>
+<span class="font-medium text-sm">Kelola Akun Warga</span>
+</a>
+</div>
+<!-- Footer Link -->
+<div class="px-2 mt-auto pt-6 border-t border-outline-variant/10">
+<a class="text-slate-400 hover:text-slate-200 mx-2 flex items-center gap-3 py-3 px-4 hover:bg-slate-800/30 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="logout">logout</span>
+<span class="font-medium text-sm">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-12 pb-16 min-h-screen">
+<!-- Page Header & Controls -->
+<div class="flex items-end justify-between mb-10">
+<div class="flex flex-col gap-2">
+<h1 class="text-[2.75rem] leading-none font-headline font-semibold text-on-surface tracking-tight">Antrean Pengaduan</h1>
+<p class="text-on-surface-variant font-body text-sm mt-1 max-w-lg">Kelola dan tinjau laporan warga yang membutuhkan perhatian segera. Data diurutkan berdasarkan urgensi dan waktu masuk.</p>
+</div>
+<div class="flex items-center gap-4">
+<!-- Status Filter Dropdown -->
+<div class="relative group">
+<button class="flex items-center gap-2 bg-surface-container-lowest ghost-border rounded-lg px-4 py-2.5 text-sm font-medium text-on-surface-variant hover:text-on-surface hover:border-outline-variant/40 transition-all">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>Semua Status</span>
+<span class="material-symbols-outlined text-[18px] ml-1 opacity-60">expand_more</span>
+</button>
+<!-- Dropdown Content (Hidden by default, shown on hover/focus for demo) -->
+<div class="absolute right-0 top-full mt-2 w-48 bg-surface-container-highest rounded-xl border border-outline-variant/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 backdrop-blur-md">
+<a class="block px-4 py-2 text-sm text-on-surface hover:bg-white/5 transition-colors" href="#">Semua Status</a>
+<a class="block px-4 py-2 text-sm text-tertiary hover:bg-white/5 transition-colors" href="#">Menunggu</a>
+<a class="block px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors" href="#">Diproses</a>
+</div>
+</div>
+<!-- Action Button -->
+<button class="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-lg px-5 py-2.5 text-sm font-semibold shadow-lg hover:shadow-xl hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Catat Manual
+                </button>
+</div>
+</div>
+<!-- The Curated Table Canvas -->
+<div class="bg-surface-container rounded-2xl border border-outline-variant/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] overflow-hidden relative">
+<!-- Table Header (Minimalist) -->
+<div class="grid grid-cols-12 gap-4 px-8 py-4 border-b border-outline-variant/10 bg-surface-container-low/50">
+<div class="col-span-4 text-xs font-label text-on-surface-variant uppercase tracking-wider">Judul Pengaduan</div>
+<div class="col-span-2 text-xs font-label text-on-surface-variant uppercase tracking-wider">Pelapor</div>
+<div class="col-span-2 text-xs font-label text-on-surface-variant uppercase tracking-wider">Waktu Tunggu</div>
+<div class="col-span-2 text-xs font-label text-on-surface-variant uppercase tracking-wider">Status</div>
+<div class="col-span-2 text-xs font-label text-on-surface-variant uppercase tracking-wider text-right">Aksi</div>
+</div>
+<!-- Table Body Rows -->
+<div class="flex flex-col">
+<!-- Row 1: Attention Needed (True) -->
+<div class="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors items-center relative group">
+<!-- Attention Indicator Line -->
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-error shadow-[0_0_10px_rgba(238,125,119,0.5)]"></div>
+<div class="col-span-4 flex flex-col pr-4">
+<span class="text-sm font-semibold text-on-surface truncate">Infrastruktur Jalan Rusak Parah di Dusun Krajan</span>
+<span class="text-xs text-error mt-1 flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                            Perlu Perhatian Segera
+                        </span>
+</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-xs font-bold text-primary border border-outline-variant/20">
+                            BS
+                        </div>
+<span class="text-sm text-on-surface">Budi Santoso</span>
+</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary">schedule</span>
+<span class="text-sm font-medium text-tertiary">48 Jam</span>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-tertiary/10 text-tertiary border border-tertiary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                            Menunggu Review
+                        </span>
+</div>
+<div class="col-span-2 flex items-center justify-end">
+<button class="text-xs font-medium text-primary hover:text-on-surface px-4 py-2 rounded-lg ghost-border hover:bg-white/5 transition-all">
+                            Tinjau
+                        </button>
+</div>
+</div>
+<!-- Row 2: Normal -->
+<div class="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors items-center relative">
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-transparent"></div>
+<div class="col-span-4 flex flex-col pr-4">
+<span class="text-sm font-medium text-on-surface truncate">Masalah Saluran Air Tersumbat di RT 04</span>
+<span class="text-xs text-on-surface-variant mt-1">ID: PGD-2023-089</span>
+</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-xs font-bold text-primary border border-outline-variant/20">
+                            SW
+                        </div>
+<span class="text-sm text-on-surface">Siti Wahyuni</span>
+</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span>
+<span class="text-sm text-on-surface-variant">12 Jam</span>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            Diproses
+                        </span>
+</div>
+<div class="col-span-2 flex items-center justify-end">
+<button class="text-xs font-medium text-on-surface-variant hover:text-on-surface px-4 py-2 rounded-lg hover:bg-white/5 transition-all">
+                            Detail
+                        </button>
+</div>
+</div>
+<!-- Row 3: Attention Needed (True) -->
+<div class="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors items-center relative">
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-error shadow-[0_0_10px_rgba(238,125,119,0.5)]"></div>
+<div class="col-span-4 flex flex-col pr-4">
+<span class="text-sm font-semibold text-on-surface truncate">Konflik Batas Tanah Antar Warga Desa</span>
+<span class="text-xs text-error mt-1 flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                            Mediasi Diperlukan
+                        </span>
+</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-xs font-bold text-primary border border-outline-variant/20">
+                            AW
+                        </div>
+<span class="text-sm text-on-surface">Ahmad Wijaya</span>
+</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary">schedule</span>
+<span class="text-sm font-medium text-tertiary">72 Jam</span>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-tertiary/10 text-tertiary border border-tertiary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                            Tertunda
+                        </span>
+</div>
+<div class="col-span-2 flex items-center justify-end">
+<button class="text-xs font-medium text-primary hover:text-on-surface px-4 py-2 rounded-lg ghost-border hover:bg-white/5 transition-all">
+                            Tinjau
+                        </button>
+</div>
+</div>
+<!-- Row 4: Normal -->
+<div class="grid grid-cols-12 gap-4 px-8 py-5 border-b border-outline-variant/10 hover:bg-white/[0.02] transition-colors items-center relative">
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-transparent"></div>
+<div class="col-span-4 flex flex-col pr-4">
+<span class="text-sm font-medium text-on-surface truncate">Permohonan Penerangan Jalan Umum Baru</span>
+<span class="text-xs text-on-surface-variant mt-1">ID: PGD-2023-091</span>
+</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-xs font-bold text-primary border border-outline-variant/20">
+                            RH
+                        </div>
+<span class="text-sm text-on-surface">Rini Handayani</span>
+</div>
+<div class="col-span-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span>
+<span class="text-sm text-on-surface-variant">4 Jam</span>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-surface-container-highest text-on-surface border border-outline-variant/30">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>
+                            Baru Masuk
+                        </span>
+</div>
+<div class="col-span-2 flex items-center justify-end">
+<button class="text-xs font-medium text-on-surface-variant hover:text-on-surface px-4 py-2 rounded-lg hover:bg-white/5 transition-all">
+                            Detail
+                        </button>
+</div>
+</div>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="px-8 py-4 bg-surface-container-lowest flex items-center justify-between border-t border-outline-variant/10">
+<span class="text-xs font-medium text-on-surface-variant">Menampilkan 4 dari 24 Pengaduan</span>
+<div class="flex items-center gap-2">
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-white/5 disabled:opacity-30 disabled:hover:bg-transparent transition-all" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 rounded-md flex items-center justify-center text-xs font-medium bg-primary/20 text-primary">1</button>
+<button class="w-6 h-6 rounded-md flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-white/5 transition-colors">2</button>
+<button class="w-6 h-6 rounded-md flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-white/5 transition-colors">3</button>
+</div>
+<button class="p-1.5 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

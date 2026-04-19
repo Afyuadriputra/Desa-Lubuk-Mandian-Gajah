@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Beranda Overview - The Curated Lens</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        "tertiary-dim": "#cbd5e1",
+                        "primary-fixed": "#e2e8f0",
+                        "surface-container-high": "#1e293b",
+                        "secondary-dim": "#94a3b8",
+                        "on-primary-container": "#f1f5f9",
+                        "on-secondary-fixed-variant": "#475569",
+                        "on-tertiary-container": "#f1f5f9",
+                        "on-secondary": "#f8fafc",
+                        "surface-container-lowest": "#020617",
+                        "tertiary-container": "#334155",
+                        "outline-variant": "#334155",
+                        "on-tertiary": "#f8fafc",
+                        "on-primary": "#f8fafc",
+                        "secondary-container": "#334155",
+                        "surface-dim": "#0f172a",
+                        "on-error": "#f8fafc",
+                        "secondary": "#94a3b8",
+                        "on-error-container": "#f8fafc",
+                        "surface-bright": "#1e293b",
+                        "secondary-fixed-dim": "#cbd5e1",
+                        "secondary-fixed": "#e2e8f0",
+                        "inverse-primary": "#64748b",
+                        "background": "#0f172a",
+                        "surface-container": "#1e293b",
+                        "primary-container": "#334155",
+                        "surface-container-highest": "#334155",
+                        "primary-fixed-dim": "#cbd5e1",
+                        "on-secondary-fixed": "#1e293b",
+                        "tertiary": "#e2e8f0",
+                        "on-tertiary-fixed": "#0f172a",
+                        "surface": "#0f172a",
+                        "tertiary-fixed-dim": "#cbd5e1",
+                        "primary": "#e2e8f0",
+                        "on-primary-fixed": "#0f172a",
+                        "on-primary-fixed-variant": "#1e293b",
+                        "inverse-on-surface": "#f1f5f9",
+                        "on-tertiary-fixed-variant": "#1e293b",
+                        "surface-tint": "#e2e8f0",
+                        "outline": "#475569",
+                        "error": "#ef4444",
+                        "on-surface-variant": "#94a3b8",
+                        "error-dim": "#dc2626",
+                        "on-surface": "#f8fafc",
+                        "inverse-surface": "#e2e8f0",
+                        "primary-dim": "#cbd5e1",
+                        "surface-container-low": "#0f172a",
+                        "error-container": "#7f1d1d",
+                        "surface-variant": "#1e293b",
+                        "on-background": "#f8fafc",
+                        "on-secondary-container": "#f1f5f9",
+                        "tertiary-fixed": "#e2e8f0"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"],
+                        "inter": ["Inter", "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background-color: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .ghost-border {
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #e2e8f0, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(to right, #e2e8f0, #94a3b8);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 antialiased flex h-screen overflow-hidden font-inter">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col py-6 space-y-2 bg-slate-900 h-screen w-64 fixed left-0 top-0 text-slate-200 font-inter text-sm tracking-wide z-40 transition-all duration-300 ease-in-out">
+<!-- Header / Brand -->
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden ghost-border">
+<img alt="System Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyqrTnmiNPOWB9c9rIaBLk34Hz74b9hS2qthsnhhqqLyTvYIHtxLeHDHQhfLwzphwXkVXdpvFVOsxnDBPq4ZMrLVh---jAqzdGdZFHKJf_05ibY8iKr8l7Wz1c00NseYy0aDDLMgAGor_EWhdcyX6VdHIjaSPDNZ3bJltZO2AXfvToii_zTTbruc_nnXhA5871HnNlRSyfHeVCX9t_v4nHWv3p6HXxwwODRBczVgXbgjUhTqIUQRHZqgUOuvw1sluYJsSEvp8XVg"/>
+</div>
+<div>
+<h1 class="text-lg font-semibold text-slate-100">Admin Panel</h1>
+<p class="text-xs text-slate-400">Management Console</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 w-full flex-1">
+<a class="flex items-center gap-3 py-3 px-4 bg-slate-800 text-slate-100 rounded-lg mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span>Beranda Overview</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 text-slate-400 hover:text-slate-200 mx-2 hover:bg-slate-800/30 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="description">description</span>
+<span>Antrean Surat</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 text-slate-400 hover:text-slate-200 mx-2 hover:bg-slate-800/30 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="chat_bubble">chat_bubble</span>
+<span>Antrean Pengaduan</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 text-slate-400 hover:text-slate-200 mx-2 hover:bg-slate-800/30 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="home_max">home_max</span>
+<span>Kelola Homepage</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 text-slate-400 hover:text-slate-200 mx-2 hover:bg-slate-800/30 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="storefront">storefront</span>
+<span>Katalog BUMDes</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-4 text-slate-400 hover:text-slate-200 mx-2 hover:bg-slate-800/30 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span>Kelola Akun Warga</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="mt-auto px-2 mb-4 w-full">
+<a class="flex items-center gap-3 py-3 px-4 text-slate-400 hover:text-slate-200 mx-2 hover:bg-slate-800/30 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden md:ml-64 relative">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-900/70 backdrop-blur-xl shadow-2xl shadow-slate-950/50 flex justify-between items-center px-8 h-16 md:w-[calc(100%-16rem)] text-slate-200 font-inter tracking-tight text-sm">
+<div class="flex items-center gap-6">
+<!-- Search (on_left) -->
+<div class="hidden md:flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700/50 focus-within:border-slate-500 transition-colors">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">search</span>
+<input class="bg-transparent border-none outline-none text-sm text-slate-200 placeholder:text-slate-500 w-48 focus:ring-0" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="text-xl font-bold tracking-widest text-slate-100 uppercase hidden lg:block">
+                The Curated Lens
+            </div>
+<div class="flex items-center gap-6">
+<button class="text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 p-2 rounded-full transition-colors relative scale-100 hover:scale-95 duration-200">
+<span class="material-symbols-outlined text-[24px]" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-slate-300 rounded-full"></span>
+</button>
+<button class="text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 p-2 rounded-full transition-colors relative scale-100 hover:scale-95 duration-200">
+<span class="material-symbols-outlined text-[24px]" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-800 overflow-hidden border border-slate-700 cursor-pointer">
+<img alt="Administrator Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQkIb9WDWvDkgjDN1ZbYSm1MPkbfPNi5y3YqTJYuScK9sX3u39QSZR3p58exbs69OlM5lrllwg3CpeaY74cZ9LL8GLrdFg0jjU4eFbuMKyoGD-iHpccrKMU_bVKDPvTAQ8cbVGDM0dAXLLvOzu-9oZmVorcshxuqwExhnDRNi6Byn4LPqJ0jmtfNLr5Lr8L8h_ddjhU9onmUI585jROCkF8fyfm_QcDBC0DUcYV7fIxIhx2MfhCzRmSH_HCfKTR2vazu5JPUh0UQ"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto p-8 lg:p-12 pb-24 mt-16 bg-slate-950">
+<!-- Alert Banner -->
+<div class="mb-10 bg-slate-800/50 border border-slate-700 rounded-lg p-4 flex items-start gap-4">
+<span class="material-symbols-outlined text-slate-300 mt-0.5" data-icon="warning">warning</span>
+<div>
+<h3 class="text-slate-200 font-medium text-sm">System Alert</h3>
+<p class="text-slate-400 text-sm mt-1">Kapasitas server hampir penuh (92%). Harap pertimbangkan untuk membersihkan log lama.</p>
+</div>
+</div>
+<div class="max-w-7xl mx-auto space-y-12">
+<!-- Header -->
+<div>
+<h2 class="text-3xl font-inter font-semibold text-slate-100 tracking-wide">Overview</h2>
+<p class="text-slate-400 text-sm mt-2">At a glance metrics for today.</p>
+</div>
+<!-- Summary Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-slate-900 rounded-xl p-6 relative overflow-hidden border border-slate-800 group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-slate-400 text-xs font-medium uppercase tracking-wider">Total Surat Hari Ini</span>
+<span class="material-symbols-outlined text-slate-500" data-icon="drafts">drafts</span>
+</div>
+<div class="text-[2.75rem] font-inter font-bold text-slate-100 leading-none mt-2">
+                            24
+                        </div>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<span class="text-slate-300 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12%</span>
+<span class="text-slate-500">vs last week</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-slate-900 rounded-xl p-6 relative overflow-hidden border border-slate-800 group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-slate-400 text-xs font-medium uppercase tracking-wider">Surat Pending</span>
+<span class="material-symbols-outlined text-slate-500" data-icon="pending_actions">pending_actions</span>
+</div>
+<div class="text-[2.75rem] font-inter font-bold text-slate-100 leading-none mt-2">
+                            7
+                        </div>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<span class="text-slate-400 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_downward</span> 3%</span>
+<span class="text-slate-500">vs last week</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-slate-900 rounded-xl p-6 relative overflow-hidden border border-slate-800 group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-slate-400 text-xs font-medium uppercase tracking-wider">Pengaduan Aktif</span>
+<span class="material-symbols-outlined text-slate-500" data-icon="report_problem">report_problem</span>
+</div>
+<div class="text-[2.75rem] font-inter font-bold text-slate-100 leading-none mt-2">
+                            3
+                        </div>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<span class="text-slate-500">Requires attention</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-slate-900 rounded-xl p-6 relative overflow-hidden border border-slate-800 group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-slate-400 text-xs font-medium uppercase tracking-wider">Total Warga Aktif</span>
+<span class="material-symbols-outlined text-slate-500" data-icon="group">group</span>
+</div>
+<div class="text-[2.75rem] font-inter font-bold text-slate-100 leading-none mt-2">
+                            1.2k
+                        </div>
+<div class="mt-4 flex items-center gap-2 text-xs">
+<span class="text-slate-300 flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 2%</span>
+<span class="text-slate-500">this month</span>
+</div>
+</div>
+</div>
+<!-- Analytics Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Line Chart Area -->
+<div class="lg:col-span-2 bg-slate-900 rounded-xl p-8 border border-slate-800">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-xl font-inter font-medium text-slate-100 tracking-wide">Tren Surat Masuk</h3>
+<button class="text-xs text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1">
+                                Last 7 Days <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<!-- Dummy Chart Area -->
+<div class="h-64 w-full relative flex items-end gap-2">
+<div class="absolute left-0 top-0 w-full h-full flex flex-col justify-between text-[10px] text-slate-500 pb-6 pointer-events-none">
+<div class="w-full border-b border-slate-800 flex justify-end pr-2 h-0 relative"><span class="absolute -top-2 left-0">40</span></div>
+<div class="w-full border-b border-slate-800 flex justify-end pr-2 h-0 relative"><span class="absolute -top-2 left-0">30</span></div>
+<div class="w-full border-b border-slate-800 flex justify-end pr-2 h-0 relative"><span class="absolute -top-2 left-0">20</span></div>
+<div class="w-full border-b border-slate-800 flex justify-end pr-2 h-0 relative"><span class="absolute -top-2 left-0">10</span></div>
+<div class="w-full border-b border-slate-800 flex justify-end pr-2 h-0 relative"><span class="absolute -top-2 left-0">0</span></div>
+</div>
+<svg class="w-full h-full absolute inset-0 pb-6 pt-2 px-8" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,80 C20,70 30,90 50,40 C70,10 80,50 100,20" fill="none" stroke="#e2e8f0" stroke-linecap="round" stroke-width="2"></path>
+<path d="M0,90 C20,85 30,95 50,70 C70,50 80,80 100,60" fill="none" stroke="#64748b" stroke-dasharray="4 4" stroke-width="1.5"></path>
+</svg>
+<div class="absolute bottom-0 left-0 w-full flex justify-between px-8 text-[10px] text-slate-500">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+</div>
+<!-- Donut Chart Area -->
+<div class="bg-slate-900 rounded-xl p-8 border border-slate-800 flex flex-col">
+<h3 class="text-xl font-inter font-medium text-slate-100 tracking-wide mb-8">Kategori Pengaduan</h3>
+<div class="flex-1 flex flex-col items-center justify-center relative">
+<div class="w-40 h-40 rounded-full border-[12px] border-slate-800 relative">
+<svg class="absolute inset-0 w-full h-full -rotate-90 transform" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#e2e8f0" stroke-dasharray="180 251" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#64748b" stroke-dasharray="50 251" stroke-dashoffset="-180" stroke-width="12"></circle>
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#334155" stroke-dasharray="21 251" stroke-dashoffset="-230" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="text-2xl font-bold text-slate-100">15</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-wider">Total</span>
+</div>
+</div>
+<div class="w-full mt-8 space-y-3">
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-slate-200"></div><span class="text-slate-400">Infrastruktur</span></div>
+<span class="text-slate-200 font-medium">65%</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-slate-500"></div><span class="text-slate-400">Layanan Umum</span></div>
+<span class="text-slate-200 font-medium">25%</span>
+</div>
+<div class="flex items-center justify-between text-sm">
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-slate-700"></div><span class="text-slate-400">Lainnya</span></div>
+<span class="text-slate-200 font-medium">10%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Lower Section -->
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+<!-- System Health -->
+<div class="lg:col-span-3 bg-slate-900 rounded-xl p-8 border border-slate-800">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-inter font-medium text-slate-100 tracking-wide">System Health</h3>
+<button class="text-xs text-slate-400 hover:text-slate-200 uppercase tracking-wider">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-slate-800/50 transition-colors group">
+<div class="mt-1 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
+<span class="material-symbols-outlined text-[18px]">error</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-sm font-medium text-slate-200">Logo Desa Belum Ada</h4>
+<span class="text-[10px] uppercase px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">High</span>
+</div>
+<p class="text-xs text-slate-500 mt-1">master_flags • Profil desa tidak lengkap.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-slate-800/50 transition-colors group">
+<div class="mt-1 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-sm font-medium text-slate-200">Visi Misi Kosong</h4>
+<span class="text-[10px] uppercase px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">Medium</span>
+</div>
+<p class="text-xs text-slate-500 mt-1">content_flags • Halaman depan memerlukan update.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="lg:col-span-2 bg-slate-900 rounded-xl p-8 border border-slate-800">
+<h3 class="text-xl font-inter font-medium text-slate-100 tracking-wide mb-6">Recent Activity</h3>
+<div class="relative pl-4 space-y-6 before:absolute before:inset-y-0 before:left-[11px] before:w-px before:bg-slate-800">
+<div class="relative">
+<div class="absolute -left-4 w-2 h-2 rounded-full bg-slate-300 ring-4 ring-slate-900"></div>
+<div class="pl-4">
+<p class="text-xs text-slate-500 mb-1">10 mins ago</p>
+<p class="text-sm text-slate-200 font-medium">Admin menyetujui Surat Kelahiran</p>
+<p class="text-xs text-slate-600 mt-1">ID: #SRT-2023-089</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-4 w-2 h-2 rounded-full bg-slate-800 border border-slate-700 ring-4 ring-slate-900"></div>
+<div class="pl-4">
+<p class="text-xs text-slate-500 mb-1">1 hour ago</p>
+<p class="text-sm text-slate-200 font-medium">Pengaduan baru diterima: Lampu Jalan Mati</p>
+<p class="text-xs text-slate-600 mt-1">Kategori: Infrastruktur</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-4 w-2 h-2 rounded-full bg-slate-800 border border-slate-700 ring-4 ring-slate-900"></div>
+<div class="pl-4">
+<p class="text-xs text-slate-500 mb-1">3 hours ago</p>
+<p class="text-sm text-slate-200 font-medium">System backup completed</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

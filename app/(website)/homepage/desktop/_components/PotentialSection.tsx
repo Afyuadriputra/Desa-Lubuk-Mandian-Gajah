@@ -1,4 +1,7 @@
 import type { HomepageData } from "../../data/homepage.types";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DesktopIcon } from "./DesktopIcon";
 
 type Props = {
   data: HomepageData;
@@ -16,11 +19,11 @@ export default function NamaSection({ data }: Props) {
           <p className="type-body text-on-surface-variant max-w-2xl mx-auto">{data.potentialQuote}</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-20">
+        <div className="mb-20 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {data.potentials.map((item) => (
-            <div
+            <Card
               key={item.title}
-              className="group relative rounded-3xl overflow-hidden aspect-[3/4]"
+              className="group relative overflow-hidden rounded-[2rem] border-white/10 bg-transparent"
             >
               <img
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -30,23 +33,38 @@ export default function NamaSection({ data }: Props) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-6 flex flex-col justify-end">
                 <h4 className="type-body font-bold text-white">{item.title}</h4>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
 
-        <div className="bg-primary-container rounded-[2.5rem] p-12 text-white">
-          <h3 className="type-title font-bold mb-8 text-center">{data.potentialOpportunitiesTitle}</h3>
-          <div className="grid md:grid-cols-3 gap-12">
+        <div className="rounded-[2.5rem] bg-primary-container p-12 text-white">
+          <h3 className="mb-8 text-center type-title font-bold">{data.potentialOpportunitiesTitle}</h3>
+          <Tabs defaultValue={data.potentialOpportunityItems[0]?.title ?? "default"}>
+            <div className="mb-8 flex justify-center">
+              <TabsList>
+                {data.potentialOpportunityItems.map((item) => (
+                  <TabsTrigger key={item.title} value={item.title}>
+                    {item.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
             {data.potentialOpportunityItems.map((item) => (
-              <div key={item.title} className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-                  <span className="material-symbols-outlined">{item.icon}</span>
-                </div>
-                <h4 className="type-body font-bold">{item.title}</h4>
-                <p className="type-body text-primary-fixed opacity-90">{item.description}</p>
-              </div>
+              <TabsContent key={item.title} value={item.title}>
+                <Card className="border-white/12 bg-white/8 text-white shadow-none">
+                  <CardContent className="grid items-center gap-8 p-8 md:grid-cols-[auto_1fr]">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white/14 text-white">
+                      <DesktopIcon name={item.icon} className="h-7 w-7" />
+                    </div>
+                    <div className="space-y-3">
+                      <h4 className="type-body font-bold">{item.title}</h4>
+                      <p className="type-body text-primary-fixed opacity-90">{item.description}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
             ))}
-          </div>
+          </Tabs>
         </div>
       </div>
     </section>

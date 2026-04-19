@@ -1,4 +1,7 @@
 import type { HomepageData } from "../../data/homepage.types";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { DesktopIcon } from "./DesktopIcon";
 
 type Props = {
   data: HomepageData;
@@ -20,55 +23,67 @@ export default function NamaSection({ data }: Props) {
             </p>
 
             <div className="space-y-6">
-              <div className="flex gap-6 items-start">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined">location_on</span>
-                </div>
-                <div>
-                  <h4 className="type-body font-bold">Alamat Kantor Desa</h4>
-                  <p className="type-body text-on-surface-variant">{data.contact.address}</p>
-                </div>
-              </div>
+              <Card className="rounded-[1.75rem] shadow-none">
+                <CardContent className="flex items-start gap-6 p-6">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    <DesktopIcon name="location_on" className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="type-body font-bold">Alamat Kantor Desa</h4>
+                    <p className="type-body text-on-surface-variant">{data.contact.address}</p>
+                  </div>
+                </CardContent>
+              </Card>
 
-              <div className="flex gap-6 items-start">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined">chat</span>
-                </div>
-                <div>
-                  <h4 className="type-body font-bold">WhatsApp</h4>
-                  <p className="type-body text-on-surface-variant">{data.contact.whatsapp}</p>
-                </div>
-              </div>
+              <Card className="rounded-[1.75rem] shadow-none">
+                <CardContent className="flex items-start gap-6 p-6">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    <DesktopIcon name="chat" className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="type-body font-bold">WhatsApp</h4>
+                    <p className="type-body text-on-surface-variant">{data.contact.whatsapp}</p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="flex gap-4 pt-4">
-              <a
-                className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
-                href={mapsUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="material-symbols-outlined text-xl">public</span>
-              </a>
-              <a
-                className="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg"
-                href={`https://wa.me/${whatsappNumber}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="material-symbols-outlined text-xl">share</span>
-              </a>
+              <Button asChild variant="icon" className="rounded-full bg-primary text-white hover:bg-[#174a2e] hover:text-white">
+                <a
+                  aria-label="Buka lokasi di Google Maps"
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <DesktopIcon name="public" className="h-5 w-5" />
+                </a>
+              </Button>
+              <Button asChild variant="icon" className="rounded-full bg-secondary text-white hover:bg-[#664a00] hover:text-white">
+                <a
+                  aria-label="Hubungi lewat WhatsApp"
+                  href={`https://wa.me/${whatsappNumber}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <DesktopIcon name="share" className="h-5 w-5" />
+                </a>
+              </Button>
             </div>
           </div>
 
           <div className="h-[400px] md:h-full min-h-[400px] bg-stone-100 relative">
-            {hasMapImage ? (
-              <img className="w-full h-full object-cover" src={data.contact.mapImage} alt="Peta desa" />
-            ) : (
-              <div className="w-full h-full bg-primary/10" />
-            )}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            </div>
+            <a href={mapsUrl} target="_blank" rel="noreferrer" className="block h-full w-full">
+              {hasMapImage ? (
+                <img className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.02]" src={data.contact.mapImage} alt="Peta desa" />
+              ) : (
+                <div className="w-full h-full bg-primary/10" />
+              )}
+              <div className="absolute inset-x-6 bottom-6 rounded-[1.5rem] border border-white/12 bg-black/35 p-4 text-white backdrop-blur-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/72">Lokasi Kantor</p>
+                <p className="mt-1 text-base font-semibold">Buka peta & arah kunjungan</p>
+              </div>
+            </a>
           </div>
         </div>
       </div>

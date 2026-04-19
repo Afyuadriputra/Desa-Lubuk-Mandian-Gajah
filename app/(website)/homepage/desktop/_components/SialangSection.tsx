@@ -1,4 +1,6 @@
 ﻿import type { HomepageData } from "../../data/homepage.types";
+import { Card, CardContent } from "@/components/ui/card";
+import { DesktopIcon } from "./DesktopIcon";
 
 type Props = {
   data: HomepageData;
@@ -11,18 +13,22 @@ export default function NamaSection({ data }: Props) {
     <section className="section-shell bg-primary text-white relative">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
         <div className="section-stack">
-          <span className="inline-block px-4 py-2 rounded-full bg-secondary-container/20 border border-secondary-container/30 text-secondary-container type-label font-bold w-fit">
+          <span className="inline-block w-fit rounded-full border border-secondary-container/30 bg-secondary-container/20 px-4 py-2 type-label font-bold text-secondary-container">
             {data.sialangBadge}
           </span>
           <h2 className="type-title font-bold">{data.sialangTitle}</h2>
           <p className="type-body text-primary-fixed">{data.sialangDescription}</p>
-          <div className="p-6 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm">
-            <p className="type-body italic text-primary-fixed mb-4">"{data.sialangQuote}"</p>
-            <div className="flex items-center gap-4">
-              <span className="material-symbols-outlined text-secondary-fixed-dim">park</span>
-              <span className="type-body font-bold">{data.sialangStat}</span>
-            </div>
-          </div>
+          <Card className="border-white/14 bg-white/10 text-white backdrop-blur-md">
+            <CardContent className="space-y-5 p-6">
+              <p className="type-body italic text-primary-fixed">"{data.sialangQuote}"</p>
+              <div className="flex items-center gap-4 rounded-2xl border border-white/12 bg-black/10 px-4 py-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary-container/15 text-secondary-fixed-dim">
+                  <DesktopIcon name="park" className="h-5 w-5" />
+                </div>
+                <span className="type-body font-bold">{data.sialangStat}</span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="relative">
@@ -35,7 +41,7 @@ export default function NamaSection({ data }: Props) {
           ) : (
             <div className="rounded-[3rem] w-full aspect-square bg-white/10 shadow-2xl" />
           )}
-          <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-t from-primary/60 to-transparent" />
+          <div className="absolute inset-0 rounded-[3rem] bg-gradient-to-t from-primary/72 via-primary/10 to-transparent" />
           <div className="absolute bottom-8 left-8">
             <h3 className="type-title font-bold">{data.sialangTitle}</h3>
           </div>

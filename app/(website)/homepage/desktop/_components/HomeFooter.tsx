@@ -1,4 +1,7 @@
 ﻿import type { HomepageData } from "../../data/homepage.types";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
+import { DesktopIcon } from "./DesktopIcon";
 
 type Props = {
   data: HomepageData;
@@ -17,14 +20,14 @@ export default function NamaSection({ data }: Props) {
 
         <div className="section-stack-tight">
           <h4 className="type-body font-bold text-primary">Tautan Penting</h4>
-          <ul className="space-y-4 type-body">
+          <ul className="space-y-3 type-body">
             {data.footerLinks.map((link) => (
               <li key={link.label}>
                 <a
-                  className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2"
+                  className="group flex items-center gap-2 rounded-2xl px-3 py-2 text-on-surface-variant transition-colors hover:bg-white/70 hover:text-primary"
                   href={link.href}
                 >
-                  <span className="material-symbols-outlined text-sm">chevron_right</span>
+                  <DesktopIcon name="chevron_right" className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                   {link.label}
                 </a>
               </li>
@@ -34,26 +37,30 @@ export default function NamaSection({ data }: Props) {
 
         <div className="section-stack-tight">
           <h4 className="type-body font-bold text-primary">Jam Operasional Kantor</h4>
-          <ul className="space-y-4 type-body text-on-surface-variant">
+          <Accordion defaultValue={data.officeHours[0]?.day ?? null}>
             {data.officeHours.map((item) => (
-              <li key={item.day} className="flex justify-between pb-4 border-b border-primary/5 last:border-b-0">
-                <span>{item.day}</span>
-                <span className={item.danger ? "text-error font-semibold" : "font-semibold"}>
-                  {item.time}
-                </span>
-              </li>
+              <AccordionItem key={item.day} value={item.day}>
+                <AccordionTrigger>{item.day}</AccordionTrigger>
+                <AccordionContent>
+                  <span className={item.danger ? "font-semibold text-error" : "font-semibold text-primary"}>
+                    {item.time}
+                  </span>
+                </AccordionContent>
+              </AccordionItem>
             ))}
-          </ul>
+          </Accordion>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-8 pt-8 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="type-body text-on-surface-variant text-center">{data.footerCopyright}</p>
-        <div className="flex gap-6 opacity-60 grayscale hover:grayscale-0 transition-[filter,opacity] duration-200">
+        <div className="flex flex-wrap gap-3 opacity-80 transition-[filter,opacity] duration-200">
           {data.footerBadges.map((badge) => (
-            <span key={badge} className="type-label font-bold">
-              {badge}
-            </span>
+            <Card key={badge} className="rounded-full border-primary/8 bg-white/76 shadow-none">
+              <CardContent className="px-4 py-2">
+                <span className="type-label font-bold">{badge}</span>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { apiRequest } from "@/lib/api/client";
-import type { ActivationDto, UserDto } from "@/lib/api/types";
+import type { ActivationDto, UserDto, UserListQuery } from "@/lib/api/types";
 
 type LoginPayload = {
   nik: string;
@@ -46,6 +46,15 @@ export const authApi = {
 
   createAdmin: (payload: CreateAdminPayload) =>
     apiRequest<UserDto>("/auth/users/admin/create", { method: "POST", body: payload }),
+
+  listUsers: (query: UserListQuery = {}) => {
+    const params = new URLSearchParams();
+    if (query.q) params.set("q", query.q);
+    if (query.role) params.set("role", query.role);
+    if (typeof query.is_active === "boolean") params.set("is_active", String(query.is_active));
+    const suffix = params.toString();
+    return apiRequest<UserDto[]>(`/auth/users${suffix ? `?${suffix}` : ""}`);
+  },
 
   activateUser: (userId: string) =>
     apiRequest<ActivationDto>(`/auth/users/${userId}/activate`, { method: "POST" }),
