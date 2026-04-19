@@ -37,11 +37,16 @@ export default function NamaSection({ data }: Props) {
 
         <div className="section-stack-tight">
           <h4 className="type-body font-bold text-primary">Jam Operasional Kantor</h4>
-          <Accordion defaultValue={data.officeHours[0]?.day ?? null}>
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue={data.officeHours[0]?.day}
+            className="rounded-[1.5rem] border border-primary/10 bg-white/72 px-4 py-2"
+          >
             {data.officeHours.map((item) => (
-              <AccordionItem key={item.day} value={item.day}>
-                <AccordionTrigger>{item.day}</AccordionTrigger>
-                <AccordionContent>
+              <AccordionItem key={item.day} value={item.day} className="border-primary/10">
+                <AccordionTrigger className="py-3 text-primary hover:no-underline">{item.day}</AccordionTrigger>
+                <AccordionContent className="pb-3 text-on-surface-variant">
                   <span className={item.danger ? "font-semibold text-error" : "font-semibold text-primary"}>
                     {item.time}
                   </span>

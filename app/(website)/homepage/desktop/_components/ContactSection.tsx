@@ -49,7 +49,11 @@ export default function NamaSection({ data }: Props) {
             </div>
 
             <div className="flex gap-4 pt-4">
-              <Button asChild variant="icon" className="rounded-full bg-primary text-white hover:bg-[#174a2e] hover:text-white">
+              <Button
+                asChild
+                size="icon-lg"
+                className="rounded-full bg-primary text-white hover:bg-[#174a2e] hover:text-white"
+              >
                 <a
                   aria-label="Buka lokasi di Google Maps"
                   href={mapsUrl}
@@ -59,7 +63,11 @@ export default function NamaSection({ data }: Props) {
                   <DesktopIcon name="public" className="h-5 w-5" />
                 </a>
               </Button>
-              <Button asChild variant="icon" className="rounded-full bg-secondary text-white hover:bg-[#664a00] hover:text-white">
+              <Button
+                asChild
+                size="icon-lg"
+                className="rounded-full bg-secondary text-white hover:bg-[#664a00] hover:text-white"
+              >
                 <a
                   aria-label="Hubungi lewat WhatsApp"
                   href={`https://wa.me/${whatsappNumber}`}

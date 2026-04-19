@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import SwiperRuntime from "./SwiperRuntime";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -42,8 +43,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         className="bg-surface font-body text-on-surface selection:bg-primary/20 antialiased"
         suppressHydrationWarning
       >
-        <SwiperRuntime />
-        {children}
+        <TooltipProvider>
+          <SwiperRuntime />
+          {children}
+        </TooltipProvider>
       </body>
     </html>
   );

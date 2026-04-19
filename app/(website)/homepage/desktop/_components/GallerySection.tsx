@@ -62,7 +62,7 @@ export default function NamaSection({ data }: Props) {
             </div>
 
             {activeItem ? (
-              <DialogContent>
+              <DialogContent className="max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#15130f] p-0 text-white shadow-2xl">
                 <div className="grid max-h-[88vh] md:grid-cols-[1.35fr_0.65fr]">
                   <div className="bg-black">
                     <img

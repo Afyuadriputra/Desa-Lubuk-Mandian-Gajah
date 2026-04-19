@@ -75,7 +75,10 @@ export default function HomeNavbar({ data }: Props) {
             <span className="type-label text-primary/55">Jelajahi Desa</span>
           </div>
 
-          <Button asChild className="nav-cta hidden md:inline-flex">
+          <Button
+            asChild
+            className="nav-cta hidden bg-primary text-on-primary shadow-[0_18px_38px_-24px_rgba(31,94,59,0.9)] hover:bg-[#174a2e] md:inline-flex"
+          >
             <a href="#kontak">Kontak</a>
           </Button>
 

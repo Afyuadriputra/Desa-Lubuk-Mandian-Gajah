@@ -9,6 +9,7 @@ type Props = {
 
 export default function HeroSection({ data }: Props) {
   const hasHeroImage = Boolean(data.heroImage);
+  const hasHeroBadge = Boolean(data.heroBadge);
 
   return (
     <section className="relative h-[90vh] flex items-center overflow-hidden">
@@ -27,9 +28,11 @@ export default function HeroSection({ data }: Props) {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="max-w-3xl text-white section-stack">
-          <Badge className="w-fit animate-[stat-card-reveal_700ms_cubic-bezier(0.22,1,0.36,1)_both] shadow-md">
-            {data.heroBadge}
-          </Badge>
+          {hasHeroBadge ? (
+            <Badge className="w-fit border-white/10 bg-white/12 px-3 py-1 text-[0.7rem] tracking-[0.18em] text-white shadow-md backdrop-blur-md animate-[stat-card-reveal_700ms_cubic-bezier(0.22,1,0.36,1)_both]">
+              {data.heroBadge}
+            </Badge>
+          ) : null}
           <h1 className="type-display font-bold tracking-tight text-balance">
             {data.villageName}
           </h1>
@@ -40,7 +43,11 @@ export default function HeroSection({ data }: Props) {
             {data.heroDescription}
           </p>
           <div className="flex flex-wrap gap-4 pt-4">
-            <Button asChild size="lg" className="group">
+            <Button
+              asChild
+              size="lg"
+              className="group rounded-2xl bg-primary-container px-8 py-4 text-white shadow-[0_18px_40px_-28px_rgba(31,94,59,0.9)] hover:bg-[#174a2e]"
+            >
               <a href="/sejarah">
                 Baca Sejarah Desa
                 <DesktopIcon
@@ -51,10 +58,10 @@ export default function HeroSection({ data }: Props) {
             </Button>
             <Button
               asChild
-                variant="outline"
-                size="lg"
-                className="border-white/24 bg-white/10 text-white backdrop-blur-md hover:bg-white/18 hover:text-white"
-              >
+              variant="outline"
+              size="lg"
+              className="border-white/24 bg-white/10 text-white backdrop-blur-md hover:bg-white/18 hover:text-white"
+            >
               <a href="/gambut">
                 Kenali Gambut Desa
               </a>

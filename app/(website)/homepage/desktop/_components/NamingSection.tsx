@@ -39,15 +39,15 @@ export default function NamaSection({ data }: Props) {
           </div>
           <p className="type-body max-w-[64ch] text-on-surface-variant">{data.namingDescription}</p>
           <div>
-            <a href="/sejarah" className="inline-flex">
-              <Button variant="outline" className="group">
+            <Button asChild variant="outline" className="group">
+              <a href="/sejarah" className="inline-flex">
                 Selengkapnya di Halaman Sejarah
                 <DesktopIcon
                   name="arrow_forward"
                   className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
                 />
-              </Button>
-            </a>
+              </a>
+            </Button>
           </div>
         </div>
       </div>

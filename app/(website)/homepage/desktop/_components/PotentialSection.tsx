@@ -41,9 +41,13 @@ export default function NamaSection({ data }: Props) {
           <h3 className="mb-8 text-center type-title font-bold">{data.potentialOpportunitiesTitle}</h3>
           <Tabs defaultValue={data.potentialOpportunityItems[0]?.title ?? "default"}>
             <div className="mb-8 flex justify-center">
-              <TabsList>
+              <TabsList className="h-auto flex-wrap rounded-[1.6rem] bg-white/10 p-1.5 text-white/72">
                 {data.potentialOpportunityItems.map((item) => (
-                  <TabsTrigger key={item.title} value={item.title}>
+                  <TabsTrigger
+                    key={item.title}
+                    value={item.title}
+                    className="rounded-[1.2rem] px-4 py-2 text-white/72 data-active:bg-white data-active:text-primary"
+                  >
                     {item.title}
                   </TabsTrigger>
                 ))}

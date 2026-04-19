@@ -29,7 +29,7 @@ export default function NamaSection({ data }: Props) {
           {data.cultureCards.map((card) => (
             <HoverCard key={card.title}>
               <div className="relative">
-                <HoverCardTrigger asChild>
+                <HoverCardTrigger className="block h-full rounded-[2rem] text-left no-underline focus-visible:outline-none">
                   <Card className="group h-full rounded-[2rem] bg-surface-container/92 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1.5 hover:border-primary/16 hover:shadow-[0_24px_36px_-28px_rgba(31,94,59,0.65)]">
                     <CardHeader className="pb-4">
                       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary/12 text-secondary">
@@ -42,7 +42,7 @@ export default function NamaSection({ data }: Props) {
                     </CardContent>
                   </Card>
                 </HoverCardTrigger>
-                <HoverCardContent className="max-w-[22rem]">
+                <HoverCardContent className="max-w-[22rem] rounded-[1.5rem] border-primary/12 bg-[#fffaf0] p-5 text-on-surface shadow-[0_30px_60px_-40px_rgba(31,94,59,0.9)]">
                   <h4 className="mb-2 text-base font-bold text-primary">{card.title}</h4>
                   <p className="text-sm leading-6 text-on-surface-variant">{card.description}</p>
                 </HoverCardContent>
