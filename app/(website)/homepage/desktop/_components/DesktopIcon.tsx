@@ -26,7 +26,9 @@ import {
   X,
 } from "lucide-react";
 
-const iconMap = {
+type LucideIconComponent = React.ComponentType<LucideProps>;
+
+const iconMap: Record<string, LucideIconComponent> = {
   groups: Users,
   record_voice_over: Mic2,
   local_fire_department: Flame,
@@ -51,7 +53,7 @@ const iconMap = {
   park: Trees,
   menu: Menu,
   close: X,
-} satisfies Record<string, React.ComponentType<LucideProps>>;
+};
 
 export function DesktopIcon({
   name,

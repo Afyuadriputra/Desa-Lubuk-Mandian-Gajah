@@ -31,6 +31,14 @@ Backend pakai session Django, bukan JWT.
 - endpoint cek sesi:
   - `GET /auth/me`
 
+Catatan kontrak:
+- `POST /auth/users/{id}/activate`
+- `POST /auth/users/{id}/deactivate`
+  - response hanya:
+    - `id`
+    - `is_active`
+  - bukan full `UserDto`
+
 ## Struktur client TS
 
 ```txt
@@ -106,6 +114,45 @@ Catatan:
 | `/pengaduan/buat` | `POST /pengaduan/mvp/buat` | `pengaduanApi.buat()` |
 | `/pengaduan/[id]` | `GET /pengaduan/mvp/{id}` | `pengaduanApi.detail(id)` |
 
+Catatan kontrak `surat`:
+- list/proses item ringkas:
+  - `id`
+  - `jenis_surat`
+  - `status`
+  - `created_at`
+  - `pdf_url`
+- detail tambahan:
+  - `keperluan`
+  - `nomor_surat`
+  - `rejection_reason`
+  - `updated_at`
+  - `histori`
+- history item:
+  - `status_from`
+  - `status_to`
+  - `notes`
+  - `changed_by_nama`
+  - `created_at`
+
+Catatan kontrak `pengaduan`:
+- list/proses item ringkas:
+  - `id`
+  - `judul`
+  - `kategori`
+  - `status`
+  - `pelapor_nama`
+  - `created_at`
+- detail tambahan:
+  - `deskripsi`
+  - `foto_bukti_url`
+  - `updated_at`
+  - `histori`
+- history item:
+  - `status_to`
+  - `notes`
+  - `changed_by_nama`
+  - `created_at`
+
 ### Rekomendasi page admin panel
 
 | Frontend page | Endpoint backend | Client TS |
@@ -127,6 +174,17 @@ Catatan:
 | `/admin/homepage/gallery` | `POST/PUT/DELETE /homepage/admin/gallery/*` | `homepageApi.create/update/deleteGalleryItem()` |
 | `/admin/homepage/footer-links` | `POST/PUT/DELETE /homepage/admin/footer-links/*` | `homepageApi.create/update/deleteFooterLink()` |
 | `/admin/homepage/stats` | `POST/PUT/DELETE /homepage/admin/stats/*` | `homepageApi.create/update/deleteStat()` |
+
+Catatan kontrak `potensi_ekonomi`:
+- `POST /potensi-ekonomi/mvp/admin/buat`
+  - wajib `multipart/form-data`
+  - frontend helper:
+    - `buildUnitUsahaFormData()`
+- `PUT /potensi-ekonomi/mvp/admin/{id}`
+  - JSON biasa
+- `DELETE /potensi-ekonomi/mvp/admin/{id}`
+  - response plain:
+    - `detail`
 
 ## Kontrak homepage publik
 

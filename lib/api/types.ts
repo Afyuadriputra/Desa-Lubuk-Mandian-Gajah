@@ -1,3 +1,4 @@
+// --- CORE & ENVELOPES ---
 export type ApiEnvelope<T> = {
   data: T;
 };
@@ -6,6 +7,7 @@ export type ApiError = {
   detail: string;
 };
 
+// --- MODUL: AUTH WARGA (`auth_warga`) ---
 export type UserRole = "SUPERADMIN" | "ADMIN" | "BUMDES" | "WARGA";
 
 export type UserDto = {
@@ -17,7 +19,10 @@ export type UserDto = {
   is_active: boolean;
 };
 
-export type ActivationDto = UserDto;
+export type ActivationDto = {
+  id: string;
+  is_active: boolean;
+};
 
 export type UserListQuery = {
   q?: string;
@@ -25,6 +30,7 @@ export type UserListQuery = {
   is_active?: boolean;
 };
 
+// --- MODUL: PROFIL WILAYAH (`profil_wilayah`) ---
 export type ProfilDesaDto = {
   visi: string;
   misi: string;
@@ -38,103 +44,127 @@ export type DusunDto = {
 };
 
 export type PerangkatPublikDto = {
-  id: number;
-  nama_lengkap: string;
   jabatan: string;
+  nama: string;
+  foto_url?: string | null;
+};
+
+export type PerangkatAdminDto = {
+  id: number;
+  user_id: string;
+  jabatan: string;
+  is_published: boolean;
   foto_url?: string | null;
 };
 
 export type ProfilPublikDto = {
-  profil_desa: ProfilDesaDto | null;
-  dusun: DusunDto[];
+  profil: ProfilDesaDto;
   perangkat: PerangkatPublikDto[];
 };
 
+// --- MODUL: PUBLIKASI INFORMASI (`publikasi_informasi`) ---
 export type PublikasiListItemDto = {
-  id: number;
   judul: string;
   slug: string;
-  jenis: "BERITA" | "PENGUMUMAN";
-  ringkasan?: string | null;
+  jenis: "BERITA" | "PENGUMUMAN" | string;
+  penulis_nama: string;
   published_at?: string | null;
-  created_at?: string | null;
 };
 
 export type PublikasiDetailDto = {
-  id: number;
   judul: string;
   slug: string;
-  jenis: "BERITA" | "PENGUMUMAN";
   konten_html: string;
+  jenis: "BERITA" | "PENGUMUMAN" | string;
+  status: "DRAFT" | "PUBLISHED" | string;
+  penulis_nama: string;
   published_at?: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
-export type UnitUsahaListItemDto = {
+// --- MODUL: POTENSI EKONOMI (`potensi_ekonomi`) ---
+export type KatalogPublikDto = {
   id: number;
   nama_usaha: string;
-  kategori: "KOPERASI" | "WISATA" | "JASA";
+  kategori: string;
+  deskripsi: string;
+  harga_tiket?: number | null;
+  foto_url?: string | null;
+};
+
+export type KatalogAdminDto = {
+  id: number;
+  nama_usaha: string;
+  kategori: string;
+  is_published: boolean;
+  created_at: string;
+};
+
+export type UnitUsahaDetailDto = {
+  id: number;
+  nama_usaha: string;
+  kategori: string;
   deskripsi: string;
   fasilitas?: string | null;
   kontak_wa?: string | null;
-  harga_tiket?: string | number | null;
-  foto_utama_url?: string | null;
-  is_published?: boolean;
+  harga_tiket?: number | null;
+  is_published: boolean;
+  foto_url?: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
-export type UnitUsahaDetailDto = UnitUsahaListItemDto & {
-  created_at?: string | null;
-  updated_at?: string | null;
-};
-
+// --- MODUL: LAYANAN ADMINISTRASI (`layanan_administrasi`) ---
 export type SuratDto = {
   id: string;
   jenis_surat: "SKU" | "SKTM" | "DOMISILI";
-  keperluan: string;
   status: "PENDING" | "VERIFIED" | "PROCESSED" | "DONE" | "REJECTED";
-  nomor_surat?: string | null;
-  rejection_reason?: string | null;
+  created_at: string;
   pdf_url?: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
 };
 
 export type SuratHistoryDto = {
   status_from?: string | null;
   status_to: string;
   notes?: string | null;
+  changed_by_nama?: string | null;
   created_at: string;
-  changed_by?: string | null;
 };
 
 export type SuratDetailDto = SuratDto & {
-  histori_status?: SuratHistoryDto[];
+  keperluan: string;
+  nomor_surat?: string | null;
+  rejection_reason?: string | null;
+  updated_at: string;
+  histori?: SuratHistoryDto[];
 };
 
+// --- MODUL: PENGADUAN WARGA (`pengaduan_warga`) ---
 export type PengaduanDto = {
   id: number;
   kategori: string;
   judul: string;
-  deskripsi: string;
   status: "OPEN" | "TRIAGED" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
-  foto_bukti_url?: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
+  pelapor_nama: string;
+  created_at: string;
 };
 
 export type PengaduanHistoryDto = {
-  status_from?: string | null;
   status_to: string;
   notes?: string | null;
+  changed_by_nama?: string | null;
   created_at: string;
-  changed_by?: string | null;
 };
 
 export type PengaduanDetailDto = PengaduanDto & {
-  histori_tindak_lanjut?: PengaduanHistoryDto[];
+  deskripsi: string;
+  foto_bukti_url?: string | null;
+  updated_at: string;
+  histori?: PengaduanHistoryDto[];
 };
 
+// --- MODUL: DASHBOARD ADMIN (`dashboard_admin`) ---
 export type DashboardSummaryDto = {
   total_pengajuan_surat_hari_ini: number;
   surat_pending: number;
@@ -248,6 +278,7 @@ export type DashboardHealthDto = {
   data: Record<string, unknown>;
 };
 
+// --- MODUL: HOMEPAGE KONTEN (`homepage_konten`) ---
 export type HomepageStatDto = {
   value: string;
   label: string;

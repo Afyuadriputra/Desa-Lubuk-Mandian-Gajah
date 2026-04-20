@@ -42,10 +42,22 @@ export const authApi = {
     apiRequest<UserDto>("/auth/change-password", { method: "POST", body: payload }),
 
   createWarga: (payload: CreateWargaPayload) =>
-    apiRequest<UserDto>("/auth/users/warga/create", { method: "POST", body: payload }),
+    apiRequest<UserDto>("/auth/users/warga/create", {
+      method: "POST",
+      body: {
+        ...payload,
+        nomor_hp: payload.nomor_hp ?? undefined,
+      },
+    }),
 
   createAdmin: (payload: CreateAdminPayload) =>
-    apiRequest<UserDto>("/auth/users/admin/create", { method: "POST", body: payload }),
+    apiRequest<UserDto>("/auth/users/admin/create", {
+      method: "POST",
+      body: {
+        ...payload,
+        nomor_hp: payload.nomor_hp ?? undefined,
+      },
+    }),
 
   listUsers: (query: UserListQuery = {}) => {
     const params = new URLSearchParams();

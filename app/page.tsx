@@ -5,6 +5,8 @@ import MobileHomepage from "./(website)/homepage/mobile/MobileHomepage";
 import { homepageData } from "./(website)/homepage/data/homepage.data";
 import { getHomepageBackendData } from "@/lib/api/homepage";
 
+export const dynamic = "force-dynamic";
+
 const MOBILE_UA_PATTERN =
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i;
 

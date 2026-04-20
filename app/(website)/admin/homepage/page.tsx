@@ -48,6 +48,8 @@ type ChildSectionProps<T extends EditableChildItem> = {
   onDelete: (id: number) => Promise<void>;
 };
 
+type ChildDraft<T extends EditableChildItem> = Omit<T, "id">;
+
 export default function AdminHomepageCMSPage() {
   const [data, setData] = useState<HomepageAdminContentDto | null>(null);
   const [loading, setLoading] = useState(true);
@@ -681,11 +683,22 @@ function ChildSection<T extends EditableChildItem>({
   onUpdate,
   onDelete,
 }: ChildSectionProps<T>) {
-  const [createForm, setCreateForm] = useState<Omit<T, "id">>(createDefaults);
+  const [createForm, setCreateForm] = useState<ChildDraft<T>>(createDefaults);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editingForm, setEditingForm] = useState<Omit<T, "id"> | null>(null);
+  const [editingForm, setEditingForm] = useState<ChildDraft<T> | null>(null);
   const [busy, setBusy] = useState<"create" | "update" | "delete" | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const mergeDraftValue = (
+    draft: ChildDraft<T>,
+    key: string,
+    value: string | number | boolean,
+  ): ChildDraft<T> => {
+    return {
+      ...draft,
+      [key]: value,
+    } as ChildDraft<T>;
+  };
 
   useEffect(() => {
     setCreateForm(createDefaults);
@@ -704,17 +717,17 @@ function ChildSection<T extends EditableChildItem>({
     value: string | number | boolean,
   ) => {
     if (target === "create") {
-      setCreateForm((prev) => ({ ...prev, [key]: value }));
+      setCreateForm((prev) => mergeDraftValue(prev, key, value));
       return;
     }
-    setEditingForm((prev) => ({ ...(prev || {}), [key]: value }));
+    setEditingForm((prev) => (prev ? mergeDraftValue(prev, key, value) : prev));
   };
 
   const startEdit = (item: T) => {
     const nextForm = { ...item } as T;
     delete nextForm.id;
     setEditingId(item.id ?? null);
-    setEditingForm(nextForm as Omit<T, "id">);
+    setEditingForm(nextForm as ChildDraft<T>);
     setError(null);
   };
 

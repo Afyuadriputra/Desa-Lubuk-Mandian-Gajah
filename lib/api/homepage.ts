@@ -147,7 +147,6 @@ export const homepageApi = {
   getPublic: () =>
     apiRequest<HomepageDataDto>("/homepage", {
       cache: "no-store",
-      next: { revalidate: 0 },
     }),
 
   getAdminContent: () =>
