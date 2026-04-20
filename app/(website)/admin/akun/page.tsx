@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { authApi } from "@/lib/api/auth";
 import { dashboardApi } from "@/lib/api/dashboard";
 import type { DashboardOverviewDto, UserDto, UserRole } from "@/lib/api/types";
@@ -364,23 +365,31 @@ export default function AdminKelolaAkunPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleToggleActive(user)}
-                        disabled={actionState.loadingId === user.id}
-                        className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition-colors disabled:opacity-50 ${
-                          user.is_active
-                            ? "border border-red-900/40 bg-red-950/30 text-red-300 hover:bg-red-950/50"
-                            : "border border-emerald-900/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-950/50"
-                        }`}
-                      >
-                        {user.is_active ? <XCircle size={14} /> : <CheckCircle2 size={14} />}
-                        {actionState.loadingId === user.id
-                          ? "Memproses..."
-                          : user.is_active
-                            ? "Nonaktifkan"
-                            : "Aktifkan"}
-                      </button>
+                      <div className="flex justify-end gap-2">
+                        <Link
+                          href={`/admin/akun/${user.id}`}
+                          className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-200 transition-colors hover:bg-zinc-900"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleActive(user)}
+                          disabled={actionState.loadingId === user.id}
+                          className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition-colors disabled:opacity-50 ${
+                            user.is_active
+                              ? "border border-red-900/40 bg-red-950/30 text-red-300 hover:bg-red-950/50"
+                              : "border border-emerald-900/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-950/50"
+                          }`}
+                        >
+                          {user.is_active ? <XCircle size={14} /> : <CheckCircle2 size={14} />}
+                          {actionState.loadingId === user.id
+                            ? "Memproses..."
+                            : user.is_active
+                              ? "Nonaktifkan"
+                              : "Aktifkan"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

@@ -1,12 +1,5 @@
 import { apiRequest } from "@/lib/api/client";
-import type { ApiEnvelope, PublikasiDetailDto, PublikasiListItemDto } from "@/lib/api/types";
-
-type PublikasiPayload = {
-  judul: string;
-  konten_html: string;
-  jenis: "BERITA" | "PENGUMUMAN";
-  status?: "DRAFT" | "PUBLISHED";
-};
+import type { ApiEnvelope, PublikasiDetailDto, PublikasiListItemDto, PublikasiPayload } from "@/lib/api/types";
 
 type PublikasiStatusPayload = {
   status: "DRAFT" | "PUBLISHED";
@@ -18,6 +11,9 @@ export const publikasiApi = {
 
   detailPublik: (slug: string) =>
     apiRequest<ApiEnvelope<PublikasiDetailDto>>(`/publikasi/mvp/publik/${slug}`),
+
+  listAdmin: () =>
+    apiRequest<PublikasiDetailDto[]>("/publikasi/admin"),
 
   create: (payload: PublikasiPayload) =>
     apiRequest<PublikasiDetailDto>("/publikasi/admin/buat", {

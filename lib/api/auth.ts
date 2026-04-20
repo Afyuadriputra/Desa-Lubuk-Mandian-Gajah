@@ -1,5 +1,12 @@
 import { apiRequest } from "@/lib/api/client";
-import type { ActivationDto, UserDto, UserListQuery } from "@/lib/api/types";
+import type {
+  ActivationDto,
+  GroupDto,
+  PermissionGroupDto,
+  UserDetailDto,
+  UserDto,
+  UserListQuery,
+} from "@/lib/api/types";
 
 type LoginPayload = {
   nik: string;
@@ -27,6 +34,17 @@ type CreateAdminPayload = {
   role: "SUPERADMIN" | "ADMIN" | "BUMDES";
   nomor_hp?: string | null;
   is_active?: boolean;
+};
+
+type UpdateUserPayload = {
+  nama_lengkap: string;
+  nomor_hp?: string | null;
+  role: "SUPERADMIN" | "ADMIN" | "BUMDES" | "WARGA";
+  is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
+  groups: number[];
+  user_permissions: number[];
 };
 
 export const authApi = {
@@ -67,6 +85,24 @@ export const authApi = {
     const suffix = params.toString();
     return apiRequest<UserDto[]>(`/auth/users${suffix ? `?${suffix}` : ""}`);
   },
+
+  getUserDetail: (userId: string) =>
+    apiRequest<UserDetailDto>(`/auth/users/${userId}`),
+
+  updateUser: (userId: string, payload: UpdateUserPayload) =>
+    apiRequest<UserDetailDto>(`/auth/users/${userId}`, {
+      method: "PUT",
+      body: {
+        ...payload,
+        nomor_hp: payload.nomor_hp ?? null,
+      },
+    }),
+
+  listGroups: () =>
+    apiRequest<GroupDto[]>("/auth/groups"),
+
+  listPermissions: () =>
+    apiRequest<PermissionGroupDto[]>("/auth/permissions"),
 
   activateUser: (userId: string) =>
     apiRequest<ActivationDto>(`/auth/users/${userId}/activate`, { method: "POST" }),

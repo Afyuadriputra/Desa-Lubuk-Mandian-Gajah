@@ -19,6 +19,35 @@ export type UserDto = {
   is_active: boolean;
 };
 
+export type GroupDto = {
+  id: number;
+  name: string;
+};
+
+export type PermissionDto = {
+  id: number;
+  app_label: string;
+  model: string;
+  codename: string;
+  name: string;
+};
+
+export type PermissionGroupDto = {
+  app_label: string;
+  model: string;
+  permissions: PermissionDto[];
+};
+
+export type UserDetailDto = UserDto & {
+  is_staff: boolean;
+  is_superuser: boolean;
+  created_at: string;
+  updated_at: string;
+  last_login?: string | null;
+  groups: GroupDto[];
+  user_permissions: PermissionDto[];
+};
+
 export type ActivationDto = {
   id: string;
   is_active: boolean;
@@ -57,6 +86,13 @@ export type PerangkatAdminDto = {
   foto_url?: string | null;
 };
 
+export type PerangkatAdminPayload = {
+  user_id: string;
+  jabatan: string;
+  is_published: boolean;
+  foto?: File | null;
+};
+
 export type ProfilPublikDto = {
   profil: ProfilDesaDto;
   perangkat: PerangkatPublikDto[];
@@ -81,6 +117,13 @@ export type PublikasiDetailDto = {
   published_at?: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type PublikasiPayload = {
+  judul: string;
+  konten_html: string;
+  jenis: "BERITA" | "PENGUMUMAN" | string;
+  status?: "DRAFT" | "PUBLISHED" | string;
 };
 
 // --- MODUL: POTENSI EKONOMI (`potensi_ekonomi`) ---

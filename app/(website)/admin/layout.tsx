@@ -11,10 +11,12 @@ import {
   Globe,
   Store,
   Users,
+  Map,
   LogOut,
   Search,
   Bell,
   Settings,
+  Newspaper,
 } from "lucide-react";
 import { authApi } from "@/lib/api/auth";
 import type { UserDto } from "@/lib/api/types";
@@ -26,6 +28,9 @@ const navItems = [
   { href: "/admin/surat-queue", label: "Antrean Surat", icon: FileText },
   { href: "/admin/pengaduan-queue", label: "Antrean Pengaduan", icon: MessageSquare },
   { href: "/admin/homepage", label: "Kelola Homepage", icon: Globe },
+  { href: "/admin/profil-wilayah", label: "Profil Wilayah", icon: Map },
+  { href: "/admin/publikasi", label: "Publikasi", icon: Newspaper },
+  { href: "/admin/potensi-ekonomi", label: "Potensi Ekonomi", icon: Store },
   { href: "/admin/akun", label: "Kelola Akun", icon: Users },
 ];
 

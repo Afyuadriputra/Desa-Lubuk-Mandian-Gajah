@@ -142,7 +142,7 @@ export default function AdminPengaduanQueuePage() {
               </div>
               <div className="col-span-2 flex justify-end">
                 <a
-                  href={item.detail_url}
+                  href={`/admin/pengaduan-queue/${item.id}`}
                   className="text-[11px] font-medium text-zinc-500 hover:text-white px-3 py-1.5 rounded-lg hover:bg-zinc-800 transition-all flex items-center gap-1.5"
                 >
                   <Eye size={12} />

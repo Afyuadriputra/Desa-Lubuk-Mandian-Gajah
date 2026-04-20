@@ -151,7 +151,7 @@ export default function AdminSuratQueuePage() {
               <div className="col-span-1 text-xs text-zinc-600">{formatDate(item.created_at)}</div>
               <div className="col-span-1 flex justify-end gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <a
-                  href={item.detail_url}
+                  href={`/admin/surat-queue/${item.id}`}
                   className="p-1.5 rounded-md text-zinc-500 hover:text-white hover:bg-zinc-800 transition-colors"
                 >
                   <Eye size={14} />

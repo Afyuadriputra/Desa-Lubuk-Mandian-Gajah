@@ -1,5 +1,5 @@
 import { apiRequest } from "@/lib/api/client";
-import type { DusunDto, ProfilDesaDto, ProfilPublikDto } from "@/lib/api/types";
+import type { DusunDto, PerangkatAdminDto, PerangkatAdminPayload, ProfilDesaDto, ProfilPublikDto } from "@/lib/api/types";
 
 type UpsertDusunPayload = {
   nama_dusun: string;
@@ -26,6 +26,35 @@ export const profilApi = {
     apiRequest<{ detail: string }>(`/profil-wilayah/admin/dusun/${dusunId}`, {
       method: "DELETE",
     }),
+
+  listPerangkatAdmin: () =>
+    apiRequest<PerangkatAdminDto[]>("/profil-wilayah/admin/perangkat"),
+
+  createPerangkat: (payload: PerangkatAdminPayload) => {
+    const formData = new FormData();
+    formData.set("user_id", payload.user_id);
+    formData.set("jabatan", payload.jabatan);
+    formData.set("is_published", String(payload.is_published));
+    if (payload.foto) formData.set("foto", payload.foto);
+    return apiRequest<{ detail: string; id: number }>("/profil-wilayah/admin/perangkat", {
+      method: "POST",
+      body: formData,
+    });
+  },
+
+  updatePerangkat: (perangkatId: number, payload: Omit<PerangkatAdminPayload, "foto">) =>
+    apiRequest<{ detail: string; id: number }>(`/profil-wilayah/admin/perangkat/${perangkatId}`, {
+      method: "PUT",
+      body: payload,
+    }),
+
+  deletePerangkat: (perangkatId: number) =>
+    apiRequest<{ detail: string }>(`/profil-wilayah/admin/perangkat/${perangkatId}`, {
+      method: "DELETE",
+    }),
+
+  getProfilDesaAdmin: () =>
+    apiRequest<ProfilDesaDto>("/profil-wilayah/admin/profil"),
 
   updateProfilDesa: (payload: UpdateProfilPayload) =>
     apiRequest<ProfilDesaDto>("/profil-wilayah/admin/profil", {
