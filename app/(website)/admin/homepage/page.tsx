@@ -1,68 +1,73 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { homepageApi } from "@/lib/api/homepage";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type {
   HomepageAdminContentDto,
   HomepageContentUpdatePayload,
-  HomepageCultureCardDto,
-  HomepageCultureCardPayload,
-  HomepageFacilityDto,
-  HomepageFacilityPayload,
-  HomepageFooterLinkDto,
-  HomepageFooterLinkPayload,
-  HomepageGalleryItemDto,
-  HomepageGalleryItemPayload,
-  HomepagePotentialOpportunityItemDto,
-  HomepagePotentialOpportunityItemPayload,
-  HomepageRecoveryItemDto,
-  HomepageRecoveryItemPayload,
-  HomepageStatItemDto,
-  HomepageStatItemPayload,
 } from "@/lib/api/types";
-import { BarChart3, Building2, Image, Leaf, Save, Sparkles, XCircle } from "lucide-react";
+import { homepageApi } from "@/lib/api/homepage";
+import {
+  ArrowRight,
+  BarChart3,
+  Building2,
+  Image as ImageIcon,
+  Leaf,
+  Link2,
+  Save,
+  Sparkles,
+  TriangleAlert,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   AdminPageHeader,
+  AdminFormSkeleton,
+  AdminListSkeleton,
   ErrorState,
-  LoadingState,
   SaveState,
+  AdminNotice,
 } from "../_components/admin-primitives";
+import { adminToastError, adminToastSuccess, getErrorMessage } from "../_components/admin-feedback";
+import { HomepageEditorSections } from "./homepage-editor-sections";
+import {
+  HomepageCollectionSections,
+  SummaryCard,
+} from "./homepage-collection-sections";
 
-type ChildFieldType = "text" | "textarea" | "checkbox" | "number";
-
-type ChildFieldConfig = {
-  key: string;
-  label: string;
-  type?: ChildFieldType;
-  placeholder?: string;
-};
-
-type EditableChildItem = {
-  id?: number;
-  [key: string]: string | number | boolean | undefined;
-};
-
-type ChildSectionProps<T extends EditableChildItem> = {
-  title: string;
-  description: string;
-  items: T[];
-  fields: ChildFieldConfig[];
-  createDefaults: Omit<T, "id">;
-  emptyLabel: string;
-  onCreate: (payload: Omit<T, "id">) => Promise<void>;
-  onUpdate: (id: number, payload: Omit<T, "id">) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
-};
-
-type ChildDraft<T extends EditableChildItem> = Omit<T, "id">;
+const homepageSectionLinks = [
+  { href: "#hero-brand", label: "Hero & Brand" },
+  { href: "#naming", label: "Asal Usul" },
+  { href: "#nature", label: "Sialang & Gambut" },
+  { href: "#culture-potential", label: "Budaya & Potensi" },
+  { href: "#footer-contact", label: "Footer & Kontak" },
+  { href: "#culture-cards", label: "Culture Cards" },
+  { href: "#recovery-items", label: "Recovery Items" },
+  { href: "#opportunities", label: "Potential Opportunities" },
+  { href: "#facilities", label: "Facilities" },
+  { href: "#gallery", label: "Gallery" },
+  { href: "#footer-links", label: "Footer Links" },
+  { href: "#stats-manual", label: "Stats Manual" },
+];
 
 export default function AdminHomepageCMSPage() {
+  const router = useRouter();
   const [data, setData] = useState<HomepageAdminContentDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
+  const [pendingNavigationHref, setPendingNavigationHref] = useState<string | null>(null);
   const [form, setForm] = useState<Partial<HomepageContentUpdatePayload>>({});
 
   const loadAdminContent = async () => {
@@ -125,9 +130,15 @@ export default function AdminHomepageCMSPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const refreshAfterMutation = async (successMessage: string) => {
+  const refreshAfterMutation = async (
+    successMessage: string,
+    options?: { toast?: boolean },
+  ) => {
     await loadAdminContent();
     setSaveMsg(successMessage);
+    if (options?.toast !== false) {
+      adminToastSuccess(successMessage);
+    }
   };
 
   const handlePublish = async () => {
@@ -136,34 +147,165 @@ export default function AdminHomepageCMSPage() {
     setSaveMsg(null);
     try {
       await homepageApi.updateContent(form as HomepageContentUpdatePayload);
-      await refreshAfterMutation("Perubahan konten utama berhasil disimpan.");
-    } catch (err: any) {
-      setSaveMsg(`Gagal: ${err.message}`);
+      await refreshAfterMutation("Perubahan konten utama berhasil disimpan.", {
+        toast: false,
+      });
+      adminToastSuccess("Perubahan konten utama berhasil disimpan.");
+    } catch (err: unknown) {
+      const message = getErrorMessage(err, "Operasi gagal.");
+      setSaveMsg(`Gagal: ${message}`);
+      adminToastError(err, "Gagal menyimpan perubahan homepage.");
     } finally {
       setSaving(false);
     }
   };
 
-  const updateField = (key: keyof HomepageContentUpdatePayload, value: string | string[] | object) => {
+  const updateField = (
+    key: keyof HomepageContentUpdatePayload,
+    value: string | string[] | object,
+  ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const updateBrand = (key: keyof HomepageContentUpdatePayload["brand"], value: string) => {
+  const updateBrand = (
+    key: keyof HomepageContentUpdatePayload["brand"],
+    value: string,
+  ) => {
     setForm((prev) => ({
       ...prev,
       brand: { ...prev.brand!, [key]: value },
     }));
   };
 
-  const updateContact = (key: keyof HomepageContentUpdatePayload["contact"], value: string) => {
+  const updateContact = (
+    key: keyof HomepageContentUpdatePayload["contact"],
+    value: string,
+  ) => {
     setForm((prev) => ({
       ...prev,
       contact: { ...prev.contact!, [key]: value },
     }));
   };
 
+  const isDirty = React.useMemo(() => {
+    if (!data) return false;
+    return JSON.stringify(form) !== JSON.stringify({
+      villageName: data.villageName || "",
+      tagline: data.tagline || "",
+      heroDescription: data.heroDescription || "",
+      heroImage: data.heroImage || "",
+      heroBadge: data.heroBadge || "",
+      brand: {
+        logoUrl: data.brand?.logoUrl || "",
+        logoAlt: data.brand?.logoAlt || "",
+        regionLabel: data.brand?.regionLabel || "",
+      },
+      quickStatsDescription: data.quickStatsDescription || "",
+      contact: {
+        address: data.contact?.address || "",
+        whatsapp: data.contact?.whatsapp || "",
+        mapImage: data.contact?.mapImage || "",
+      },
+      namingTitle: data.namingTitle || "",
+      namingDescription: data.namingDescription || "",
+      namingImage: data.namingImage || "",
+      namingQuote: data.namingQuote || "",
+      cultureTitle: data.cultureTitle || "",
+      cultureDescription: data.cultureDescription || "",
+      sialangTitle: data.sialangTitle || "",
+      sialangDescription: data.sialangDescription || "",
+      sialangImage: data.sialangImage || "",
+      sialangBadge: data.sialangBadge || "",
+      sialangStat: data.sialangStat || "",
+      sialangQuote: data.sialangQuote || "",
+      peatTitle: data.peatTitle || "",
+      peatDescription: data.peatDescription || "",
+      peatQuote: data.peatQuote || "",
+      peatImages: data.peatImages || [],
+      recoveryTitle: data.recoveryTitle || "",
+      recoveryDescription: data.recoveryDescription || "",
+      potentialTitle: data.potentialTitle || "",
+      potentialQuote: data.potentialQuote || "",
+      potentialOpportunitiesTitle: data.potentialOpportunitiesTitle || "",
+      facilitiesTitle: data.facilitiesTitle || "",
+      galleryTitle: data.galleryTitle || "",
+      galleryDescription: data.galleryDescription || "",
+      contactTitle: data.contactTitle || "",
+      contactDescription: data.contactDescription || "",
+      footerDescription: data.footerDescription || "",
+      footerBadges: data.footerBadges || [],
+      footerCopyright: data.footerCopyright || "",
+      officeHours: data.officeHours || [],
+    });
+  }, [data, form]);
+
+  React.useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!isDirty) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
+
+  React.useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (!isDirty || saving) return;
+      if (event.defaultPrevented) return;
+      if (event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const anchor = target.closest("a[href]");
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      if (anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+
+      const nextUrl = new URL(anchor.href, window.location.href);
+      const currentUrl = new URL(window.location.href);
+
+      if (nextUrl.origin !== currentUrl.origin) return;
+      if (nextUrl.pathname === currentUrl.pathname && nextUrl.search === currentUrl.search) {
+        return;
+      }
+
+      event.preventDefault();
+      setPendingNavigationHref(`${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+    };
+
+    document.addEventListener("click", handleDocumentClick, true);
+    return () => document.removeEventListener("click", handleDocumentClick, true);
+  }, [isDirty, saving]);
+
+  const handleConfirmLeave = () => {
+    if (!pendingNavigationHref) return;
+    const destination = pendingNavigationHref;
+    setPendingNavigationHref(null);
+    router.push(destination);
+  };
+
   if (loading) {
-    return <LoadingState label="Memuat konten homepage..." />;
+    return (
+      <div className="mx-auto max-w-[1600px] space-y-6 pb-6">
+        <AdminPageHeader
+          eyebrow="Homepage CMS"
+          title="Kelola Homepage"
+          description="Editor difokuskan untuk kerja panjang: panel konten di kiri, rail aksi dan preview di kanan, tanpa mengubah kontrak API yang sudah ada."
+        />
+        <div className="grid grid-cols-1 gap-6 xl:h-[calc(100vh-13rem)] xl:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="space-y-6">
+            <AdminFormSkeleton fields={6} />
+            <AdminListSkeleton rows={5} />
+          </div>
+          <div className="space-y-6">
+            <AdminFormSkeleton fields={3} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error || !data) {
@@ -171,15 +313,45 @@ export default function AdminHomepageCMSPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-8 pb-12">
-      <div className="admin-glass sticky top-3 z-20 rounded-[28px] px-5 py-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto max-w-[1600px] space-y-6 pb-6">
+      <AlertDialog
+        open={pendingNavigationHref !== null}
+        onOpenChange={(open) => {
+          if (!open) setPendingNavigationHref(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Perubahan belum disimpan</AlertDialogTitle>
+            <AlertDialogDescription>
+              Anda sedang mengubah konten homepage. Jika tetap pindah halaman, perubahan yang belum disimpan akan hilang.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Tetap di halaman ini</AlertDialogCancel>
+            <AlertDialogAction tone="danger" onClick={handleConfirmLeave}>
+              Lanjutkan tanpa simpan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <div className="admin-glass rounded-[30px] px-5 py-5 sm:px-6">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
           <AdminPageHeader
             eyebrow="Homepage CMS"
             title="Kelola Homepage"
-            description="Scalar content, daftar dinamis, dan statistik manual dikelola dari satu panel dengan preview cepat."
+            description="Editor difokuskan untuk kerja panjang: panel konten di kiri, rail aksi dan preview di kanan, tanpa mengubah kontrak API yang sudah ada."
           />
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-col gap-3 xl:w-[320px] xl:items-end">
+            {isDirty ? (
+              <AdminNotice tone="info">
+                <span className="inline-flex items-center gap-2">
+                  <TriangleAlert className="size-4" />
+                  Belum disimpan
+                </span>
+              </AdminNotice>
+            ) : null}
             <SaveState
               message={saveMsg}
               tone={saveMsg?.startsWith("Gagal") ? "danger" : "success"}
@@ -187,7 +359,7 @@ export default function AdminHomepageCMSPage() {
             <Button
               onClick={handlePublish}
               disabled={saving}
-              className="rounded-full bg-slate-900 text-white hover:bg-slate-800"
+              className="w-full rounded-full bg-slate-900 text-white hover:bg-slate-800 xl:w-auto xl:min-w-[220px]"
             >
               <Save size={16} />
               {saving ? "Menyimpan..." : "Publish konten"}
@@ -196,278 +368,90 @@ export default function AdminHomepageCMSPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="flex flex-col gap-6 lg:col-span-8">
-          <SectionCard title="Hero & Brand Config">
-            <div className="grid grid-cols-1 gap-4">
-              <Field label="Hero Badge" value={form.heroBadge} onChange={(v) => updateField("heroBadge", v)} />
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Headline (Nama Desa)" value={form.villageName} onChange={(v) => updateField("villageName", v)} />
-                <Field label="Tagline" value={form.tagline} onChange={(v) => updateField("tagline", v)} />
-              </div>
-              <Field label="Deskripsi Hero" value={form.heroDescription} onChange={(v) => updateField("heroDescription", v)} multiline />
-              <Field label="Hero Image URL" value={form.heroImage} onChange={(v) => updateField("heroImage", v)} />
-
-              <div className="mt-2 border-t border-slate-200/80 pt-4">
-                <h4 className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-slate-500">Identitas Merek</h4>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <Field label="Logo URL" value={form.brand?.logoUrl} onChange={(v) => updateBrand("logoUrl", v)} />
-                  <Field label="Logo Alt Text" value={form.brand?.logoAlt} onChange={(v) => updateBrand("logoAlt", v)} />
-                  <Field label="Region Label" value={form.brand?.regionLabel} onChange={(v) => updateBrand("regionLabel", v)} />
-                </div>
-              </div>
-            </div>
-          </SectionCard>
-
-          <SectionCard title="Asal Usul (Naming)">
-            <Field label="Judul Asal Usul" value={form.namingTitle} onChange={(v) => updateField("namingTitle", v)} />
-            <Field label="Deskripsi Sejarah" value={form.namingDescription} onChange={(v) => updateField("namingDescription", v)} multiline />
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Field label="Naming Image URL" value={form.namingImage} onChange={(v) => updateField("namingImage", v)} />
-              <Field label="Quote Sejarah" value={form.namingQuote} onChange={(v) => updateField("namingQuote", v)} />
-            </div>
-          </SectionCard>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <SectionCard title="Hutan Sialang">
-              <Field label="Judul" value={form.sialangTitle} onChange={(v) => updateField("sialangTitle", v)} />
-              <Field label="Deskripsi" value={form.sialangDescription} onChange={(v) => updateField("sialangDescription", v)} multiline />
-              <Field label="Image URL" value={form.sialangImage} onChange={(v) => updateField("sialangImage", v)} />
-              <Field label="Badge" value={form.sialangBadge} onChange={(v) => updateField("sialangBadge", v)} />
-              <Field label="Stat" value={form.sialangStat} onChange={(v) => updateField("sialangStat", v)} />
-              <Field label="Quote" value={form.sialangQuote} onChange={(v) => updateField("sialangQuote", v)} />
-            </SectionCard>
-
-            <SectionCard title="Ekosistem Gambut">
-              <Field label="Judul" value={form.peatTitle} onChange={(v) => updateField("peatTitle", v)} />
-              <Field label="Deskripsi" value={form.peatDescription} onChange={(v) => updateField("peatDescription", v)} multiline />
-              <Field label="Quote" value={form.peatQuote} onChange={(v) => updateField("peatQuote", v)} />
-              <TagArrayField
-                label="Peat Images"
-                values={(form.peatImages as string[]) || []}
-                onChange={(values) => updateField("peatImages", values)}
-                helper="Satu URL per baris."
-              />
-            </SectionCard>
-          </div>
-
-          <SectionCard title="Budaya & Potensi">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="space-y-4">
-                <h4 className="border-b border-slate-200/80 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                  Nilai Budaya
-                </h4>
-                <Field label="Judul Budaya" value={form.cultureTitle} onChange={(v) => updateField("cultureTitle", v)} />
-                <Field label="Deskripsi Budaya" value={form.cultureDescription} onChange={(v) => updateField("cultureDescription", v)} multiline />
-              </div>
-              <div className="space-y-4">
-                <h4 className="border-b border-slate-200/80 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                  Potensi Desa
-                </h4>
-                <Field label="Judul Potensi" value={form.potentialTitle} onChange={(v) => updateField("potentialTitle", v)} />
-                <Field label="Kutipan Potensi" value={form.potentialQuote} onChange={(v) => updateField("potentialQuote", v)} />
-                <Field
-                  label="Judul Peluang"
-                  value={form.potentialOpportunitiesTitle}
-                  onChange={(v) => updateField("potentialOpportunitiesTitle", v)}
-                />
-              </div>
-            </div>
-
-            <div className="mt-6 space-y-4 border-t border-slate-200/80 pt-4">
-              <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Pemulihan Ekonomi</h4>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Judul Pemulihan" value={form.recoveryTitle} onChange={(v) => updateField("recoveryTitle", v)} />
-                <Field label="Deskripsi Pemulihan" value={form.recoveryDescription} onChange={(v) => updateField("recoveryDescription", v)} multiline />
-              </div>
-            </div>
-          </SectionCard>
-
-          <SectionCard title="Footer, Gallery & Kontak">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="space-y-4 md:border-r md:border-slate-200/80 md:pr-4">
-                <Field
-                  label="Deskripsi Statistik Cepat"
-                  value={form.quickStatsDescription}
-                  onChange={(v) => updateField("quickStatsDescription", v)}
-                  multiline
-                />
-                <Field label="Judul Fasilitas" value={form.facilitiesTitle} onChange={(v) => updateField("facilitiesTitle", v)} />
-                <Field label="Judul Galeri" value={form.galleryTitle} onChange={(v) => updateField("galleryTitle", v)} />
-                <Field
-                  label="Deskripsi Galeri"
-                  value={form.galleryDescription}
-                  onChange={(v) => updateField("galleryDescription", v)}
-                  multiline
-                />
-                <Field
-                  label="Deskripsi Footer"
-                  value={form.footerDescription}
-                  onChange={(v) => updateField("footerDescription", v)}
-                  multiline
-                />
-                <Field
-                  label="Hak Cipta Footer"
-                  value={form.footerCopyright}
-                  onChange={(v) => updateField("footerCopyright", v)}
-                />
-              </div>
-
-              <div className="space-y-4">
-                <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Informasi Kontak</h4>
-                <Field label="Judul Kontak" value={form.contactTitle} onChange={(v) => updateField("contactTitle", v)} />
-                <Field
-                  label="Deskripsi Kontak"
-                  value={form.contactDescription}
-                  onChange={(v) => updateField("contactDescription", v)}
-                  multiline
-                />
-                <Field label="Alamat Fisik" value={form.contact?.address} onChange={(v) => updateContact("address", v)} multiline />
-                <Field label="Nomor WhatsApp" value={form.contact?.whatsapp} onChange={(v) => updateContact("whatsapp", v)} />
-                <Field label="URL Gambar Peta" value={form.contact?.mapImage} onChange={(v) => updateContact("mapImage", v)} />
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-              <TagArrayField
-                label="Footer Badges"
-                values={(form.footerBadges as string[]) || []}
-                onChange={(values) => updateField("footerBadges", values)}
-                helper="Satu badge per baris."
-              />
-              <OfficeHoursField
-                values={form.officeHours || []}
-                onChange={(values) => updateField("officeHours", values)}
-              />
-            </div>
-          </SectionCard>
-
-          <ChildSection<HomepageCultureCardDto>
-            title="Culture Cards"
-            description="Mengelola kartu budaya yang tampil di section nilai lokal."
-            items={data.cultureCards}
-            fields={[
-              { key: "icon", label: "Icon" },
-              { key: "title", label: "Title" },
-              { key: "description", label: "Description", type: "textarea" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ icon: "", title: "", description: "", sort_order: data.cultureCards.length }}
-            emptyLabel="Belum ada culture card."
-            onCreate={(payload) => homepageApi.createCultureCard(payload as HomepageCultureCardPayload).then(() => refreshAfterMutation("Culture card ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updateCultureCard(id, payload as HomepageCultureCardPayload).then(() => refreshAfterMutation("Culture card diperbarui."))}
-            onDelete={(id) => homepageApi.deleteCultureCard(id).then(() => refreshAfterMutation("Culture card dihapus."))}
+      <div className="grid grid-cols-1 gap-6 xl:h-[calc(100vh-13rem)] xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="admin-scrollbar min-h-0 space-y-6 xl:overflow-y-auto xl:pr-2">
+          <HomepageEditorSections
+            form={form}
+            updateField={updateField}
+            updateBrand={updateBrand}
+            updateContact={updateContact}
           />
-
-          <ChildSection<HomepageRecoveryItemDto>
-            title="Recovery Items"
-            description="Daftar item pemulihan ekonomi pasca-gambut."
-            items={data.recoveryItems}
-            fields={[
-              { key: "icon", label: "Icon" },
-              { key: "title", label: "Title" },
-              { key: "description", label: "Description", type: "textarea" },
-              { key: "wrapper", label: "Wrapper" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ icon: "", title: "", description: "", wrapper: "", sort_order: data.recoveryItems.length }}
-            emptyLabel="Belum ada recovery item."
-            onCreate={(payload) => homepageApi.createRecoveryItem(payload as HomepageRecoveryItemPayload).then(() => refreshAfterMutation("Recovery item ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updateRecoveryItem(id, payload as HomepageRecoveryItemPayload).then(() => refreshAfterMutation("Recovery item diperbarui."))}
-            onDelete={(id) => homepageApi.deleteRecoveryItem(id).then(() => refreshAfterMutation("Recovery item dihapus."))}
-          />
-
-          <ChildSection<HomepagePotentialOpportunityItemDto>
-            title="Potential Opportunities"
-            description="Opportunitas turunan yang tampil setelah daftar potensi usaha publik."
-            items={data.potentialOpportunityItems}
-            fields={[
-              { key: "icon", label: "Icon" },
-              { key: "title", label: "Title" },
-              { key: "description", label: "Description", type: "textarea" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ icon: "", title: "", description: "", sort_order: data.potentialOpportunityItems.length }}
-            emptyLabel="Belum ada opportunity item."
-            onCreate={(payload) => homepageApi.createPotentialOpportunity(payload as HomepagePotentialOpportunityItemPayload).then(() => refreshAfterMutation("Opportunity item ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updatePotentialOpportunity(id, payload as HomepagePotentialOpportunityItemPayload).then(() => refreshAfterMutation("Opportunity item diperbarui."))}
-            onDelete={(id) => homepageApi.deletePotentialOpportunity(id).then(() => refreshAfterMutation("Opportunity item dihapus."))}
-          />
-
-          <ChildSection<HomepageFacilityDto>
-            title="Facilities"
-            description="Fasilitas cepat di section publik."
-            items={data.facilities}
-            fields={[
-              { key: "icon", label: "Icon" },
-              { key: "label", label: "Label" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ icon: "", label: "", sort_order: data.facilities.length }}
-            emptyLabel="Belum ada fasilitas."
-            onCreate={(payload) => homepageApi.createFacility(payload as HomepageFacilityPayload).then(() => refreshAfterMutation("Facility ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updateFacility(id, payload as HomepageFacilityPayload).then(() => refreshAfterMutation("Facility diperbarui."))}
-            onDelete={(id) => homepageApi.deleteFacility(id).then(() => refreshAfterMutation("Facility dihapus."))}
-          />
-
-          <ChildSection<HomepageGalleryItemDto>
-            title="Gallery"
-            description="Gambar galeri homepage. `tall` untuk layout tinggi."
-            items={data.gallery}
-            fields={[
-              { key: "image", label: "Image URL" },
-              { key: "alt", label: "Alt" },
-              { key: "caption", label: "Caption", type: "textarea" },
-              { key: "tall", label: "Tall", type: "checkbox" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ image: "", alt: "", caption: "", tall: false, sort_order: data.gallery.length }}
-            emptyLabel="Belum ada gallery item."
-            onCreate={(payload) => homepageApi.createGalleryItem(payload as HomepageGalleryItemPayload).then(() => refreshAfterMutation("Gallery item ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updateGalleryItem(id, payload as HomepageGalleryItemPayload).then(() => refreshAfterMutation("Gallery item diperbarui."))}
-            onDelete={(id) => homepageApi.deleteGalleryItem(id).then(() => refreshAfterMutation("Gallery item dihapus."))}
-          />
-
-          <ChildSection<HomepageFooterLinkDto>
-            title="Footer Links"
-            description="Link cepat di footer publik."
-            items={data.footerLinks}
-            fields={[
-              { key: "label", label: "Label" },
-              { key: "href", label: "Href" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ label: "", href: "", sort_order: data.footerLinks.length }}
-            emptyLabel="Belum ada footer link."
-            onCreate={(payload) => homepageApi.createFooterLink(payload as HomepageFooterLinkPayload).then(() => refreshAfterMutation("Footer link ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updateFooterLink(id, payload as HomepageFooterLinkPayload).then(() => refreshAfterMutation("Footer link diperbarui."))}
-            onDelete={(id) => homepageApi.deleteFooterLink(id).then(() => refreshAfterMutation("Footer link dihapus."))}
-          />
-
-          <ChildSection<HomepageStatItemDto>
-            title="Stats Manual"
-            description="Stat manual untuk homepage. `Dusun` tetap otomatis dari profil wilayah dan tidak perlu dibuat di sini."
-            items={data.statsItems}
-            fields={[
-              { key: "label", label: "Label" },
-              { key: "value", label: "Value" },
-              { key: "sort_order", label: "Sort Order", type: "number" },
-            ]}
-            createDefaults={{ label: "", value: "", sort_order: data.statsItems.length }}
-            emptyLabel="Belum ada stat manual."
-            onCreate={(payload) => homepageApi.createStat(payload as HomepageStatItemPayload).then(() => refreshAfterMutation("Stat manual ditambahkan."))}
-            onUpdate={(id, payload) => homepageApi.updateStat(id, payload as HomepageStatItemPayload).then(() => refreshAfterMutation("Stat manual diperbarui."))}
-            onDelete={(id) => homepageApi.deleteStat(id).then(() => refreshAfterMutation("Stat manual dihapus."))}
+          <HomepageCollectionSections
+            data={data}
+            refreshAfterMutation={refreshAfterMutation}
           />
         </div>
 
-        <div className="space-y-6 lg:col-span-4">
+        <aside className="admin-scrollbar min-h-0 space-y-6 xl:overflow-y-auto xl:pr-1">
+          <div className="admin-glass rounded-[28px] px-5 py-5">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Aksi halaman
+                </p>
+                <h2 className="text-base font-semibold text-slate-950">
+                  Simpan perubahan utama
+                </h2>
+                <p className="text-sm leading-6 text-slate-500">
+                  Gunakan panel ini saat selesai merapikan section besar. Fokus edit tetap penuh di area kiri.
+                </p>
+              </div>
+
+              <SaveState
+                message={saveMsg}
+                tone={saveMsg?.startsWith("Gagal") ? "danger" : "success"}
+              />
+
+              <Button
+                onClick={handlePublish}
+                disabled={saving}
+                className="w-full rounded-full bg-slate-900 text-white hover:bg-slate-800"
+              >
+                <Save size={16} />
+                {saving ? "Menyimpan..." : "Publish konten"}
+              </Button>
+            </div>
+          </div>
+
+          <div className="admin-panel rounded-[28px] border-white/70 p-5">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Navigasi section
+                </p>
+                <h2 className="text-base font-semibold text-slate-950">
+                  Lompat ke bagian editor
+                </h2>
+                <p className="text-sm leading-6 text-slate-500">
+                  Pakai navigator ini untuk berpindah cepat antar blok tanpa kehilangan konteks.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {homepageSectionLinks.map((section) => (
+                  <a
+                    key={section.href}
+                    href={section.href}
+                    className="inline-flex items-center justify-between rounded-[20px] border border-slate-200/80 bg-white/80 px-3.5 py-2.5 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-white hover:text-slate-950"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <Link2 className="size-4" />
+                      {section.label}
+                    </span>
+                    <ArrowRight className="size-4 text-slate-400" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="admin-panel group relative min-h-[220px] overflow-hidden rounded-[28px] border-white/70">
             {form.heroImage ? (
-              <img
+              <Image
                 alt="Preview"
+                fill
                 className="absolute inset-0 h-full w-full object-cover opacity-50 transition-opacity group-hover:opacity-70"
                 src={form.heroImage as string}
+                unoptimized
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-slate-100 text-slate-400">
@@ -476,9 +460,15 @@ export default function AdminHomepageCMSPage() {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
             <div className="absolute bottom-0 left-0 z-10 w-full p-5">
-              <span className="mb-1 block text-[9px] font-semibold uppercase tracking-wider text-slate-300">Hero Preview</span>
-              <h3 className="truncate text-xl font-bold text-white">{form.villageName || "Nama Desa"}</h3>
-              <p className="mt-0.5 truncate text-xs text-slate-200/80">{form.tagline || "Tagline"}</p>
+              <span className="mb-1 block text-[9px] font-semibold uppercase tracking-wider text-slate-300">
+                Hero Preview
+              </span>
+              <h3 className="truncate text-xl font-bold text-white">
+                {form.villageName || "Nama Desa"}
+              </h3>
+              <p className="mt-0.5 truncate text-xs text-slate-200/80">
+                {form.tagline || "Tagline"}
+              </p>
             </div>
           </div>
 
@@ -489,443 +479,15 @@ export default function AdminHomepageCMSPage() {
             <div className="grid grid-cols-2 gap-3">
               <SummaryCard icon={<Sparkles size={14} />} label="Culture" count={data.cultureCards.length} />
               <SummaryCard icon={<Leaf size={14} />} label="Recovery" count={data.recoveryItems.length} />
-              <SummaryCard icon={<Image size={14} />} label="Gallery" count={data.gallery.length} />
+              <SummaryCard icon={<ImageIcon size={14} />} label="Gallery" count={data.gallery.length} />
               <SummaryCard icon={<Building2 size={14} />} label="Fasilitas" count={data.facilities.length} />
             </div>
-            <p className="mt-2 text-center text-[10px] text-slate-500">Semua list di bawah sudah terkoneksi ke endpoint CRUD backend.</p>
+            <p className="mt-2 text-center text-[10px] text-slate-500">
+              Semua list di bawah sudah terkoneksi ke endpoint CRUD backend.
+            </p>
           </div>
-        </div>
+        </aside>
       </div>
-    </div>
-  );
-}
-
-function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="admin-panel relative overflow-hidden rounded-[28px] border-white/70 p-5 sm:p-6">
-      <div className="absolute left-0 top-6 h-10 w-1 rounded-r-full bg-slate-300" />
-      <h2 className="mb-5 pl-2 text-sm font-semibold text-slate-900">{title}</h2>
-      <div className="space-y-4">{children}</div>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  value = "",
-  onChange,
-  multiline = false,
-}: {
-  label: string;
-  value: string | undefined;
-  onChange: (v: string) => void;
-  multiline?: boolean;
-}) {
-  const cls =
-    "w-full rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-xs font-medium text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200/70 sm:text-sm";
-
-  return (
-    <div className="flex w-full flex-col gap-1.5">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{label}</label>
-      {multiline ? (
-        <textarea className={`${cls} resize-none`} rows={3} value={value || ""} onChange={(e) => onChange(e.target.value)} />
-      ) : (
-        <input className={cls} type="text" value={value || ""} onChange={(e) => onChange(e.target.value)} />
-      )}
-    </div>
-  );
-}
-
-function TagArrayField({
-  label,
-  values,
-  onChange,
-  helper,
-}: {
-  label: string;
-  values: string[];
-  onChange: (values: string[]) => void;
-  helper?: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{label}</label>
-      <textarea
-        rows={5}
-        value={values.join("\n")}
-        onChange={(event) =>
-          onChange(
-            event.target.value
-              .split("\n")
-              .map((item) => item.trim())
-              .filter(Boolean),
-          )
-        }
-        className="w-full resize-none rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-xs font-medium text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200/70 sm:text-sm"
-      />
-      {helper && <p className="text-[10px] text-slate-500">{helper}</p>}
-    </div>
-  );
-}
-
-function OfficeHoursField({
-  values,
-  onChange,
-}: {
-  values: HomepageContentUpdatePayload["officeHours"];
-  onChange: (values: HomepageContentUpdatePayload["officeHours"]) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-3">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Jam Operasional</label>
-      {(values || []).map((item, index) => (
-        <div key={`${item.day}-${index}`} className="admin-subtle-panel grid grid-cols-1 gap-3 rounded-[22px] p-3">
-          <Field
-            label={`Hari ${index + 1}`}
-            value={item.day}
-            onChange={(value) =>
-              onChange(
-                values.map((entry, entryIndex) =>
-                  entryIndex === index ? { ...entry, day: value } : entry,
-                ),
-              )
-            }
-          />
-          <Field
-            label="Jam"
-            value={item.time}
-            onChange={(value) =>
-              onChange(
-                values.map((entry, entryIndex) =>
-                  entryIndex === index ? { ...entry, time: value } : entry,
-                ),
-              )
-            }
-          />
-          <label className="flex items-center gap-2 text-xs text-slate-500">
-            <input
-              type="checkbox"
-              checked={Boolean(item.danger)}
-              onChange={(event) =>
-                onChange(
-                  values.map((entry, entryIndex) =>
-                    entryIndex === index ? { ...entry, danger: event.target.checked } : entry,
-                  ),
-                )
-              }
-            />
-            Tandai sebagai baris penting / libur
-          </label>
-        </div>
-      ))}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => onChange([...(values || []), { day: "", time: "", danger: false }])}
-          className="rounded-full border-slate-200 bg-white/90 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white"
-        >
-          Tambah Jam
-        </button>
-        {(values || []).length > 0 && (
-          <button
-            type="button"
-            onClick={() => onChange(values.slice(0, -1))}
-            className="rounded-full border-slate-200 bg-white/80 px-3 py-2 text-xs font-semibold text-slate-500 hover:bg-white"
-          >
-            Hapus Terakhir
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function SummaryCard({
-  icon,
-  label,
-  count,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  count: number;
-}) {
-  return (
-    <div className="admin-subtle-panel flex flex-col items-center justify-center gap-1.5 rounded-[22px] px-3 py-3 text-center transition-colors hover:bg-white">
-      <span className="text-slate-500">{icon}</span>
-      <div className="flex flex-col items-center">
-        <p className="text-lg leading-none font-bold text-slate-900">{count}</p>
-        <p className="mt-1 text-[9px] uppercase tracking-widest text-slate-400">{label}</p>
-      </div>
-    </div>
-  );
-}
-
-function ChildSection<T extends EditableChildItem>({
-  title,
-  description,
-  items,
-  fields,
-  createDefaults,
-  emptyLabel,
-  onCreate,
-  onUpdate,
-  onDelete,
-}: ChildSectionProps<T>) {
-  const [createForm, setCreateForm] = useState<ChildDraft<T>>(createDefaults);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editingForm, setEditingForm] = useState<ChildDraft<T> | null>(null);
-  const [busy, setBusy] = useState<"create" | "update" | "delete" | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const mergeDraftValue = (
-    draft: ChildDraft<T>,
-    key: string,
-    value: string | number | boolean,
-  ): ChildDraft<T> => {
-    return {
-      ...draft,
-      [key]: value,
-    } as ChildDraft<T>;
-  };
-
-  useEffect(() => {
-    setCreateForm(createDefaults);
-    if (editingId !== null) {
-      const nextItem = items.find((item) => item.id === editingId);
-      if (!nextItem) {
-        setEditingId(null);
-        setEditingForm(null);
-      }
-    }
-  }, [items, editingId]);
-
-  const updateDraft = (
-    target: "create" | "edit",
-    key: string,
-    value: string | number | boolean,
-  ) => {
-    if (target === "create") {
-      setCreateForm((prev) => mergeDraftValue(prev, key, value));
-      return;
-    }
-    setEditingForm((prev) => (prev ? mergeDraftValue(prev, key, value) : prev));
-  };
-
-  const startEdit = (item: T) => {
-    const nextForm = { ...item } as T;
-    delete nextForm.id;
-    setEditingId(item.id ?? null);
-    setEditingForm(nextForm as ChildDraft<T>);
-    setError(null);
-  };
-
-  const handleCreate = async () => {
-    setBusy("create");
-    setError(null);
-    try {
-      await onCreate(createForm);
-    } catch (err: any) {
-      setError(err.message ?? "Gagal menambah item.");
-    } finally {
-      setBusy(null);
-    }
-  };
-
-  const handleUpdate = async () => {
-    if (editingId === null || !editingForm) return;
-    setBusy("update");
-    setError(null);
-    try {
-      await onUpdate(editingId, editingForm);
-      setEditingId(null);
-      setEditingForm(null);
-    } catch (err: any) {
-      setError(err.message ?? "Gagal memperbarui item.");
-    } finally {
-      setBusy(null);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    setBusy("delete");
-    setError(null);
-    try {
-      await onDelete(id);
-      if (editingId === id) {
-        setEditingId(null);
-        setEditingForm(null);
-      }
-    } catch (err: any) {
-      setError(err.message ?? "Gagal menghapus item.");
-    } finally {
-      setBusy(null);
-    }
-  };
-
-  return (
-    <SectionCard title={title}>
-      <p className="text-sm text-slate-500">{description}</p>
-      {error && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
-          {error}
-        </div>
-      )}
-
-      <div className="space-y-3">
-        {items.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-5 text-sm text-slate-500">
-            {emptyLabel}
-          </div>
-        ) : (
-          items.map((item) => {
-            const draft = editingId === item.id ? editingForm : item;
-            return (
-              <div key={item.id} className="admin-subtle-panel rounded-[24px] p-4">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                      Item #{item.id}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    {editingId === item.id ? (
-                      <>
-                        <button
-                          type="button"
-                          onClick={handleUpdate}
-                          disabled={busy === "update"}
-                          className="rounded-full bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
-                        >
-                          {busy === "update" ? "Menyimpan..." : "Simpan"}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setEditingId(null);
-                            setEditingForm(null);
-                          }}
-                          className="rounded-full border-slate-200 bg-white/85 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-white"
-                        >
-                          Batal
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => startEdit(item)}
-                        className="rounded-full border-slate-200 bg-white/85 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-white"
-                      >
-                        Edit
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(item.id as number)}
-                      disabled={busy === "delete"}
-                      className="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 disabled:opacity-50"
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {fields.map((field) => (
-                    <ChildField
-                      key={`${item.id}-${field.key}`}
-                      label={field.label}
-                      type={field.type}
-                      placeholder={field.placeholder}
-                      value={draft?.[field.key]}
-                      onChange={(value) => updateDraft(editingId === item.id ? "edit" : "create", field.key, value)}
-                      disabled={editingId !== item.id}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      <div className="admin-panel rounded-[24px] border-white/70 p-4">
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Tambah Item Baru</h3>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {fields.map((field) => (
-            <ChildField
-              key={`create-${field.key}`}
-              label={field.label}
-              type={field.type}
-              placeholder={field.placeholder}
-              value={createForm[field.key]}
-              onChange={(value) => updateDraft("create", field.key, value)}
-            />
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={handleCreate}
-          disabled={busy === "create"}
-          className="mt-4 rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
-        >
-          {busy === "create" ? "Menambah..." : "Tambah Item"}
-        </button>
-      </div>
-    </SectionCard>
-  );
-}
-
-function ChildField({
-  label,
-  value,
-  onChange,
-  type = "text",
-  placeholder,
-  disabled = false,
-}: {
-  label: string;
-  value: string | number | boolean | undefined;
-  onChange: (value: string | number | boolean) => void;
-  type?: ChildFieldType;
-  placeholder?: string;
-  disabled?: boolean;
-}) {
-  const baseClass =
-    "w-full rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-xs font-medium text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200/70 sm:text-sm disabled:opacity-50";
-
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{label}</label>
-      {type === "textarea" ? (
-        <textarea
-          rows={3}
-          value={String(value ?? "")}
-          placeholder={placeholder}
-          disabled={disabled}
-          onChange={(event) => onChange(event.target.value)}
-          className={`${baseClass} resize-none`}
-        />
-      ) : type === "checkbox" ? (
-        <label className="flex min-h-[42px] items-center gap-2 rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-sm text-slate-600">
-          <input
-            type="checkbox"
-            checked={Boolean(value)}
-            disabled={disabled}
-            onChange={(event) => onChange(event.target.checked)}
-          />
-          Aktif
-        </label>
-      ) : (
-        <input
-          type={type === "number" ? "number" : "text"}
-          value={type === "number" ? Number(value ?? 0) : String(value ?? "")}
-          placeholder={placeholder}
-          disabled={disabled}
-          onChange={(event) =>
-            onChange(type === "number" ? Number(event.target.value || 0) : event.target.value)
-          }
-          className={baseClass}
-        />
-      )}
     </div>
   );
 }

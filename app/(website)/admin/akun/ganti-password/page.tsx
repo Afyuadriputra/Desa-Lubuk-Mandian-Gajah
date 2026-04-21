@@ -10,6 +10,7 @@ import {
   AdminPageHeader,
   AdminSectionCard,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { adminToastError, adminToastSuccess, getErrorMessage } from "@/app/(website)/admin/_components/admin-feedback";
 
 export default function AdminGantiPasswordPage() {
   const [form, setForm] = useState({
@@ -18,19 +19,18 @@ export default function AdminGantiPasswordPage() {
     confirm_password: "",
   });
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     setSaving(true);
-    setMessage(null);
     setError(null);
     try {
       await authApi.changePassword(form);
-      setMessage("Password berhasil diperbarui. Silakan gunakan password baru untuk login berikutnya.");
+      adminToastSuccess("Password berhasil diperbarui. Silakan gunakan password baru untuk login berikutnya.");
       setForm({ current_password: "", new_password: "", confirm_password: "" });
-    } catch (err: any) {
-      setError(err.message ?? "Gagal mengganti password.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal mengganti password."));
+      adminToastError(err, "Gagal mengganti password.");
     } finally {
       setSaving(false);
     }
@@ -49,7 +49,6 @@ export default function AdminGantiPasswordPage() {
         }
       />
 
-      {message ? <AdminNotice tone="success">{message}</AdminNotice> : null}
       {error ? <AdminNotice tone="error">{error}</AdminNotice> : null}
 
       <AdminSectionCard

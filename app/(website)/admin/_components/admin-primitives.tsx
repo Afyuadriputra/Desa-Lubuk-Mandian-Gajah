@@ -86,6 +86,10 @@ export type HealthFlagViewModel = {
   tone: AdminStatusTone;
 };
 
+export type AdminSkeletonVariant = "stats" | "list" | "form" | "detail";
+
+export type AdminDirtyState = "clean" | "dirty" | "saving";
+
 const toneMap: Record<AdminStatusTone, string> = {
   neutral: "border-slate-200 bg-slate-50 text-slate-600",
   info: "border-blue-200 bg-blue-50 text-blue-700",
@@ -363,6 +367,123 @@ export function AdminWidgetSkeleton({
   );
 }
 
+export function AdminStatsSkeleton({
+  count = 4,
+}: {
+  count?: number;
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {Array.from({ length: count }).map((_, index) => (
+        <AdminWidgetSkeleton key={index} lines={2} />
+      ))}
+    </div>
+  );
+}
+
+export function AdminListSkeleton({
+  rows = 6,
+}: {
+  rows?: number;
+}) {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: rows }).map((_, index) => (
+        <AdminSurface key={index} className="rounded-[26px] border-white/70">
+          <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0 flex-1 space-y-3">
+              <Skeleton className="h-5 w-40 rounded-full" />
+              <Skeleton className="h-4 w-3/4 rounded-full" />
+              <div className="flex flex-wrap gap-2">
+                <Skeleton className="h-6 w-20 rounded-full" />
+                <Skeleton className="h-6 w-24 rounded-full" />
+              </div>
+            </div>
+            <div className="w-full max-w-[180px] space-y-3">
+              <Skeleton className="h-4 w-24 rounded-full" />
+              <Skeleton className="h-9 w-full rounded-2xl" />
+            </div>
+          </CardContent>
+        </AdminSurface>
+      ))}
+    </div>
+  );
+}
+
+export function AdminFormSkeleton({
+  fields = 6,
+}: {
+  fields?: number;
+}) {
+  return (
+    <AdminSectionCard title="Memuat form" description="Menyiapkan workspace editor.">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {Array.from({ length: fields }).map((_, index) => (
+          <div key={index} className="space-y-2">
+            <Skeleton className="h-3 w-20 rounded-full" />
+            <Skeleton className="h-11 w-full rounded-[22px]" />
+          </div>
+        ))}
+        <div className="md:col-span-2 space-y-2">
+          <Skeleton className="h-3 w-24 rounded-full" />
+          <Skeleton className="h-36 w-full rounded-[22px]" />
+        </div>
+      </div>
+    </AdminSectionCard>
+  );
+}
+
+export function AdminFilterSkeleton({
+  filters = 3,
+}: {
+  filters?: number;
+}) {
+  return (
+    <AdminSurface className="rounded-[26px]">
+      <CardContent className="flex flex-col gap-3 p-4 xl:flex-row xl:items-end xl:justify-between">
+        <div className="grid flex-1 grid-cols-1 gap-3 lg:grid-cols-3">
+          {Array.from({ length: filters }).map((_, index) => (
+            <div key={index} className="space-y-2">
+              <Skeleton className="h-3 w-20 rounded-full" />
+              <Skeleton className="h-11 w-full rounded-[22px]" />
+            </div>
+          ))}
+        </div>
+        <Skeleton className="h-9 w-32 rounded-full" />
+      </CardContent>
+    </AdminSurface>
+  );
+}
+
+export function AdminDetailSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-24 rounded-full" />
+        <Skeleton className="h-10 w-80 rounded-full" />
+        <Skeleton className="h-4 w-96 max-w-full rounded-full" />
+      </div>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="space-y-6 xl:col-span-2">
+          <AdminFormSkeleton fields={4} />
+          <AdminFormSkeleton fields={4} />
+        </div>
+        <AdminSectionCard title="Memuat riwayat">
+          <div className="space-y-3">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="space-y-2 rounded-[22px] border border-slate-200/80 bg-white/80 p-3">
+                <Skeleton className="h-4 w-32 rounded-full" />
+                <Skeleton className="h-3 w-40 rounded-full" />
+                <Skeleton className="h-3 w-full rounded-full" />
+              </div>
+            ))}
+          </div>
+        </AdminSectionCard>
+      </div>
+    </div>
+  );
+}
+
 export function StatusBadge({
   label,
   tone,
@@ -548,6 +669,41 @@ export function AdminFilterToolbar({
 
 export function AdminFilterBar(props: React.ComponentProps<typeof AdminFilterToolbar>) {
   return <AdminFilterToolbar {...props} />;
+}
+
+export function AdminActiveFilters({
+  items,
+  onClear,
+}: {
+  items: Array<{ key: string; label: string }>;
+  onClear?: () => void;
+}) {
+  if (!items.length) return null;
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {items.map((item) => (
+        <Badge
+          key={item.key}
+          variant="outline"
+          className="rounded-full border-slate-200 bg-white/85 px-3 py-1 text-xs font-medium text-slate-600"
+        >
+          {item.label}
+        </Badge>
+      ))}
+      {onClear ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onClear}
+          className="rounded-full text-slate-500 hover:bg-white/80 hover:text-slate-900"
+        >
+          Reset filter
+        </Button>
+      ) : null}
+    </div>
+  );
 }
 
 export function AdminActionRail({

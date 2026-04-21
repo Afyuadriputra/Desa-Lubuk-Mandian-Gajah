@@ -6,13 +6,16 @@ import { useParams } from "next/navigation";
 import { suratApi } from "@/lib/api/surat";
 import type { SuratDetailDto } from "@/lib/api/types";
 import {
+  AdminDetailSkeleton,
   AdminField,
   AdminNotice,
   AdminPageHeader,
   AdminSectionCard,
   StatusBadge,
   AdminTextarea,
+  ErrorState,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { adminToastError, adminToastSuccess, getErrorMessage } from "@/app/(website)/admin/_components/admin-feedback";
 import { Button } from "@/components/ui/button";
 import { localizeSuratJenis, localizeSuratStatus, toneForSuratStatus } from "@/app/(website)/admin/_components/admin-labels";
 
@@ -38,7 +41,7 @@ export default function AdminSuratDetailPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const loadDetail = async () => {
+  const loadDetail = React.useCallback(async () => {
     const result = await suratApi.detail(suratId);
     const data = result.data;
     setSurat(data);
@@ -47,24 +50,25 @@ export default function AdminSuratDetailPage() {
       nomor_surat: data.nomor_surat ?? "",
       rejection_reason: data.rejection_reason ?? "",
     }));
-  };
+  }, [suratId]);
 
   useEffect(() => {
     loadDetail()
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [suratId]);
+  }, [loadDetail]);
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat detail surat...</div>;
+    return <AdminDetailSkeleton />;
   }
 
   if (error || !surat) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4">
-        <AdminNotice tone="error">{error ?? "Surat tidak ditemukan."}</AdminNotice>
-        <Link href="/admin/surat-queue" className="text-sm text-slate-500 hover:text-slate-950">Kembali ke antrean surat</Link>
-      </div>
+      <ErrorState
+        title="Gagal memuat detail surat"
+        description={error ?? "Surat tidak ditemukan."}
+        action={<Link href="/admin/surat-queue" className="text-sm text-slate-600 hover:text-slate-950">Kembali ke antrean surat</Link>}
+      />
     );
   }
 
@@ -132,8 +136,10 @@ export default function AdminSuratDetailPage() {
                     await suratApi.proses(suratId, form);
                     await loadDetail();
                     setMessage("Status surat berhasil diperbarui.");
-                  } catch (err: any) {
-                    setError(err.message ?? "Gagal memproses surat.");
+                    adminToastSuccess("Status surat berhasil diperbarui.");
+                  } catch (err: unknown) {
+                    setError(getErrorMessage(err, "Gagal memproses surat."));
+                    adminToastError(err, "Gagal memproses surat.");
                   } finally {
                     setSaving(false);
                   }

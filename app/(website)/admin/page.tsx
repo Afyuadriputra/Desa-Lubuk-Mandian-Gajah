@@ -3,12 +3,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
+  ArrowRight,
   AlertTriangle,
   CheckCircle2,
   FileText,
+  Globe,
   MessageSquare,
   ShieldAlert,
   Sparkles,
+  Store,
   Users,
 } from "lucide-react";
 import { authApi } from "@/lib/api/auth";
@@ -171,7 +174,7 @@ export default function AdminOverviewPage() {
 
   const overview = overviewState.data;
   const summary = overview?.summary;
-  const alerts = overview?.alerts ?? [];
+  const alerts = useMemo(() => overview?.alerts ?? [], [overview?.alerts]);
   const charts = overview?.charts;
 
   const contentFlags = useMemo(
@@ -309,6 +312,7 @@ export default function AdminOverviewPage() {
             className="rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white hover:text-slate-950"
           >
             <Link href={viewerRole === "BUMDES" ? "/admin/potensi-ekonomi" : "/admin/homepage"}>
+              {viewerRole === "BUMDES" ? <Store data-icon="inline-start" /> : <Globe data-icon="inline-start" />}
               {viewerRole === "BUMDES" ? "Kelola potensi" : "Kelola homepage"}
             </Link>
           </Button>
@@ -412,9 +416,7 @@ export default function AdminOverviewPage() {
                       className="rounded-full"
                     >
                       <Link href={action.path.startsWith("/") ? action.path : `/admin${action.path}`}>
-                        {action.badge_count > 0 ? (
-                          <Sparkles data-icon="inline-start" />
-                        ) : null}
+                        {action.badge_count > 0 ? <Sparkles data-icon="inline-start" /> : <ArrowRight data-icon="inline-start" />}
                         {action.label}
                       </Link>
                     </Button>
@@ -633,7 +635,10 @@ export default function AdminOverviewPage() {
                     </div>
                   </div>
                   <Button asChild variant="outline" className="rounded-full">
-                    <Link href={action.href}>{action.label}</Link>
+                    <Link href={action.href}>
+                      <ArrowRight data-icon="inline-start" />
+                      {action.label}
+                    </Link>
                   </Button>
                 </div>
               );

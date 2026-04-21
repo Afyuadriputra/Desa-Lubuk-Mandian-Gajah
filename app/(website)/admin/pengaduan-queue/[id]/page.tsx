@@ -6,12 +6,15 @@ import { useParams } from "next/navigation";
 import { pengaduanApi } from "@/lib/api/pengaduan";
 import type { PengaduanDetailDto } from "@/lib/api/types";
 import {
+  AdminDetailSkeleton,
   AdminNotice,
   AdminPageHeader,
   AdminSectionCard,
   StatusBadge,
   AdminTextarea,
+  ErrorState,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { adminToastError, adminToastSuccess, getErrorMessage } from "@/app/(website)/admin/_components/admin-feedback";
 import { Button } from "@/components/ui/button";
 import { localizePengaduanStatus, toneForPengaduanStatus } from "@/app/(website)/admin/_components/admin-labels";
 
@@ -30,27 +33,28 @@ export default function AdminPengaduanDetailPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const loadDetail = async () => {
+  const loadDetail = React.useCallback(async () => {
     const result = await pengaduanApi.detail(pengaduanId);
     setPengaduan(result.data);
-  };
+  }, [pengaduanId]);
 
   useEffect(() => {
     loadDetail()
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [pengaduanId]);
+  }, [loadDetail]);
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat detail pengaduan...</div>;
+    return <AdminDetailSkeleton />;
   }
 
   if (error || !pengaduan) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4">
-        <AdminNotice tone="error">{error ?? "Pengaduan tidak ditemukan."}</AdminNotice>
-        <Link href="/admin/pengaduan-queue" className="text-sm text-slate-500 hover:text-slate-950">Kembali ke antrean pengaduan</Link>
-      </div>
+      <ErrorState
+        title="Gagal memuat detail pengaduan"
+        description={error ?? "Pengaduan tidak ditemukan."}
+        action={<Link href="/admin/pengaduan-queue" className="text-sm text-slate-600 hover:text-slate-950">Kembali ke antrean pengaduan</Link>}
+      />
     );
   }
 
@@ -109,18 +113,20 @@ export default function AdminPengaduanDetailPage() {
               <div>
                 <Button
                   onClick={async () => {
-                    setSaving(true);
-                    setMessage(null);
-                    setError(null);
-                    try {
-                      await pengaduanApi.proses(pengaduanId, form);
-                      await loadDetail();
-                      setMessage("Pengaduan berhasil diproses.");
-                    } catch (err: any) {
-                      setError(err.message ?? "Gagal memproses pengaduan.");
-                    } finally {
-                      setSaving(false);
-                    }
+                  setSaving(true);
+                  setMessage(null);
+                  setError(null);
+                  try {
+                    await pengaduanApi.proses(pengaduanId, form);
+                    await loadDetail();
+                    setMessage("Pengaduan berhasil diproses.");
+                    adminToastSuccess("Pengaduan berhasil diproses.");
+                  } catch (err: unknown) {
+                    setError(getErrorMessage(err, "Gagal memproses pengaduan."));
+                    adminToastError(err, "Gagal memproses pengaduan.");
+                  } finally {
+                    setSaving(false);
+                  }
                   }}
                   disabled={saving}
                   className="rounded-full"

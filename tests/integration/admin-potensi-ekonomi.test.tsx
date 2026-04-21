@@ -36,6 +36,20 @@ describe("AdminPotensiEkonomiPage", () => {
       ],
     });
     ekonomiApiMock.create.mockResolvedValue({ data: { id: 99 } });
+    ekonomiApiMock.detailPublik.mockResolvedValue({
+      data: {
+        id: 1,
+        nama_usaha: "Kopi Desa",
+        kategori: "UMKM",
+        deskripsi: "Kopi lokal",
+        fasilitas: "Gazebo",
+        kontak_wa: "08123",
+        harga_tiket: null,
+        is_published: false,
+        foto_url: null,
+      },
+    });
+    ekonomiApiMock.remove.mockResolvedValue({ detail: "ok" });
   });
 
   afterEach(() => {
@@ -69,5 +83,23 @@ describe("AdminPotensiEkonomiPage", () => {
     expect(payload.get("harga_tiket")).toBe("15000");
     expect(payload.get("is_published")).toBe("true");
     expect(await screen.findByText("Unit usaha berhasil dibuat.")).toBeInTheDocument();
+  });
+
+  it("menampilkan AlertDialog sebelum hapus unit usaha", async () => {
+    renderWithProviders(<AdminPotensiEkonomiPage />);
+
+    await userEvent.click(await screen.findByRole("button", { name: /Kopi Desa/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Hapus Unit" }));
+
+    expect(await screen.findByText("Hapus unit usaha ini?")).toBeInTheDocument();
+    expect(ekonomiApiMock.remove).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole("button", { name: "Hapus unit" }));
+
+    await waitFor(() => {
+      expect(ekonomiApiMock.remove).toHaveBeenCalledWith(1);
+    });
+
+    expect(await screen.findByText("Unit usaha berhasil dihapus.")).toBeInTheDocument();
   });
 });

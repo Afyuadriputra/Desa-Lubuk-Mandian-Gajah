@@ -38,7 +38,7 @@ function ChartContainer({
 
   return (
     <ChartContext.Provider value={config}>
-      <div className={cn("w-full", className)} style={style as React.CSSProperties}>
+      <div className={cn("w-full min-w-0", className)} style={style as React.CSSProperties}>
         {children}
       </div>
     </ChartContext.Provider>

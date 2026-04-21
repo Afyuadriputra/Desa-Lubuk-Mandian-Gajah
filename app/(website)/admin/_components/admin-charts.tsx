@@ -8,7 +8,6 @@ import {
   Cell,
   Line,
   LineChart,
-  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -24,6 +23,53 @@ import {
 
 const chartColors = ["#94a3b8", "#64748b", "#3b82f6", "#d97706", "#16a34a"];
 
+function MeasuredChartFrame({
+  children,
+}: {
+  children: (size: { width: number; height: number }) => React.ReactNode;
+}) {
+  const hostRef = React.useRef<HTMLDivElement | null>(null);
+  const [size, setSize] = React.useState({ width: 0, height: 0 });
+
+  React.useEffect(() => {
+    const node = hostRef.current;
+    if (!node) return;
+
+    const updateSize = () => {
+      const nextWidth = Math.floor(node.clientWidth);
+      const nextHeight = Math.floor(node.clientHeight);
+
+      setSize((prev) =>
+        prev.width === nextWidth && prev.height === nextHeight
+          ? prev
+          : { width: nextWidth, height: nextHeight },
+      );
+    };
+
+    updateSize();
+
+    const observer = new ResizeObserver(() => {
+      updateSize();
+    });
+
+    observer.observe(node);
+    window.addEventListener("resize", updateSize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateSize);
+    };
+  }, []);
+
+  const isReady = size.width > 0 && size.height > 0;
+
+  return (
+    <div ref={hostRef} className="h-full w-full min-w-0">
+      {isReady ? children(size) : <div className="h-full w-full" aria-hidden="true" />}
+    </div>
+  );
+}
+
 export function StatusBarChart({
   data,
 }: {
@@ -31,13 +77,14 @@ export function StatusBarChart({
 }) {
   return (
     <ChartContainer
-      className="h-64 w-full"
+      className="h-64 min-h-[16rem] w-full min-w-0"
       config={{
         total: { label: "Total", color: "#64748b" },
       }}
     >
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} barCategoryGap={12}>
+      <MeasuredChartFrame>
+        {({ width, height }) => (
+        <BarChart width={width} height={height} data={data} barCategoryGap={12}>
           <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="label" stroke="#94a3b8" tickLine={false} axisLine={false} fontSize={12} />
           <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} fontSize={12} allowDecimals={false} />
@@ -51,7 +98,8 @@ export function StatusBarChart({
             ))}
           </Bar>
         </BarChart>
-      </ResponsiveContainer>
+        )}
+      </MeasuredChartFrame>
     </ChartContainer>
   );
 }
@@ -73,13 +121,14 @@ export function TrendLineChart({
 
   return (
     <ChartContainer
-      className="h-64 w-full"
+      className="h-64 min-h-[16rem] w-full min-w-0"
       config={{
         total: { label: "Total", color },
       }}
     >
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={normalized}>
+      <MeasuredChartFrame>
+        {({ width, height }) => (
+        <LineChart width={width} height={height} data={normalized}>
           <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="shortDate" stroke="#94a3b8" tickLine={false} axisLine={false} fontSize={12} />
           <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} fontSize={12} allowDecimals={false} />
@@ -96,7 +145,8 @@ export function TrendLineChart({
             activeDot={{ r: 5, strokeWidth: 0, fill: color }}
           />
         </LineChart>
-      </ResponsiveContainer>
+        )}
+      </MeasuredChartFrame>
     </ChartContainer>
   );
 }

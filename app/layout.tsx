@@ -19,7 +19,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="id" className={cn("light", "font-sans")} suppressHydrationWarning>
+    <html
+      lang="id"
+      className={cn("light", "font-sans")}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head suppressHydrationWarning>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

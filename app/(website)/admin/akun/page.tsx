@@ -8,11 +8,21 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Plus, ShieldCheck, UserPlus, Users } from "lucide-react";
-import { toast } from "sonner";
+import { Eye, Plus, Power, Save, Search, ShieldCheck, UserPlus, Users } from "lucide-react";
 import { authApi } from "@/lib/api/auth";
 import type { UserDto, UserRole } from "@/lib/api/types";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
@@ -26,14 +36,18 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import {
   AdminFilterToolbar,
+  AdminFormSkeleton,
+  AdminListSkeleton,
   AdminPageHeader,
   AdminSectionCard,
+  AdminStatsSkeleton,
+  AdminNotice,
   ErrorState,
-  LoadingState,
   MetricCard,
   StatusBadge,
   getStatusTone,
 } from "../_components/admin-primitives";
+import { adminToastError, adminToastSuccess, getErrorMessage } from "../_components/admin-feedback";
 import { localizeUserRole, toneForRole } from "../_components/admin-labels";
 
 type WargaForm = {
@@ -82,8 +96,9 @@ export default function AdminKelolaAkunPage() {
   const [adminForm, setAdminForm] = useState<AdminForm>(emptyAdminForm);
   const [submitting, setSubmitting] = useState<"warga" | "admin" | null>(null);
   const [actionId, setActionId] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
-  const loadUsers = async () => {
+  const loadUsers = React.useCallback(async () => {
     setListLoading(true);
     try {
       const result = await authApi.listUsers({
@@ -93,18 +108,17 @@ export default function AdminKelolaAkunPage() {
       });
       setUsers(result);
       setError(null);
-    } catch (err: any) {
-      setError(err.message ?? "Gagal memuat akun.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal memuat akun."));
     } finally {
       setListLoading(false);
       setLoading(false);
     }
-  };
+  }, [roleFilter, search, statusFilter]);
 
   useEffect(() => {
     void loadUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roleFilter, statusFilter]);
+  }, [loadUsers]);
 
   const filteredSummary = useMemo(() => {
     const active = users.filter((user) => user.is_active).length;
@@ -121,17 +135,20 @@ export default function AdminKelolaAkunPage() {
   const handleCreateWarga = async (event: React.FormEvent) => {
     event.preventDefault();
     setSubmitting("warga");
+    setMessage(null);
     try {
       await authApi.createWarga({
         ...wargaForm,
         nomor_hp: wargaForm.nomor_hp || null,
       });
-      toast.success("Akun warga berhasil dibuat.");
+      setMessage("Akun warga berhasil dibuat.");
+      adminToastSuccess("Akun warga berhasil dibuat.");
       setWargaForm(emptyWargaForm);
       setCreateDialogOpen(false);
       await loadUsers();
-    } catch (err: any) {
-      toast.error(err.message ?? "Gagal membuat akun warga.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal membuat akun warga."));
+      adminToastError(err, "Gagal membuat akun warga.");
     } finally {
       setSubmitting(null);
     }
@@ -140,39 +157,46 @@ export default function AdminKelolaAkunPage() {
   const handleCreateAdmin = async (event: React.FormEvent) => {
     event.preventDefault();
     setSubmitting("admin");
+    setMessage(null);
     try {
       await authApi.createAdmin({
         ...adminForm,
         nomor_hp: adminForm.nomor_hp || null,
       });
-      toast.success("Akun admin/BUMDes berhasil dibuat.");
+      setMessage("Akun admin/BUMDes berhasil dibuat.");
+      adminToastSuccess("Akun admin/BUMDes berhasil dibuat.");
       setAdminForm(emptyAdminForm);
       setCreateDialogOpen(false);
       await loadUsers();
-    } catch (err: any) {
-      toast.error(err.message ?? "Gagal membuat akun admin/BUMDes.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal membuat akun admin/BUMDes."));
+      adminToastError(err, "Gagal membuat akun admin/BUMDes.");
     } finally {
       setSubmitting(null);
     }
   };
 
-  const handleToggleActive = async (user: UserDto) => {
+  const handleToggleActive = React.useCallback(async (user: UserDto) => {
     setActionId(user.id);
+    setMessage(null);
     try {
       if (user.is_active) {
         await authApi.deactivateUser(user.id);
-        toast.success(`Akun ${user.nama_lengkap} dinonaktifkan.`);
+        setMessage(`Akun ${user.nama_lengkap} dinonaktifkan.`);
+        adminToastSuccess(`Akun ${user.nama_lengkap} dinonaktifkan.`);
       } else {
         await authApi.activateUser(user.id);
-        toast.success(`Akun ${user.nama_lengkap} diaktifkan.`);
+        setMessage(`Akun ${user.nama_lengkap} diaktifkan.`);
+        adminToastSuccess(`Akun ${user.nama_lengkap} diaktifkan.`);
       }
       await loadUsers();
-    } catch (err: any) {
-      toast.error(err.message ?? "Gagal mengubah status akun.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal mengubah status akun."));
+      adminToastError(err, "Gagal mengubah status akun.");
     } finally {
       setActionId(null);
     }
-  };
+  }, [loadUsers]);
 
   const columns = useMemo(
     () => [
@@ -217,25 +241,54 @@ export default function AdminKelolaAkunPage() {
               variant="outline"
               className="rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white hover:text-slate-950"
             >
-              <Link href={`/admin/akun/${row.original.id}`}>Edit</Link>
+              <Link href={`/admin/akun/${row.original.id}`}>
+                <Eye data-icon="inline-start" />
+                Edit
+              </Link>
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleToggleActive(row.original)}
-              disabled={actionId === row.original.id}
-              className="rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white hover:text-slate-950"
-            >
-              {actionId === row.original.id
-                ? "Memproses..."
-                : row.original.is_active
-                  ? "Nonaktifkan"
-                  : "Aktifkan"}
-            </Button>
+            {row.original.is_active ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    disabled={actionId === row.original.id}
+                    className="rounded-full border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
+                  >
+                    <Power data-icon="inline-start" />
+                    {actionId === row.original.id ? "Memproses..." : "Nonaktifkan"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Nonaktifkan akun ini?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Akun milik {row.original.nama_lengkap} tidak akan bisa masuk sampai diaktifkan kembali.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogAction tone="danger" onClick={() => handleToggleActive(row.original)}>
+                      Nonaktifkan akun
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={() => handleToggleActive(row.original)}
+                disabled={actionId === row.original.id}
+                className="rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white hover:text-slate-950"
+              >
+                <Power data-icon="inline-start" />
+                {actionId === row.original.id ? "Memproses..." : "Aktifkan"}
+              </Button>
+            )}
           </div>
         ),
       }),
     ],
-    [actionId],
+    [actionId, handleToggleActive],
   );
 
   const table = useReactTable({
@@ -245,7 +298,20 @@ export default function AdminKelolaAkunPage() {
   });
 
   if (loading) {
-    return <LoadingState label="Memuat daftar akun..." />;
+    return (
+      <div className="space-y-6">
+        <AdminPageHeader
+          eyebrow="Kontrol Akses"
+          title="Kelola akun"
+          description="Pantau pengguna aktif, filter akun yang relevan, lalu buat akun baru dari dialog terpisah agar fokus monitoring tetap terjaga."
+        />
+        <AdminStatsSkeleton cards={4} />
+        <AdminFormSkeleton fields={3} />
+        <AdminSectionCard title="Daftar akun">
+          <AdminListSkeleton rows={6} />
+        </AdminSectionCard>
+      </div>
+    );
   }
 
   if (error && !users.length) {
@@ -304,6 +370,7 @@ export default function AdminKelolaAkunPage() {
                       </Field>
                       <div className="col-span-full flex justify-end">
                         <Button type="submit" disabled={submitting === "warga"} className="rounded-full bg-slate-900 text-white hover:bg-slate-800">
+                          <Save data-icon="inline-start" />
                           {submitting === "warga" ? "Menyimpan..." : "Simpan akun warga"}
                         </Button>
                       </div>
@@ -336,6 +403,7 @@ export default function AdminKelolaAkunPage() {
                       </Field>
                       <div className="col-span-full flex justify-end">
                         <Button type="submit" disabled={submitting === "admin"} className="rounded-full bg-slate-900 text-white hover:bg-slate-800">
+                          <Save data-icon="inline-start" />
                           {submitting === "admin" ? "Menyimpan..." : "Simpan akun admin"}
                         </Button>
                       </div>
@@ -347,6 +415,9 @@ export default function AdminKelolaAkunPage() {
           </Dialog>
         }
       />
+
+      {message ? <AdminNotice tone="success">{message}</AdminNotice> : null}
+      {error ? <AdminNotice tone="error">{error}</AdminNotice> : null}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Total akun" value={String(filteredSummary.total)} icon={<Users className="size-5" />} />
@@ -384,6 +455,7 @@ export default function AdminKelolaAkunPage() {
             disabled={listLoading}
             className="rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white hover:text-slate-950"
           >
+            <Search data-icon="inline-start" />
             {listLoading ? "Memuat..." : "Terapkan filter"}
           </Button>
         }

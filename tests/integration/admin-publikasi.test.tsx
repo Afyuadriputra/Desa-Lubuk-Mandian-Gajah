@@ -60,4 +60,22 @@ describe("AdminPublikasiPage", () => {
 
     expect(await screen.findByText("Publikasi berhasil diperbarui.")).toBeInTheDocument();
   });
+
+  it("menampilkan AlertDialog sebelum hapus publikasi", async () => {
+    renderWithProviders(<AdminPublikasiPage />);
+
+    await userEvent.click(await screen.findByRole("button", { name: /Berita Desa/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Hapus" }));
+
+    expect(await screen.findByText("Hapus publikasi ini?")).toBeInTheDocument();
+    expect(publikasiApiMock.remove).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByRole("button", { name: "Hapus publikasi" }));
+
+    await waitFor(() => {
+      expect(publikasiApiMock.remove).toHaveBeenCalledWith("berita-desa");
+    });
+
+    expect(await screen.findByText("Publikasi berhasil dihapus.")).toBeInTheDocument();
+  });
 });

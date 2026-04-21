@@ -7,11 +7,14 @@ import { authApi } from "@/lib/api/auth";
 import type { PermissionDto, PermissionGroupDto, UserDetailDto, UserRole } from "@/lib/api/types";
 import {
   AdminCheckbox,
+  AdminDetailSkeleton,
   AdminField,
   AdminNotice,
   AdminPageHeader,
   AdminSectionCard,
+  ErrorState,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { adminToastError, adminToastSuccess, getErrorMessage } from "@/app/(website)/admin/_components/admin-feedback";
 import { Button } from "@/components/ui/button";
 import { localizeUserRole } from "@/app/(website)/admin/_components/admin-labels";
 
@@ -110,8 +113,10 @@ export default function AdminAkunDetailPage() {
       await authApi.resetUserPassword(userId, resetPasswordForm);
       setResetPasswordForm({ new_password: "", confirm_password: "" });
       setMessage("Password akun berhasil direset. Pengguna bisa login memakai password baru.");
-    } catch (err: any) {
-      setError(err.message ?? "Gagal mereset password akun.");
+      adminToastSuccess("Password akun berhasil direset. Pengguna bisa login memakai password baru.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal mereset password akun."));
+      adminToastError(err, "Gagal mereset password akun.");
     } finally {
       setResetSaving(false);
     }
@@ -130,25 +135,30 @@ export default function AdminAkunDetailPage() {
       setUser(updated);
       setForm(toFormState(updated));
       setMessage("Perubahan akun berhasil disimpan.");
-    } catch (err: any) {
-      setError(err.message ?? "Gagal menyimpan akun.");
+      adminToastSuccess("Perubahan akun berhasil disimpan.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Gagal menyimpan akun."));
+      adminToastError(err, "Gagal menyimpan akun.");
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat detail akun...</div>;
+    return <AdminDetailSkeleton />;
   }
 
   if (error || !user || !form) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4">
-        <AdminNotice tone="error">{error ?? "Data akun tidak ditemukan."}</AdminNotice>
-        <Link href="/admin/akun" className="text-sm text-slate-500 hover:text-slate-950">
-          Kembali ke daftar akun
-        </Link>
-      </div>
+      <ErrorState
+        title="Gagal memuat detail akun"
+        description={error ?? "Data akun tidak ditemukan."}
+        action={
+          <Link href="/admin/akun" className="text-sm text-slate-600 hover:text-slate-950">
+            Kembali ke daftar akun
+          </Link>
+        }
+      />
     );
   }
 

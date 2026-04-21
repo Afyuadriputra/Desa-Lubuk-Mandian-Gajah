@@ -7,10 +7,13 @@ import { dashboardApi } from "@/lib/api/dashboard";
 import type { DashboardQueueItemDto } from "@/lib/api/types";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  AdminActiveFilters,
+  AdminFilterSkeleton,
   AdminFilterToolbar,
+  AdminListSkeleton,
   AdminPageHeader,
+  AdminStatsSkeleton,
   ErrorState,
-  LoadingState,
   MetricCard,
   QueueList,
   formatAdminDate,
@@ -47,7 +50,6 @@ export default function AdminSuratQueuePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
     dashboardApi
       .suratQueue({
         scope,
@@ -104,8 +106,40 @@ export default function AdminSuratQueuePage() {
     detailHref: `/admin/surat-queue/${item.id}`,
   }));
 
+  const activeFilters = [
+    statusFilter ? { key: "status", label: `Status: ${localizeSuratStatus(statusFilter)}` } : null,
+    agingFilter
+      ? {
+          key: "aging",
+          label: agingFilter === "overdue" ? "Aging: Lewat SLA" : "Aging: Perlu Dipantau",
+        }
+      : null,
+    scope !== "all"
+      ? { key: "scope", label: scope === "today" ? "Scope: Hari ini" : "Scope: Minggu ini" }
+      : null,
+    search.trim() ? { key: "search", label: `Cari: ${search.trim()}` } : null,
+  ].filter(Boolean) as Array<{ key: string; label: string }>;
+
+  const clearFilters = () => {
+    setScope("all");
+    setStatusFilter("");
+    setAgingFilter("");
+    setSearch("");
+  };
+
   if (loading) {
-    return <LoadingState label="Memuat antrean surat..." />;
+    return (
+      <div className="space-y-6">
+        <AdminPageHeader
+          eyebrow="Antrean Operasional"
+          title="Antrean surat"
+          description="Prioritaskan dokumen yang mendekati atau melewati SLA, lalu buka detail untuk memproses status berikutnya."
+        />
+        <AdminStatsSkeleton />
+        <AdminFilterSkeleton />
+        <AdminListSkeleton />
+      </div>
+    );
   }
 
   if (error) {
@@ -172,10 +206,12 @@ export default function AdminSuratQueuePage() {
         </div>
       </AdminFilterToolbar>
 
+      <AdminActiveFilters items={activeFilters} onClear={clearFilters} />
+
       <QueueList
         items={rows}
         emptyTitle="Tidak ada antrean surat"
-        emptyDescription="Coba ubah filter atau tunggu pengajuan baru masuk dari warga."
+        emptyDescription="Coba reset filter atau tunggu pengajuan baru masuk dari warga."
       />
     </div>
   );

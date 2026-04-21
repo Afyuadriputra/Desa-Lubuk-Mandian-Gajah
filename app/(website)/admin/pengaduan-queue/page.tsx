@@ -7,10 +7,13 @@ import { dashboardApi } from "@/lib/api/dashboard";
 import type { DashboardQueueItemDto } from "@/lib/api/types";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  AdminActiveFilters,
+  AdminFilterSkeleton,
   AdminFilterToolbar,
+  AdminListSkeleton,
   AdminPageHeader,
+  AdminStatsSkeleton,
   ErrorState,
-  LoadingState,
   MetricCard,
   QueueList,
   formatAdminDate,
@@ -47,7 +50,6 @@ export default function AdminPengaduanQueuePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
     dashboardApi
       .pengaduanQueue({
         scope,
@@ -104,8 +106,40 @@ export default function AdminPengaduanQueuePage() {
     detailHref: `/admin/pengaduan-queue/${item.id}`,
   }));
 
+  const activeFilters = [
+    statusFilter ? { key: "status", label: `Status: ${localizePengaduanStatus(statusFilter)}` } : null,
+    agingFilter
+      ? {
+          key: "aging",
+          label: agingFilter === "overdue" ? "Aging: Lewat SLA" : "Aging: Perlu Dipantau",
+        }
+      : null,
+    scope !== "all"
+      ? { key: "scope", label: scope === "today" ? "Scope: Hari ini" : "Scope: Minggu ini" }
+      : null,
+    search.trim() ? { key: "search", label: `Cari: ${search.trim()}` } : null,
+  ].filter(Boolean) as Array<{ key: string; label: string }>;
+
+  const clearFilters = () => {
+    setScope("all");
+    setStatusFilter("");
+    setAgingFilter("");
+    setSearch("");
+  };
+
   if (loading) {
-    return <LoadingState label="Memuat antrean pengaduan..." />;
+    return (
+      <div className="space-y-6">
+        <AdminPageHeader
+          eyebrow="Laporan Warga"
+          title="Antrean pengaduan"
+          description="Tindak lanjuti laporan warga yang paling mendesak lebih dulu, terutama tiket yang sudah mendekati atau melewati batas respon."
+        />
+        <AdminStatsSkeleton />
+        <AdminFilterSkeleton />
+        <AdminListSkeleton />
+      </div>
+    );
   }
 
   if (error) {
@@ -172,10 +206,12 @@ export default function AdminPengaduanQueuePage() {
         </div>
       </AdminFilterToolbar>
 
+      <AdminActiveFilters items={activeFilters} onClear={clearFilters} />
+
       <QueueList
         items={rows}
         emptyTitle="Tidak ada antrean pengaduan"
-        emptyDescription="Coba ubah filter atau tunggu laporan warga baru masuk."
+        emptyDescription="Coba reset filter atau tunggu laporan warga baru masuk."
       />
     </div>
   );
