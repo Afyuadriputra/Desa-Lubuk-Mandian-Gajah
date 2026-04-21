@@ -8,8 +8,15 @@ import {
   AdminNotice,
   AdminPageHeader,
   AdminSectionCard,
+  StatusBadge,
   AdminTextarea,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { Button } from "@/components/ui/button";
+import {
+  localizePublikasiJenis,
+  localizePublikasiStatus,
+  toneForPublikasiStatus,
+} from "@/app/(website)/admin/_components/admin-labels";
 
 const emptyForm: PublikasiPayload = {
   judul: "",
@@ -71,7 +78,7 @@ export default function AdminPublikasiPage() {
   };
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-zinc-500">Memuat publikasi...</div>;
+    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat publikasi...</div>;
   }
 
   return (
@@ -80,9 +87,9 @@ export default function AdminPublikasiPage() {
         title="Publikasi Informasi"
         description="Changelist dan editor publikasi seperti alur Django admin."
         actions={
-          <button onClick={resetForm} className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm font-semibold text-zinc-200">
+          <Button onClick={resetForm} variant="outline" className="rounded-full">
             Tambah Baru
-          </button>
+          </Button>
         }
       />
 
@@ -97,15 +104,17 @@ export default function AdminPublikasiPage() {
                 <button
                   key={item.slug}
                   onClick={() => handleSelect(item)}
-                  className={`w-full rounded-lg border px-4 py-3 text-left ${
+                  className={`w-full rounded-[24px] border px-4 py-3 text-left transition ${
                     selectedSlug === item.slug
-                      ? "border-white/30 bg-zinc-800 text-white"
-                      : "border-zinc-800 bg-zinc-950 text-zinc-200"
+                      ? "border-slate-300 bg-white text-slate-950 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.3)]"
+                      : "border-slate-200/80 bg-white/80 text-slate-900 hover:bg-white"
                   }`}
                 >
                   <div className="text-sm font-semibold">{item.judul}</div>
-                  <div className="mt-1 text-xs text-zinc-500">
-                    {item.jenis} • {item.status} • {item.penulis_nama}
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                    <StatusBadge label={localizePublikasiJenis(item.jenis)} tone="info" />
+                    <StatusBadge label={localizePublikasiStatus(item.status)} tone={toneForPublikasiStatus(item.status)} />
+                    <span>{item.penulis_nama}</span>
                   </div>
                 </button>
               ))}
@@ -119,25 +128,25 @@ export default function AdminPublikasiPage() {
               <AdminField label="Judul" value={form.judul} onChange={(value) => setForm((prev) => ({ ...prev, judul: value }))} />
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <label className="block space-y-1.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Jenis</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Jenis</span>
                   <select
                     value={form.jenis}
                     onChange={(event) => setForm((prev) => ({ ...prev, jenis: event.target.value }))}
-                    className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200"
+                    className="w-full rounded-[22px] border border-slate-200/80 bg-white/85 px-3.5 py-2.5 text-sm text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.2)] outline-none transition-all focus:border-slate-300 focus:ring-4 focus:ring-slate-200/70"
                   >
-                    <option value="BERITA">BERITA</option>
-                    <option value="PENGUMUMAN">PENGUMUMAN</option>
+                    <option value="BERITA">Berita</option>
+                    <option value="PENGUMUMAN">Pengumuman</option>
                   </select>
                 </label>
                 <label className="block space-y-1.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Status</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Status</span>
                   <select
                     value={form.status}
                     onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as "DRAFT" | "PUBLISHED" }))}
-                    className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200"
+                    className="w-full rounded-[22px] border border-slate-200/80 bg-white/85 px-3.5 py-2.5 text-sm text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.2)] outline-none transition-all focus:border-slate-300 focus:ring-4 focus:ring-slate-200/70"
                   >
-                    <option value="DRAFT">DRAFT</option>
-                    <option value="PUBLISHED">PUBLISHED</option>
+                    <option value="DRAFT">Draft</option>
+                    <option value="PUBLISHED">Terbit</option>
                   </select>
                 </label>
               </div>
@@ -148,7 +157,7 @@ export default function AdminPublikasiPage() {
                 rows={14}
               />
               <div className="flex flex-wrap gap-2">
-                <button
+                <Button
                   onClick={() =>
                     runAction(
                       () => (selectedSlug ? publikasiApi.update(selectedSlug, form) : publikasiApi.create(form)),
@@ -156,20 +165,21 @@ export default function AdminPublikasiPage() {
                     )
                   }
                   disabled={saving}
-                  className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
+                  className="rounded-full"
                 >
                   {saving ? "Menyimpan..." : selectedSlug ? "Simpan Perubahan" : "Buat Publikasi"}
-                </button>
+                </Button>
                 {selectedSlug ? (
                   <>
-                    <button
+                    <Button
                       onClick={() => runAction(() => publikasiApi.updateStatus(selectedSlug, { status: form.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED" }), "Status publikasi berhasil diperbarui.")}
                       disabled={saving}
-                      className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm font-semibold text-zinc-200"
+                      variant="outline"
+                      className="rounded-full"
                     >
-                      Toggle Publish
-                    </button>
-                    <button
+                      {form.status === "PUBLISHED" ? "Ubah ke Draft" : "Terbitkan"}
+                    </Button>
+                    <Button
                       onClick={() =>
                         runAction(async () => {
                           await publikasiApi.remove(selectedSlug);
@@ -177,10 +187,11 @@ export default function AdminPublikasiPage() {
                         }, "Publikasi berhasil dihapus.")
                       }
                       disabled={saving}
-                      className="rounded-lg border border-red-900/40 bg-red-950/30 px-4 py-2 text-sm font-semibold text-red-300"
+                      variant="outline"
+                      className="rounded-full border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
                     >
                       Hapus
-                    </button>
+                    </Button>
                   </>
                 ) : null}
               </div>

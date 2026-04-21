@@ -11,6 +11,8 @@ import {
   AdminSectionCard,
   AdminTextarea,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { Button } from "@/components/ui/button";
+import { localizeUserRole } from "@/app/(website)/admin/_components/admin-labels";
 
 const emptyDusun = { nama_dusun: "", kepala_dusun: "" };
 const emptyPerangkat = { user_id: "", jabatan: "", is_published: false };
@@ -30,7 +32,7 @@ export default function AdminProfilWilayahPage() {
   const [error, setError] = useState<string | null>(null);
 
   const userNameMap = useMemo(
-    () => new Map(users.map((user) => [user.id, `${user.nama_lengkap} (${user.role})`])),
+    () => new Map(users.map((user) => [user.id, `${user.nama_lengkap} (${localizeUserRole(user.role)})`])),
     [users]
   );
 
@@ -69,7 +71,7 @@ export default function AdminProfilWilayahPage() {
   };
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-zinc-500">Memuat profil wilayah...</div>;
+    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat profil wilayah...</div>;
   }
 
   return (
@@ -87,7 +89,7 @@ export default function AdminProfilWilayahPage() {
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <AdminField label="Nama Dusun" value={newDusun.nama_dusun} onChange={(value) => setNewDusun((prev) => ({ ...prev, nama_dusun: value }))} />
             <AdminField label="Kepala Dusun" value={newDusun.kepala_dusun} onChange={(value) => setNewDusun((prev) => ({ ...prev, kepala_dusun: value }))} />
-            <button
+            <Button
               onClick={() =>
                 runAction(async () => {
                   await profilApi.createDusun(newDusun);
@@ -95,17 +97,17 @@ export default function AdminProfilWilayahPage() {
                 }, "Dusun berhasil ditambahkan.")
               }
               disabled={saving}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
+              className="rounded-full"
             >
               Tambah Dusun
-            </button>
+            </Button>
           </div>
 
           <div className="mt-4 space-y-3">
             {dusunList.map((dusun) => {
               const draft = editingDusun[dusun.id] ?? dusun;
               return (
-                <div key={dusun.id} className="rounded-lg border border-zinc-800 bg-zinc-950 p-4">
+                <div key={dusun.id} className="rounded-[24px] border border-slate-200/80 bg-white/80 p-4 shadow-[0_14px_30px_-28px_rgba(15,23,42,0.18)]">
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                     <AdminField
                       label="Nama Dusun"
@@ -122,7 +124,7 @@ export default function AdminProfilWilayahPage() {
                       }
                     />
                     <div className="flex items-end gap-2">
-                      <button
+                      <Button
                         onClick={() =>
                           runAction(
                             () => profilApi.updateDusun(dusun.id, draft),
@@ -130,19 +132,21 @@ export default function AdminProfilWilayahPage() {
                           )
                         }
                         disabled={saving}
-                        className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-200"
+                        variant="outline"
+                        className="rounded-full"
                       >
                         Simpan
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() =>
                           runAction(() => profilApi.deleteDusun(dusun.id), `Dusun ${dusun.nama_dusun} berhasil dihapus.`)
                         }
                         disabled={saving}
-                        className="rounded-lg border border-red-900/40 bg-red-950/30 px-4 py-2 text-sm font-semibold text-red-300"
+                        variant="outline"
+                        className="rounded-full border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
                       >
                         Hapus
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -154,28 +158,28 @@ export default function AdminProfilWilayahPage() {
         <AdminSectionCard title="Kelola Perangkat Desa">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
             <label className="block space-y-1.5 md:col-span-2">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">User</span>
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">User</span>
               <select
                 value={newPerangkat.user_id}
                 onChange={(event) => setNewPerangkat((prev) => ({ ...prev, user_id: event.target.value }))}
-                className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200"
+                className="w-full rounded-[22px] border border-slate-200/80 bg-white/85 px-3.5 py-2.5 text-sm text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.2)] outline-none transition-all focus:border-slate-300 focus:ring-4 focus:ring-slate-200/70"
               >
                 <option value="">Pilih user</option>
                 {users.map((user) => (
-                  <option key={user.id} value={user.id}>{user.nama_lengkap} ({user.role})</option>
+                  <option key={user.id} value={user.id}>{user.nama_lengkap} ({localizeUserRole(user.role)})</option>
                 ))}
               </select>
             </label>
             <AdminField label="Jabatan" value={newPerangkat.jabatan} onChange={(value) => setNewPerangkat((prev) => ({ ...prev, jabatan: value }))} />
-            <label className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200">
+            <label className="flex items-center gap-2 rounded-[22px] border border-slate-200/80 bg-white/85 px-3 py-2.5 text-sm text-slate-700">
               <input
                 type="checkbox"
                 checked={newPerangkat.is_published}
                 onChange={(event) => setNewPerangkat((prev) => ({ ...prev, is_published: event.target.checked }))}
               />
-              Published
+              Tampilkan di publik
             </label>
-            <button
+            <Button
               onClick={() =>
                 runAction(async () => {
                   await profilApi.createPerangkat(newPerangkat);
@@ -183,10 +187,10 @@ export default function AdminProfilWilayahPage() {
                 }, "Perangkat berhasil ditambahkan.")
               }
               disabled={saving}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-50 md:col-span-4"
+              className="rounded-full md:col-span-4"
             >
               Tambah Perangkat
-            </button>
+            </Button>
           </div>
 
           <div className="mt-4 space-y-3">
@@ -197,23 +201,23 @@ export default function AdminProfilWilayahPage() {
                 is_published: perangkat.is_published,
               };
               return (
-                <div key={perangkat.id} className="rounded-lg border border-zinc-800 bg-zinc-950 p-4">
-                  <div className="mb-2 text-xs text-zinc-500">
+                <div key={perangkat.id} className="rounded-[24px] border border-slate-200/80 bg-white/80 p-4 shadow-[0_14px_30px_-28px_rgba(15,23,42,0.18)]">
+                  <div className="mb-2 text-xs text-slate-500">
                     User aktif: {userNameMap.get(perangkat.user_id) ?? perangkat.user_id}
                   </div>
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
                     <label className="block space-y-1.5 md:col-span-2">
-                      <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">User</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">User</span>
                       <select
                         value={draft.user_id}
                         onChange={(event) =>
                           setEditingPerangkat((prev) => ({ ...prev, [perangkat.id]: { ...draft, user_id: event.target.value } }))
                         }
-                        className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200"
+                        className="w-full rounded-[22px] border border-slate-200/80 bg-white/85 px-3.5 py-2.5 text-sm text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.2)] outline-none transition-all focus:border-slate-300 focus:ring-4 focus:ring-slate-200/70"
                       >
                         <option value="">Pilih user</option>
                         {users.map((user) => (
-                          <option key={user.id} value={user.id}>{user.nama_lengkap} ({user.role})</option>
+                          <option key={user.id} value={user.id}>{user.nama_lengkap} ({localizeUserRole(user.role)})</option>
                         ))}
                       </select>
                     </label>
@@ -224,7 +228,7 @@ export default function AdminProfilWilayahPage() {
                         setEditingPerangkat((prev) => ({ ...prev, [perangkat.id]: { ...draft, jabatan: value } }))
                       }
                     />
-                    <label className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200">
+                    <label className="flex items-center gap-2 rounded-[22px] border border-slate-200/80 bg-white/85 px-3 py-2.5 text-sm text-slate-700">
                       <input
                         type="checkbox"
                         checked={draft.is_published}
@@ -232,10 +236,10 @@ export default function AdminProfilWilayahPage() {
                           setEditingPerangkat((prev) => ({ ...prev, [perangkat.id]: { ...draft, is_published: event.target.checked } }))
                         }
                       />
-                      Published
+                      Tampilkan di publik
                     </label>
                     <div className="flex gap-2 md:col-span-4">
-                      <button
+                      <Button
                         onClick={() =>
                           runAction(
                             () => profilApi.updatePerangkat(perangkat.id, draft),
@@ -243,11 +247,12 @@ export default function AdminProfilWilayahPage() {
                           )
                         }
                         disabled={saving}
-                        className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-200"
+                        variant="outline"
+                        className="rounded-full"
                       >
                         Simpan
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() =>
                           runAction(
                             () => profilApi.deletePerangkat(perangkat.id),
@@ -255,10 +260,11 @@ export default function AdminProfilWilayahPage() {
                           )
                         }
                         disabled={saving}
-                        className="rounded-lg border border-red-900/40 bg-red-950/30 px-4 py-2 text-sm font-semibold text-red-300"
+                        variant="outline"
+                        className="rounded-full border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
                       >
                         Hapus
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -274,13 +280,13 @@ export default function AdminProfilWilayahPage() {
           <AdminTextarea label="Misi" value={profil.misi} onChange={(value) => setProfil((prev) => ({ ...prev, misi: value }))} rows={6} />
           <AdminTextarea label="Sejarah" value={profil.sejarah} onChange={(value) => setProfil((prev) => ({ ...prev, sejarah: value }))} rows={8} />
           <div>
-            <button
+            <Button
               onClick={() => runAction(() => profilApi.updateProfilDesa(profil), "Profil desa berhasil diperbarui.")}
               disabled={saving}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
+              className="rounded-full"
             >
               Simpan Profil Desa
-            </button>
+            </Button>
           </div>
         </div>
       </AdminSectionCard>

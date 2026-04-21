@@ -21,6 +21,13 @@ import type {
   HomepageStatItemPayload,
 } from "@/lib/api/types";
 import { BarChart3, Building2, Image, Leaf, Save, Sparkles, XCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  AdminPageHeader,
+  ErrorState,
+  LoadingState,
+  SaveState,
+} from "../_components/admin-primitives";
 
 type ChildFieldType = "text" | "textarea" | "checkbox" | "number";
 
@@ -156,55 +163,36 @@ export default function AdminHomepageCMSPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex h-64 flex-col items-center justify-center gap-3">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-700 border-t-white" />
-        <span className="text-xs text-zinc-500">Memuat konten homepage...</span>
-      </div>
-    );
+    return <LoadingState label="Memuat konten homepage..." />;
   }
 
   if (error || !data) {
-    return (
-      <div className="mx-auto mt-16 flex max-w-lg items-start gap-3 rounded-xl border border-red-900/40 bg-red-950/30 p-6">
-        <XCircle size={20} className="mt-0.5 shrink-0 text-red-400" />
-        <div>
-          <h3 className="text-sm font-semibold text-red-300">Gagal Memuat Data</h3>
-          <p className="mt-1 text-xs text-red-400/80">{error}</p>
-        </div>
-      </div>
-    );
+    return <ErrorState title="Gagal memuat data homepage" description={error ?? undefined} />;
   }
 
   return (
     <div className="mx-auto max-w-7xl space-y-8 pb-12">
-      <div className="sticky top-0 z-20 flex flex-col gap-4 border-b border-zinc-800/50 bg-[#09090b]/90 pt-5 pb-4 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">Kelola Homepage</h1>
-          <p className="mt-1 text-sm text-zinc-500">
-            Scalar content, daftar dinamis, dan statistik manual sekarang dikelola dari satu panel.
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          {saveMsg && (
-            <span
-              className={`rounded-full border px-3 py-1.5 text-xs font-medium ${
-                saveMsg.startsWith("Gagal")
-                  ? "border-red-900/40 bg-red-950/30 text-red-400"
-                  : "border-emerald-900/40 bg-emerald-950/30 text-emerald-400"
-              }`}
+      <div className="admin-glass sticky top-3 z-20 rounded-[28px] px-5 py-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <AdminPageHeader
+            eyebrow="Homepage CMS"
+            title="Kelola Homepage"
+            description="Scalar content, daftar dinamis, dan statistik manual dikelola dari satu panel dengan preview cepat."
+          />
+          <div className="flex items-center gap-3">
+            <SaveState
+              message={saveMsg}
+              tone={saveMsg?.startsWith("Gagal") ? "danger" : "success"}
+            />
+            <Button
+              onClick={handlePublish}
+              disabled={saving}
+              className="rounded-full bg-slate-900 text-white hover:bg-slate-800"
             >
-              {saveMsg}
-            </span>
-          )}
-          <button
-            onClick={handlePublish}
-            disabled={saving}
-            className="flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-zinc-200 disabled:opacity-50"
-          >
-            <Save size={16} />
-            {saving ? "Menyimpan..." : "Publish Konten Utama"}
-          </button>
+              <Save size={16} />
+              {saving ? "Menyimpan..." : "Publish konten"}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -220,8 +208,8 @@ export default function AdminHomepageCMSPage() {
               <Field label="Deskripsi Hero" value={form.heroDescription} onChange={(v) => updateField("heroDescription", v)} multiline />
               <Field label="Hero Image URL" value={form.heroImage} onChange={(v) => updateField("heroImage", v)} />
 
-              <div className="mt-2 border-t border-zinc-800/50 pt-4">
-                <h4 className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Brand Info</h4>
+              <div className="mt-2 border-t border-slate-200/80 pt-4">
+                <h4 className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-slate-500">Identitas Merek</h4>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <Field label="Logo URL" value={form.brand?.logoUrl} onChange={(v) => updateBrand("logoUrl", v)} />
                   <Field label="Logo Alt Text" value={form.brand?.logoAlt} onChange={(v) => updateBrand("logoAlt", v)} />
@@ -266,77 +254,77 @@ export default function AdminHomepageCMSPage() {
           <SectionCard title="Budaya & Potensi">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-4">
-                <h4 className="border-b border-zinc-800/50 pb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                <h4 className="border-b border-slate-200/80 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
                   Nilai Budaya
                 </h4>
-                <Field label="Culture Title" value={form.cultureTitle} onChange={(v) => updateField("cultureTitle", v)} />
-                <Field label="Culture Description" value={form.cultureDescription} onChange={(v) => updateField("cultureDescription", v)} multiline />
+                <Field label="Judul Budaya" value={form.cultureTitle} onChange={(v) => updateField("cultureTitle", v)} />
+                <Field label="Deskripsi Budaya" value={form.cultureDescription} onChange={(v) => updateField("cultureDescription", v)} multiline />
               </div>
               <div className="space-y-4">
-                <h4 className="border-b border-zinc-800/50 pb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                <h4 className="border-b border-slate-200/80 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
                   Potensi Desa
                 </h4>
-                <Field label="Potential Title" value={form.potentialTitle} onChange={(v) => updateField("potentialTitle", v)} />
-                <Field label="Potential Quote" value={form.potentialQuote} onChange={(v) => updateField("potentialQuote", v)} />
+                <Field label="Judul Potensi" value={form.potentialTitle} onChange={(v) => updateField("potentialTitle", v)} />
+                <Field label="Kutipan Potensi" value={form.potentialQuote} onChange={(v) => updateField("potentialQuote", v)} />
                 <Field
-                  label="Opportunities Title"
+                  label="Judul Peluang"
                   value={form.potentialOpportunitiesTitle}
                   onChange={(v) => updateField("potentialOpportunitiesTitle", v)}
                 />
               </div>
             </div>
 
-            <div className="mt-6 space-y-4 border-t border-zinc-800/50 pt-4">
-              <h4 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Pemulihan Ekonomi</h4>
+            <div className="mt-6 space-y-4 border-t border-slate-200/80 pt-4">
+              <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Pemulihan Ekonomi</h4>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Recovery Title" value={form.recoveryTitle} onChange={(v) => updateField("recoveryTitle", v)} />
-                <Field label="Recovery Description" value={form.recoveryDescription} onChange={(v) => updateField("recoveryDescription", v)} multiline />
+                <Field label="Judul Pemulihan" value={form.recoveryTitle} onChange={(v) => updateField("recoveryTitle", v)} />
+                <Field label="Deskripsi Pemulihan" value={form.recoveryDescription} onChange={(v) => updateField("recoveryDescription", v)} multiline />
               </div>
             </div>
           </SectionCard>
 
           <SectionCard title="Footer, Gallery & Kontak">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="space-y-4 md:border-r md:border-zinc-800/50 md:pr-4">
+              <div className="space-y-4 md:border-r md:border-slate-200/80 md:pr-4">
                 <Field
-                  label="Quick Stats Description"
+                  label="Deskripsi Statistik Cepat"
                   value={form.quickStatsDescription}
                   onChange={(v) => updateField("quickStatsDescription", v)}
                   multiline
                 />
-                <Field label="Facilities Title" value={form.facilitiesTitle} onChange={(v) => updateField("facilitiesTitle", v)} />
-                <Field label="Gallery Title" value={form.galleryTitle} onChange={(v) => updateField("galleryTitle", v)} />
+                <Field label="Judul Fasilitas" value={form.facilitiesTitle} onChange={(v) => updateField("facilitiesTitle", v)} />
+                <Field label="Judul Galeri" value={form.galleryTitle} onChange={(v) => updateField("galleryTitle", v)} />
                 <Field
-                  label="Gallery Description"
+                  label="Deskripsi Galeri"
                   value={form.galleryDescription}
                   onChange={(v) => updateField("galleryDescription", v)}
                   multiline
                 />
                 <Field
-                  label="Footer Description"
+                  label="Deskripsi Footer"
                   value={form.footerDescription}
                   onChange={(v) => updateField("footerDescription", v)}
                   multiline
                 />
                 <Field
-                  label="Footer Copyright"
+                  label="Hak Cipta Footer"
                   value={form.footerCopyright}
                   onChange={(v) => updateField("footerCopyright", v)}
                 />
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Contact Info</h4>
-                <Field label="Contact Section Title" value={form.contactTitle} onChange={(v) => updateField("contactTitle", v)} />
+                <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Informasi Kontak</h4>
+                <Field label="Judul Kontak" value={form.contactTitle} onChange={(v) => updateField("contactTitle", v)} />
                 <Field
-                  label="Contact Section Desc"
+                  label="Deskripsi Kontak"
                   value={form.contactDescription}
                   onChange={(v) => updateField("contactDescription", v)}
                   multiline
                 />
                 <Field label="Alamat Fisik" value={form.contact?.address} onChange={(v) => updateContact("address", v)} multiline />
                 <Field label="Nomor WhatsApp" value={form.contact?.whatsapp} onChange={(v) => updateContact("whatsapp", v)} />
-                <Field label="Google Map Image URL" value={form.contact?.mapImage} onChange={(v) => updateContact("mapImage", v)} />
+                <Field label="URL Gambar Peta" value={form.contact?.mapImage} onChange={(v) => updateContact("mapImage", v)} />
               </div>
             </div>
 
@@ -474,7 +462,7 @@ export default function AdminHomepageCMSPage() {
         </div>
 
         <div className="space-y-6 lg:col-span-4">
-          <div className="group relative min-h-[220px] overflow-hidden rounded-xl border border-zinc-800/50 bg-zinc-900/50">
+          <div className="admin-panel group relative min-h-[220px] overflow-hidden rounded-[28px] border-white/70">
             {form.heroImage ? (
               <img
                 alt="Preview"
@@ -482,20 +470,20 @@ export default function AdminHomepageCMSPage() {
                 src={form.heroImage as string}
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center border border-zinc-700/50 bg-zinc-800 text-zinc-600">
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-100 text-slate-400">
                 No Image
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
             <div className="absolute bottom-0 left-0 z-10 w-full p-5">
-              <span className="mb-1 block text-[9px] font-semibold uppercase tracking-wider text-zinc-400">Hero Preview</span>
+              <span className="mb-1 block text-[9px] font-semibold uppercase tracking-wider text-slate-300">Hero Preview</span>
               <h3 className="truncate text-xl font-bold text-white">{form.villageName || "Nama Desa"}</h3>
-              <p className="mt-0.5 truncate text-xs text-zinc-300">{form.tagline || "Tagline"}</p>
+              <p className="mt-0.5 truncate text-xs text-slate-200/80">{form.tagline || "Tagline"}</p>
             </div>
           </div>
 
           <div className="space-y-3">
-            <h2 className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+            <h2 className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
               <BarChart3 size={12} /> Item Aktif
             </h2>
             <div className="grid grid-cols-2 gap-3">
@@ -504,7 +492,7 @@ export default function AdminHomepageCMSPage() {
               <SummaryCard icon={<Image size={14} />} label="Gallery" count={data.gallery.length} />
               <SummaryCard icon={<Building2 size={14} />} label="Fasilitas" count={data.facilities.length} />
             </div>
-            <p className="mt-2 text-center text-[10px] text-zinc-500">Semua list di bawah sudah terkoneksi ke endpoint CRUD backend.</p>
+            <p className="mt-2 text-center text-[10px] text-slate-500">Semua list di bawah sudah terkoneksi ke endpoint CRUD backend.</p>
           </div>
         </div>
       </div>
@@ -514,9 +502,9 @@ export default function AdminHomepageCMSPage() {
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-zinc-800/60 bg-zinc-900/40 p-5 shadow-lg sm:p-6">
-      <div className="absolute top-0 left-0 h-full w-1 bg-white opacity-10" />
-      <h2 className="mb-5 text-sm font-semibold text-zinc-200">{title}</h2>
+    <div className="admin-panel relative overflow-hidden rounded-[28px] border-white/70 p-5 sm:p-6">
+      <div className="absolute left-0 top-6 h-10 w-1 rounded-r-full bg-slate-300" />
+      <h2 className="mb-5 pl-2 text-sm font-semibold text-slate-900">{title}</h2>
       <div className="space-y-4">{children}</div>
     </div>
   );
@@ -534,11 +522,11 @@ function Field({
   multiline?: boolean;
 }) {
   const cls =
-    "w-full rounded-lg border border-zinc-800 bg-black/40 px-3 py-2.5 text-xs font-medium text-zinc-200 transition-colors placeholder:text-zinc-700 focus:border-zinc-500 focus:outline-none sm:text-sm";
+    "w-full rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-xs font-medium text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200/70 sm:text-sm";
 
   return (
     <div className="flex w-full flex-col gap-1.5">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-zinc-500">{label}</label>
+      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{label}</label>
       {multiline ? (
         <textarea className={`${cls} resize-none`} rows={3} value={value || ""} onChange={(e) => onChange(e.target.value)} />
       ) : (
@@ -561,7 +549,7 @@ function TagArrayField({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-zinc-500">{label}</label>
+      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{label}</label>
       <textarea
         rows={5}
         value={values.join("\n")}
@@ -573,9 +561,9 @@ function TagArrayField({
               .filter(Boolean),
           )
         }
-        className="w-full resize-none rounded-lg border border-zinc-800 bg-black/40 px-3 py-2.5 text-xs font-medium text-zinc-200 transition-colors placeholder:text-zinc-700 focus:border-zinc-500 focus:outline-none sm:text-sm"
+        className="w-full resize-none rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-xs font-medium text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200/70 sm:text-sm"
       />
-      {helper && <p className="text-[10px] text-zinc-500">{helper}</p>}
+      {helper && <p className="text-[10px] text-slate-500">{helper}</p>}
     </div>
   );
 }
@@ -589,11 +577,11 @@ function OfficeHoursField({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-zinc-500">Office Hours</label>
+      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Jam Operasional</label>
       {(values || []).map((item, index) => (
-        <div key={`${item.day}-${index}`} className="grid grid-cols-1 gap-3 rounded-lg border border-zinc-800/70 bg-black/30 p-3">
+        <div key={`${item.day}-${index}`} className="admin-subtle-panel grid grid-cols-1 gap-3 rounded-[22px] p-3">
           <Field
-            label={`Day ${index + 1}`}
+            label={`Hari ${index + 1}`}
             value={item.day}
             onChange={(value) =>
               onChange(
@@ -604,7 +592,7 @@ function OfficeHoursField({
             }
           />
           <Field
-            label="Time"
+            label="Jam"
             value={item.time}
             onChange={(value) =>
               onChange(
@@ -614,7 +602,7 @@ function OfficeHoursField({
               )
             }
           />
-          <label className="flex items-center gap-2 text-xs text-zinc-400">
+          <label className="flex items-center gap-2 text-xs text-slate-500">
             <input
               type="checkbox"
               checked={Boolean(item.danger)}
@@ -634,7 +622,7 @@ function OfficeHoursField({
         <button
           type="button"
           onClick={() => onChange([...(values || []), { day: "", time: "", danger: false }])}
-          className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-200"
+          className="rounded-full border-slate-200 bg-white/90 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white"
         >
           Tambah Jam
         </button>
@@ -642,7 +630,7 @@ function OfficeHoursField({
           <button
             type="button"
             onClick={() => onChange(values.slice(0, -1))}
-            className="rounded-lg border border-zinc-800 bg-black/30 px-3 py-2 text-xs font-semibold text-zinc-400"
+            className="rounded-full border-slate-200 bg-white/80 px-3 py-2 text-xs font-semibold text-slate-500 hover:bg-white"
           >
             Hapus Terakhir
           </button>
@@ -662,11 +650,11 @@ function SummaryCard({
   count: number;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-zinc-800/80 bg-[#09090b] px-3 py-3 text-center transition-colors hover:bg-zinc-800/50">
-      <span className="text-zinc-400">{icon}</span>
+    <div className="admin-subtle-panel flex flex-col items-center justify-center gap-1.5 rounded-[22px] px-3 py-3 text-center transition-colors hover:bg-white">
+      <span className="text-slate-500">{icon}</span>
       <div className="flex flex-col items-center">
-        <p className="text-lg leading-none font-bold text-zinc-200">{count}</p>
-        <p className="mt-1 text-[9px] uppercase tracking-widest text-zinc-500">{label}</p>
+        <p className="text-lg leading-none font-bold text-slate-900">{count}</p>
+        <p className="mt-1 text-[9px] uppercase tracking-widest text-slate-400">{label}</p>
       </div>
     </div>
   );
@@ -776,26 +764,26 @@ function ChildSection<T extends EditableChildItem>({
 
   return (
     <SectionCard title={title}>
-      <p className="text-sm text-zinc-500">{description}</p>
+      <p className="text-sm text-slate-500">{description}</p>
       {error && (
-        <div className="rounded-lg border border-red-900/40 bg-red-950/30 px-3 py-2 text-xs text-red-300">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
           {error}
         </div>
       )}
 
       <div className="space-y-3">
         {items.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-zinc-800 bg-black/20 px-4 py-5 text-sm text-zinc-500">
+          <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-5 text-sm text-slate-500">
             {emptyLabel}
           </div>
         ) : (
           items.map((item) => {
             const draft = editingId === item.id ? editingForm : item;
             return (
-              <div key={item.id} className="rounded-xl border border-zinc-800/70 bg-black/20 p-4">
+              <div key={item.id} className="admin-subtle-panel rounded-[24px] p-4">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
                       Item #{item.id}
                     </p>
                   </div>
@@ -806,7 +794,7 @@ function ChildSection<T extends EditableChildItem>({
                           type="button"
                           onClick={handleUpdate}
                           disabled={busy === "update"}
-                          className="rounded-lg bg-white px-3 py-2 text-xs font-semibold text-black disabled:opacity-50"
+                          className="rounded-full bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
                         >
                           {busy === "update" ? "Menyimpan..." : "Simpan"}
                         </button>
@@ -816,7 +804,7 @@ function ChildSection<T extends EditableChildItem>({
                             setEditingId(null);
                             setEditingForm(null);
                           }}
-                          className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-300"
+                          className="rounded-full border-slate-200 bg-white/85 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-white"
                         >
                           Batal
                         </button>
@@ -825,7 +813,7 @@ function ChildSection<T extends EditableChildItem>({
                       <button
                         type="button"
                         onClick={() => startEdit(item)}
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-300"
+                        className="rounded-full border-slate-200 bg-white/85 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-white"
                       >
                         Edit
                       </button>
@@ -834,7 +822,7 @@ function ChildSection<T extends EditableChildItem>({
                       type="button"
                       onClick={() => handleDelete(item.id as number)}
                       disabled={busy === "delete"}
-                      className="rounded-lg border border-red-900/40 bg-red-950/30 px-3 py-2 text-xs font-semibold text-red-300 disabled:opacity-50"
+                      className="rounded-full border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 disabled:opacity-50"
                     >
                       Hapus
                     </button>
@@ -859,8 +847,8 @@ function ChildSection<T extends EditableChildItem>({
         )}
       </div>
 
-      <div className="rounded-xl border border-zinc-800/70 bg-zinc-950/50 p-4">
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-500">Tambah Item Baru</h3>
+      <div className="admin-panel rounded-[24px] border-white/70 p-4">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Tambah Item Baru</h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {fields.map((field) => (
             <ChildField
@@ -877,7 +865,7 @@ function ChildSection<T extends EditableChildItem>({
           type="button"
           onClick={handleCreate}
           disabled={busy === "create"}
-          className="mt-4 rounded-lg bg-white px-4 py-2 text-xs font-semibold text-black disabled:opacity-50"
+          className="mt-4 rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:opacity-50"
         >
           {busy === "create" ? "Menambah..." : "Tambah Item"}
         </button>
@@ -902,11 +890,11 @@ function ChildField({
   disabled?: boolean;
 }) {
   const baseClass =
-    "w-full rounded-lg border border-zinc-800 bg-black/40 px-3 py-2.5 text-xs font-medium text-zinc-200 transition-colors placeholder:text-zinc-700 focus:border-zinc-500 focus:outline-none sm:text-sm disabled:opacity-50";
+    "w-full rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-xs font-medium text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-200/70 sm:text-sm disabled:opacity-50";
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[9px] font-bold uppercase tracking-wider text-zinc-500">{label}</label>
+      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{label}</label>
       {type === "textarea" ? (
         <textarea
           rows={3}
@@ -917,7 +905,7 @@ function ChildField({
           className={`${baseClass} resize-none`}
         />
       ) : type === "checkbox" ? (
-        <label className="flex min-h-[42px] items-center gap-2 rounded-lg border border-zinc-800 bg-black/40 px-3 py-2.5 text-sm text-zinc-300">
+        <label className="flex min-h-[42px] items-center gap-2 rounded-2xl border border-slate-200 bg-white/85 px-3 py-2.5 text-sm text-slate-600">
           <input
             type="checkbox"
             checked={Boolean(value)}

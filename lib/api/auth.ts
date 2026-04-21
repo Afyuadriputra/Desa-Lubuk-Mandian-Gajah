@@ -19,6 +19,11 @@ type ChangePasswordPayload = {
   confirm_password: string;
 };
 
+type ResetUserPasswordPayload = {
+  new_password: string;
+  confirm_password: string;
+};
+
 type CreateWargaPayload = {
   nik: string;
   password: string;
@@ -58,6 +63,12 @@ export const authApi = {
 
   changePassword: (payload: ChangePasswordPayload) =>
     apiRequest<UserDto>("/auth/change-password", { method: "POST", body: payload }),
+
+  resetUserPassword: (userId: string, payload: ResetUserPasswordPayload) =>
+    apiRequest<UserDto>(`/auth/users/${userId}/reset-password`, {
+      method: "POST",
+      body: payload,
+    }),
 
   createWarga: (payload: CreateWargaPayload) =>
     apiRequest<UserDto>("/auth/users/warga/create", {

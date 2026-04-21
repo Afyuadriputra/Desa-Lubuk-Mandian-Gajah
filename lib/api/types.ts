@@ -321,6 +321,73 @@ export type DashboardHealthDto = {
   data: Record<string, unknown>;
 };
 
+export type AdminStatusTone =
+  | "neutral"
+  | "info"
+  | "warning"
+  | "danger"
+  | "success";
+
+export type MetricCardProps = {
+  label: string;
+  value: string;
+  hint?: string;
+  tone?: AdminStatusTone;
+};
+
+export type AdminKpiViewModel = {
+  key: string;
+  label: string;
+  value: string;
+  hint?: string;
+  tone: AdminStatusTone;
+  actionLabel?: string;
+  actionHref?: string;
+};
+
+export type AdminInsightViewModel = {
+  key: string;
+  title: string;
+  description: string;
+  tone: AdminStatusTone;
+  actionLabel?: string;
+  actionHref?: string;
+  metricLabel?: string;
+  metricValue?: string;
+};
+
+export type AdminWidgetState<T> = {
+  loading: boolean;
+  error: string | null;
+  data: T;
+};
+
+export type QueueRowViewModel = {
+  id: string;
+  title: string;
+  meta: string;
+  subjectName: string;
+  status: string;
+  tone: AdminStatusTone;
+  ageLabel: string;
+  ageHint: string;
+  attentionNeeded: boolean;
+  detailHref: string;
+};
+
+export type HealthFlagViewModel = {
+  key: string;
+  label: string;
+  total: number;
+  detail?: string | null;
+  tone: AdminStatusTone;
+};
+
+export type AdminFilterOption = {
+  label: string;
+  value: string;
+};
+
 // --- MODUL: HOMEPAGE KONTEN (`homepage_konten`) ---
 export type HomepageStatDto = {
   value: string;

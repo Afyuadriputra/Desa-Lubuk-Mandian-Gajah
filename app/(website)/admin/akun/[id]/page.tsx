@@ -12,6 +12,8 @@ import {
   AdminPageHeader,
   AdminSectionCard,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { Button } from "@/components/ui/button";
+import { localizeUserRole } from "@/app/(website)/admin/_components/admin-labels";
 
 type UserFormState = {
   nama_lengkap: string;
@@ -49,6 +51,7 @@ function formatDate(value?: string | null) {
 export default function AdminAkunDetailPage() {
   const params = useParams<{ id: string }>();
   const userId = String(params.id);
+  const [currentActorId, setCurrentActorId] = useState<string | null>(null);
   const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
   const [user, setUser] = useState<UserDetailDto | null>(null);
   const [groups, setGroups] = useState<{ id: number; name: string }[]>([]);
@@ -56,10 +59,16 @@ export default function AdminAkunDetailPage() {
   const [form, setForm] = useState<UserFormState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [resetSaving, setResetSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [resetPasswordForm, setResetPasswordForm] = useState({
+    new_password: "",
+    confirm_password: "",
+  });
 
   const canManagePermissions = currentUserRole === "SUPERADMIN";
+  const canResetManagedPassword = currentActorId !== null && currentActorId !== userId && currentUserRole !== "WARGA";
 
   const permissionLookup = useMemo(() => {
     const map = new Map<number, PermissionDto>();
@@ -77,6 +86,7 @@ export default function AdminAkunDetailPage() {
       authApi.listPermissions(),
     ])
       .then(([me, detail, groupList, permissions]) => {
+        setCurrentActorId(me.id);
         setCurrentUserRole(me.role);
         setUser(detail);
         setGroups(groupList);
@@ -90,6 +100,21 @@ export default function AdminAkunDetailPage() {
   const toggleArrayValue = (values: number[], value: number, checked: boolean) => {
     if (checked) return Array.from(new Set([...values, value]));
     return values.filter((item) => item !== value);
+  };
+
+  const handleResetPassword = async () => {
+    setResetSaving(true);
+    setMessage(null);
+    setError(null);
+    try {
+      await authApi.resetUserPassword(userId, resetPasswordForm);
+      setResetPasswordForm({ new_password: "", confirm_password: "" });
+      setMessage("Password akun berhasil direset. Pengguna bisa login memakai password baru.");
+    } catch (err: any) {
+      setError(err.message ?? "Gagal mereset password akun.");
+    } finally {
+      setResetSaving(false);
+    }
   };
 
   const handleSave = async () => {
@@ -113,14 +138,14 @@ export default function AdminAkunDetailPage() {
   };
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-zinc-500">Memuat detail akun...</div>;
+    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat detail akun...</div>;
   }
 
   if (error || !user || !form) {
     return (
       <div className="mx-auto max-w-3xl space-y-4">
         <AdminNotice tone="error">{error ?? "Data akun tidak ditemukan."}</AdminNotice>
-        <Link href="/admin/akun" className="text-sm text-zinc-400 hover:text-white">
+        <Link href="/admin/akun" className="text-sm text-slate-500 hover:text-slate-950">
           Kembali ke daftar akun
         </Link>
       </div>
@@ -134,16 +159,16 @@ export default function AdminAkunDetailPage() {
         description="Padanan object edit Django admin untuk akun pengguna."
         actions={
           <>
-            <Link href="/admin/akun" className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm font-semibold text-zinc-200">
-              Kembali
-            </Link>
-            <button
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href="/admin/akun">Kembali</Link>
+            </Button>
+            <Button
               onClick={handleSave}
               disabled={saving}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
+              className="rounded-full"
             >
               {saving ? "Menyimpan..." : "Simpan Perubahan"}
-            </button>
+            </Button>
           </>
         }
       />
@@ -167,18 +192,18 @@ export default function AdminAkunDetailPage() {
                 onChange={(value) => setForm((prev) => (prev ? { ...prev, nomor_hp: value } : prev))}
               />
               <label className="block space-y-1.5">
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Role</span>
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Role</span>
                 <select
                   value={form.role}
                   onChange={(event) => setForm((prev) => (prev ? { ...prev, role: event.target.value as UserRole } : prev))}
                   disabled={!canManagePermissions}
-                  className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200 outline-none disabled:opacity-60"
+                  className="w-full rounded-[22px] border border-slate-200/80 bg-white/85 px-3.5 py-2.5 text-sm text-slate-900 shadow-[0_10px_24px_-20px_rgba(15,23,42,0.2)] outline-none transition-all focus:border-slate-300 focus:ring-4 focus:ring-slate-200/70 disabled:opacity-60"
                 >
-                  <option value="WARGA">WARGA</option>
-                  <option value="ADMIN">ADMIN</option>
-                  <option value="BUMDES">BUMDES</option>
-                  <option value="SUPERADMIN">SUPERADMIN</option>
-                </select>
+                    <option value="WARGA">{localizeUserRole("WARGA")}</option>
+                    <option value="ADMIN">{localizeUserRole("ADMIN")}</option>
+                    <option value="BUMDES">{localizeUserRole("BUMDES")}</option>
+                    <option value="SUPERADMIN">{localizeUserRole("SUPERADMIN")}</option>
+                  </select>
               </label>
             </div>
           </AdminSectionCard>
@@ -191,13 +216,13 @@ export default function AdminAkunDetailPage() {
                 onChange={(checked) => setForm((prev) => (prev ? { ...prev, is_active: checked } : prev))}
               />
               <AdminCheckbox
-                label="Is Staff"
+                label="Staf Admin"
                 checked={form.is_staff}
                 disabled={!canManagePermissions}
                 onChange={(checked) => setForm((prev) => (prev ? { ...prev, is_staff: checked } : prev))}
               />
               <AdminCheckbox
-                label="Is Superuser"
+                label="Hak Superadmin"
                 checked={form.is_superuser}
                 disabled={!canManagePermissions}
                 onChange={(checked) => setForm((prev) => (prev ? { ...prev, is_superuser: checked } : prev))}
@@ -206,17 +231,17 @@ export default function AdminAkunDetailPage() {
           </AdminSectionCard>
 
           <AdminSectionCard
-            title="Permissions"
-            description="Groups dan user permissions tampil seperti pola Django admin."
+            title="Hak Akses"
+            description="Kelola group dan izin pengguna mengikuti pola Django admin."
           >
             {!canManagePermissions ? (
-              <AdminNotice tone="info">Hanya SUPERADMIN dapat mengubah groups dan user permissions.</AdminNotice>
+              <AdminNotice tone="info">Hanya superadmin yang dapat mengubah group dan izin pengguna.</AdminNotice>
             ) : null}
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <div className="space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Groups</h3>
-                <div className="max-h-72 space-y-2 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950 p-3">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500">Group</h3>
+                <div className="max-h-72 space-y-2 overflow-y-auto rounded-[22px] border border-slate-200/80 bg-white/80 p-3">
                   {groups.map((group) => (
                     <AdminCheckbox
                       key={group.id}
@@ -236,11 +261,11 @@ export default function AdminAkunDetailPage() {
               </div>
 
               <div className="space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">User Permissions</h3>
-                <div className="max-h-[32rem] space-y-4 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950 p-3">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500">Izin Pengguna</h3>
+                <div className="max-h-[32rem] space-y-4 overflow-y-auto rounded-[22px] border border-slate-200/80 bg-white/80 p-3">
                   {permissionGroups.map((permissionGroup) => (
                     <div key={`${permissionGroup.app_label}-${permissionGroup.model}`} className="space-y-2">
-                      <div className="text-xs font-semibold text-zinc-200">
+                      <div className="text-xs font-semibold text-slate-900">
                         {permissionGroup.app_label} / {permissionGroup.model}
                       </div>
                       <div className="space-y-2">
@@ -272,34 +297,75 @@ export default function AdminAkunDetailPage() {
         </div>
 
         <div className="space-y-6">
-          <AdminSectionCard title="Readonly Meta">
-            <div className="space-y-3 text-sm text-zinc-300">
+          <AdminSectionCard title="Metadata">
+            <div className="space-y-3 text-sm text-slate-700">
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-zinc-500">Created At</div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500">Dibuat</div>
                 <div>{formatDate(user.created_at)}</div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-zinc-500">Updated At</div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500">Diperbarui</div>
                 <div>{formatDate(user.updated_at)}</div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-zinc-500">Last Login</div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500">Login Terakhir</div>
                 <div>{formatDate(user.last_login)}</div>
               </div>
             </div>
           </AdminSectionCard>
 
-          <AdminSectionCard title="Summary Permission">
-            <div className="space-y-3 text-sm text-zinc-300">
+          <AdminSectionCard
+            title="Reset Password"
+            description="Dipakai saat warga atau pegawai lupa password dan perlu dibantu admin."
+          >
+            {canResetManagedPassword ? (
+              <div className="space-y-4">
+                <AdminField
+                  label="Password baru"
+                  type="password"
+                  value={resetPasswordForm.new_password}
+                  onChange={(value) =>
+                    setResetPasswordForm((prev) => ({ ...prev, new_password: value }))
+                  }
+                />
+                <AdminField
+                  label="Konfirmasi password baru"
+                  type="password"
+                  value={resetPasswordForm.confirm_password}
+                  onChange={(value) =>
+                    setResetPasswordForm((prev) => ({ ...prev, confirm_password: value }))
+                  }
+                />
+                <Button
+                  onClick={handleResetPassword}
+                  disabled={resetSaving}
+                  variant="outline"
+                  className="rounded-full border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 hover:text-amber-900"
+                >
+                  {resetSaving ? "Mereset..." : "Reset password akun ini"}
+                </Button>
+                <div className="text-xs text-slate-500">
+                  Gunakan fitur ini hanya untuk akun lain. Untuk akun sendiri, pakai halaman ganti password.
+                </div>
+              </div>
+            ) : (
+              <AdminNotice tone="info">
+                Reset password akun ini tidak tersedia. Jika ini akun Anda sendiri, gunakan halaman ganti password. Jika ini akun admin lain, hanya superadmin yang boleh mereset.
+              </AdminNotice>
+            )}
+          </AdminSectionCard>
+
+          <AdminSectionCard title="Ringkasan Akses">
+            <div className="space-y-3 text-sm text-slate-700">
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-zinc-500">Assigned Groups</div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500">Group Aktif</div>
                 <div>{form.groups.length}</div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-zinc-500">Assigned Permissions</div>
+                <div className="text-[10px] uppercase tracking-widest text-slate-500">Izin Aktif</div>
                 <div>{form.user_permissions.length}</div>
               </div>
-              <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-3 text-xs text-zinc-400">
+              <div className="rounded-[22px] border border-slate-200/80 bg-white/80 p-3 text-xs text-slate-500">
                 {form.user_permissions.slice(0, 5).map((permissionId) => (
                   <div key={permissionId}>{permissionLookup.get(permissionId)?.codename ?? permissionId}</div>
                 ))}

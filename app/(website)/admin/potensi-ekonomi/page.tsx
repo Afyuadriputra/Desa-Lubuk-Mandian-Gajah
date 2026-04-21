@@ -8,8 +8,10 @@ import {
   AdminNotice,
   AdminPageHeader,
   AdminSectionCard,
+  StatusBadge,
   AdminTextarea,
 } from "@/app/(website)/admin/_components/admin-primitives";
+import { Button } from "@/components/ui/button";
 
 type UnitFormState = {
   nama_usaha: string;
@@ -100,7 +102,7 @@ export default function AdminPotensiEkonomiPage() {
   };
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center text-sm text-zinc-500">Memuat potensi ekonomi...</div>;
+    return <div className="flex h-64 items-center justify-center text-sm text-slate-500">Memuat potensi ekonomi...</div>;
   }
 
   return (
@@ -109,9 +111,9 @@ export default function AdminPotensiEkonomiPage() {
         title="Potensi Ekonomi"
         description="Kelola katalog BUMDes dan wisata seperti changelist admin."
         actions={
-          <button onClick={resetForm} className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm font-semibold text-zinc-200">
+          <Button onClick={resetForm} variant="outline" className="rounded-full">
             Tambah Baru
-          </button>
+          </Button>
         }
       />
 
@@ -126,15 +128,16 @@ export default function AdminPotensiEkonomiPage() {
                 <button
                   key={item.id}
                   onClick={() => loadDetail(item.id).catch((err: Error) => setError(err.message))}
-                  className={`w-full rounded-lg border px-4 py-3 text-left ${
+                  className={`w-full rounded-[24px] border px-4 py-3 text-left transition ${
                     selectedId === item.id
-                      ? "border-white/30 bg-zinc-800 text-white"
-                      : "border-zinc-800 bg-zinc-950 text-zinc-200"
+                      ? "border-slate-300 bg-white text-slate-950 shadow-[0_18px_36px_-30px_rgba(15,23,42,0.3)]"
+                      : "border-slate-200/80 bg-white/80 text-slate-900 hover:bg-white"
                   }`}
                 >
                   <div className="text-sm font-semibold">{item.nama_usaha}</div>
-                  <div className="mt-1 text-xs text-zinc-500">
-                    {item.kategori} • {item.is_published ? "PUBLISHED" : "DRAFT"}
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                    <StatusBadge label={item.kategori} tone="info" />
+                    <StatusBadge label={item.is_published ? "Sudah Tayang" : "Draft"} tone={item.is_published ? "success" : "warning"} />
                   </div>
                 </button>
               ))}
@@ -153,33 +156,33 @@ export default function AdminPotensiEkonomiPage() {
               <AdminField label="Harga Tiket" value={form.harga_tiket} onChange={(value) => setForm((prev) => ({ ...prev, harga_tiket: value }))} />
               <AdminTextarea label="Deskripsi" value={form.deskripsi} onChange={(value) => setForm((prev) => ({ ...prev, deskripsi: value }))} rows={8} />
               <AdminTextarea label="Fasilitas" value={form.fasilitas} onChange={(value) => setForm((prev) => ({ ...prev, fasilitas: value }))} rows={4} />
-              <label className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200">
+              <label className="flex items-center gap-2 rounded-[22px] border border-slate-200/80 bg-white/85 px-3 py-2.5 text-sm text-slate-700">
                 <input
                   type="checkbox"
                   checked={form.is_published}
                   onChange={(event) => setForm((prev) => ({ ...prev, is_published: event.target.checked }))}
                 />
-                Published
+                Tampilkan di publik
               </label>
               {!selected ? (
                 <label className="block space-y-1.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Foto Utama</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Foto Utama</span>
                   <input
                     type="file"
                     onChange={(event) => setForm((prev) => ({ ...prev, foto_utama: event.target.files?.[0] ?? null }))}
-                    className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-200"
+                    className="w-full rounded-[22px] border border-slate-200/80 bg-white/85 px-3 py-2.5 text-sm text-slate-700"
                   />
                 </label>
               ) : null}
 
               {selected?.foto_url ? (
-                <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-3 text-xs text-zinc-400">
+                <div className="rounded-[22px] border border-slate-200/80 bg-white/80 p-3 text-xs text-slate-500">
                   Foto saat ini: {selected.foto_url}
                 </div>
               ) : null}
 
               <div className="flex flex-wrap gap-2">
-                <button
+                <Button
                   onClick={() =>
                     runAction(
                       () =>
@@ -211,12 +214,12 @@ export default function AdminPotensiEkonomiPage() {
                     )
                   }
                   disabled={saving}
-                  className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black disabled:opacity-50"
+                  className="rounded-full"
                 >
                   {saving ? "Menyimpan..." : selectedId ? "Simpan Perubahan" : "Buat Unit Usaha"}
-                </button>
+                </Button>
                 {selectedId ? (
-                  <button
+                  <Button
                     onClick={() =>
                       runAction(
                         async () => {
@@ -227,10 +230,11 @@ export default function AdminPotensiEkonomiPage() {
                       )
                     }
                     disabled={saving}
-                    className="rounded-lg border border-red-900/40 bg-red-950/30 px-4 py-2 text-sm font-semibold text-red-300"
+                    variant="outline"
+                    className="rounded-full border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
                   >
                     Hapus
-                  </button>
+                  </Button>
                 ) : null}
               </div>
             </div>
